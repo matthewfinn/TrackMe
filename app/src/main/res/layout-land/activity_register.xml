@@ -9,15 +9,16 @@
     android:orientation="vertical">
 
     <EditText android:id="@+id/edit_name"
-        android:layout_weight="1"
+        android:layout_weight="0.00"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/edit_name" />
+
     <EditText android:id="@+id/edit_username"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
+        android:layout_width="352dp"
         android:layout_height="wrap_content"
         android:hint="@string/edit_username" />
+
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
