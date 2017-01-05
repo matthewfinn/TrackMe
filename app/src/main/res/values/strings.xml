@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--These are strings that can be accessed by any class in the project-->
     <string name="app_name">Track Me</string>
-    <string name="edit_name">Enter name</string>
+    <string name="edit_name">Name</string>
+    <string name="edit_email">Email Address</string>
+    <string name="edit_username">Username</string>
+    <string name="edit_password">Password</string>
+    <string name="edit_confirm_password">Confirm Password</string>>
     <string name="button_register">Register</string>
+    <string name="button_login">Login</string>
 </resources>
-   
