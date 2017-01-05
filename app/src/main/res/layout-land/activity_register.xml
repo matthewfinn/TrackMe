@@ -15,9 +15,35 @@
         android:hint="@string/edit_name" />
 
     <EditText android:id="@+id/edit_username"
-        android:layout_width="352dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/edit_username" />
+
+    <EditText android:id="@+id/edit_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_email" />
+
+    <EditText android:id="@+id/edit_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_password" />
+
+    <EditText android:id="@+id/edit_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/edit_confirm_password" />
+
+    <Spinner android:id="@+id/edit_profile_type_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
+        android:entries="@array/profile_types"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Button
         android:layout_width="100dp"
@@ -25,4 +51,5 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/button_register"
         android:onClick="registerUser"/>
+
 </LinearLayout>
