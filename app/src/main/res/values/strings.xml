@@ -8,6 +8,8 @@
     <string name="edit_password">Password</string>
     <string name="edit_confirm_password">Confirm Password</string>
     <string name="edit_profile_type">Select Profile Type</string>
+    <string name="edit_dob">DOB</string>
+    <string name="edit_phno">Phone Number</string>
     <string-array name="profile_types">
         <item>Select Profile Type</item>
         <item>p1</item>
