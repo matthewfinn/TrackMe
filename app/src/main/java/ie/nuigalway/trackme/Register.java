@@ -27,4 +27,16 @@ public class Register extends AppCompatActivity {
         intent.putExtra(REG_MESSAGE, message);
         startActivity(intent);
     }
+
+    public void createLocalDB(){
+
+    }
+
+    public void pushToGlobalDB(){
+
+    }
+
+    public void createSharedPreferences(){
+
+    }
 }
