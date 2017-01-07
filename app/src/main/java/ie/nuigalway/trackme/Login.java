@@ -19,20 +19,10 @@ public class Login extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        Intent intent = getIntent();
-        String message = intent.getStringExtra(Register.REG_MESSAGE);
-        TextView textView = new TextView(this);
-        textView.setTextSize(40);
-        textView.setText(message);
-
-        ViewGroup layout = (ViewGroup) findViewById(R.id.activity_login);
-        layout.addView(textView);
-
     }
 
-    public void checkLogin(String user, String pass){
-        
+    public void checkLogin(){
+
     }
 
 }

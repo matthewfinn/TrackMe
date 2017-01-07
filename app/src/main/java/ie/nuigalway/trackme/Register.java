@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
 public class Register extends AppCompatActivity {
     public final static String REG_MESSAGE = "ie.nuigalway.trackme.MESSAGE";
 
@@ -22,9 +23,6 @@ public class Register extends AppCompatActivity {
     //This method is called when the Register button is clicked
     public void registerUser(View view) {
         Intent intent = new Intent(this, Login.class);
-        EditText editText = (EditText) findViewById(R.id.edit_name);
-        String message = editText.getText().toString();
-        intent.putExtra(REG_MESSAGE, message);
         startActivity(intent);
     }
 
