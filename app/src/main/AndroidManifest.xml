@@ -16,11 +16,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".Login" />
-        <activity android:name=".Register"></activity>
+        <activity android:name=".Register" />
 
-        <!--this is auto-generated and I don't know what it does....yet....-->
-        <!--meta-data
+        <!-- this is auto-generated and I don't know what it does....yet.... -->
+        <!--
+            meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" /-->
+            android:value="@integer/google_play_services_version" /
+        -->
+        <activity android:name=".Menu"></activity>
     </application>
+
 </manifest>
