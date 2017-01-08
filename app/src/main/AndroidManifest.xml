@@ -24,7 +24,20 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" /
         -->
-        <activity android:name=".Menu"></activity>
+        <activity android:name=".Menu" />
+
+        <service
+            android:name=".GPSService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".LocalDbService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".OnlineDbService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
