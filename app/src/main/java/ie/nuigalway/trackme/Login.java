@@ -24,7 +24,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 public class Login extends AppCompatActivity {
 
-    private static final String URL = "http://danu6.it.nuigalway.ie/login.php";
+    private static final String URL = "http://danu6.it.nuigalway.ie/trackMeServer/login.php";
     private static final String MESSAGE = "message";
     private static final String SUCCESS = "success";
     private EditText username, password;

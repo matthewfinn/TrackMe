@@ -1,6 +1,5 @@
 <?php
-	mysql_connect("danu6.it.nuigalway.ie","mydb2858fm","Qobi9soduw");
-	$database = mysql_select_db("mydb2858fm");
+	mysqli_connect("danu6.it.nuigalway.ie","mydb2858fm","xa4zud","mydb2858");
 	$username = $_POST["username"];
 	$password = $_POST["password"];
 
@@ -21,18 +20,18 @@
 
 		$loginQuery = " SELECT * FROM login WHERE username = '$username'and password='$password'";
 
-		$sql = mysql_query($loginQuery);
+		$sql = mysqli_query($loginQuery);
 
-		$array = mysql_fetch_array($sql);
+		$array = mysqli_fetch_array($sql);
 
-		if(!empty(array)){
+		if(!empty($array)){
 
-			$response=["success"] = 1;
+			$response["success"] = 1;
 			$response["message"] = "Login Successful";
 			die(json_encode($response));
 
 		}else{
-			$response=["success"] = 0;
+			$response["success"] = 0;
 			$response["message"] = "Invalid Login Details";
 			die(json_encode($response));
 		}
@@ -43,5 +42,5 @@
 		 die(json_encode($response));
 	}
 
-	mysql_close();
+	mysqli_close();
 ?>

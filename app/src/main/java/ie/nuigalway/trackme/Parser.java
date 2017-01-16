@@ -53,7 +53,7 @@ public class Parser {
 
         try { // checking request method
 
-            if(m == "POST") {
+            if(m.equals("POST")) {
 
                 URL url = new URL(u);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -67,7 +67,7 @@ public class Parser {
                     urlConnection.disconnect();
                 }
 
-            }else if(m == "GET"){
+            }else if(m.equals("GET")){
 
                 URL url = new URL(u);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -77,9 +77,6 @@ public class Parser {
                 } finally {
                     urlConnection.disconnect();
                 }
-
-
-
             }
 
         }catch(IOException e){
@@ -104,7 +101,6 @@ public class Parser {
         }
         try{
             jso = new JSONObject(s);
-
 
         }catch(JSONException e){
 
