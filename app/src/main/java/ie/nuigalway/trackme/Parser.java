@@ -1,22 +1,16 @@
 package ie.nuigalway.trackme;
 
-import org.apache.http.client.methods.HttpPostHC4;
-import org.apache.http.client.methods.HttpPost;
-
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.apache.http.NameValuePair;
-
-import java.net.MalformedURLException;
+import java.io.BufferedInputStream;
 import java.util.List;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import org.apache.http.client.ClientProtocolException;
 import java.net.URL;
 import java.io.IOException;
-import org.apache.http.HttpResponse;
 
 
 
@@ -37,29 +31,94 @@ public class Parser {
 
     }
 
-    public JSONObject getDataFromURL(String u){
-
-
-
+   /* public JSONObject getData(String u){
 
         try{
             URL url = new URL(u);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-//            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-//            readStream(in);
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+
+
+
+           // readStream(in);
 
         }catch(IOException  e){
 
             e.printStackTrace();
         }
+    }*/
+
+    public JSONObject makeRequest(String u, String m, List<NameValuePair> p){
+
+        try { // checking request method
+
+            if(m == "POST") {
+
+                URL url = new URL(u);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                try {
+                    urlConnection.setDoOutput(true);
+                    urlConnection.setChunkedStreamingMode(0);
+                    is = new BufferedInputStream(urlConnection.getInputStream());
+
+                }finally {
+                    urlConnection.disconnect();
+                }
+
+            }else if(m == "GET"){
+
+                URL url = new URL(u);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                try {
+                   is = new BufferedInputStream(urlConnection.getInputStream());
+
+                } finally {
+                    urlConnection.disconnect();
+                }
+
+
+
+            }
+
+        }catch(IOException e){
+
+            e.printStackTrace();
+        }
+
+
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+            StringBuilder str = new StringBuilder();
+            String strLine = null;
+            while ((strLine = br.readLine()) != null) {
+                str.append(strLine + "\n");
+            }
+            is.close();
+
+            s = str.toString();
+
+        }catch(Exception e){
+
+        }
+        try{
+            jso = new JSONObject(s);
+
+
+        }catch(JSONException e){
+
+        }
+        return jso;
     }
 
-    public JSONObject makeRequest(String url, String m, List<NameValuePair> p){
-
-        return null;
+    /*public void readStream(InputStream i){
 
     }
+
+    public void writeStream(OutputStream o){
+
+    }*/
 
 
 }
