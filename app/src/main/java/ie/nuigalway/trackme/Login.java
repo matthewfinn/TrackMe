@@ -10,19 +10,17 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Button;
-import android.view.View.OnClickListener;
+import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.util.Log;
 import android.app.ProgressDialog;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-
 
 public class Login extends AppCompatActivity {
 
@@ -30,7 +28,6 @@ public class Login extends AppCompatActivity {
     private static final String MESSAGE = "message";
     private static final String SUCCESS = "success";
     private EditText username, password;
-    private Button login;
     private ProgressDialog pd;
     Parser p = new Parser();
 
@@ -49,7 +46,7 @@ public class Login extends AppCompatActivity {
     }
 
     class CheckLogin extends AsyncTask<String, String, String> {
-        boolean loginFailed = false;
+       // boolean loginFailed = false;
         String pw = password.getText().toString();
         String un = username.getText().toString();
 
@@ -76,15 +73,35 @@ public class Login extends AppCompatActivity {
                 params.add(new BasicNameValuePair("username", un));
                 params.add(new BasicNameValuePair("password", pw));
 
+                Log.d("request","starting");
+                JSONObject js = p.makeRequest(URL, "POST", params);
 
-                return null;
+                Log.d("Login attempt", js.toString());
+
+                s = js.getInt(SUCCESS);
+
+                if(s==1){
+
+                    Log.d("Login Successful", js.toString());
+                    Intent i = new Intent(Login.this,Menu.class);
+                    finish();
+                    startActivity(i);
+                    return js.getString(MESSAGE);
+
+                }else{
+                    return js.getString(MESSAGE);
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
             return null;
+        }
+
+        protected void onPostExecute(String s){
+            pd.dismiss();
+            if (s != null){ Toast.makeText(Login.this, s, Toast.LENGTH_LONG).show(); }
+
         }
     }
 
