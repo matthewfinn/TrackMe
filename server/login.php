@@ -42,4 +42,6 @@
 		 $response["message"] = "Both username & password fields are empty!";
 		 die(json_encode($response));
 	}
+
+	mysql_close();
 ?>
