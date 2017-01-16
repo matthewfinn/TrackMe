@@ -101,9 +101,13 @@ public class Parser {
         }
         try{
             jso = new JSONObject(s);
+            System.out.println("JSO: " +jso.toString());
+
+            //trying to use all of json file.
 
         }catch(JSONException e){
-
+            System.out.println("PRINTING PARSER ST: " + s);
+            e.printStackTrace();
         }
         return jso;
     }

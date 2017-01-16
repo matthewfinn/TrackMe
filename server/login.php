@@ -1,7 +1,15 @@
 <?php
 	mysqli_connect("danu6.it.nuigalway.ie","mydb2858fm","xa4zud","mydb2858");
-	$username = $_POST["username"];
-	$password = $_POST["password"];
+
+	if(isset($_POST["username"])){
+    
+    $username = $_POST["username"];
+	}
+	if(isset($_POST["password"])){
+    
+    $password = $_POST["password"];
+	}
+	//$password = $_POST["password"];
 
 	if (!empty($_POST)) {
 
