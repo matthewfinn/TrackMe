@@ -3,13 +3,15 @@
  * Author: Matthew Finn
  */
 
-package ie.nuigalway.trackme;
+package ie.nuigalway.trackme.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+
+import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.activity.Login;
 
 public class Register extends AppCompatActivity {
     public final static String REG_MESSAGE = "ie.nuigalway.trackme.MESSAGE";

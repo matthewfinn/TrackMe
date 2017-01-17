@@ -1,9 +1,11 @@
-package ie.nuigalway.trackme;
+package ie.nuigalway.trackme.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import ie.nuigalway.trackme.R;
 
 public class Menu extends AppCompatActivity {
 

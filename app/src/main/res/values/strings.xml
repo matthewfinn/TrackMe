@@ -2,20 +2,23 @@
 <resources>
     <!--These are strings that can be accessed by any class in the project-->
     <string name="app_name">Track Me</string>
-    <string name="edit_name">Name</string>
-    <string name="edit_email">Email Address</string>
-    <string name="edit_username">Username</string>
-    <string name="edit_password">Password</string>
-    <string name="edit_confirm_password">Confirm Password</string>
-    <string name="edit_profile_type">Select Profile Type</string>
-    <string name="edit_dob">DOB</string>
-    <string name="edit_phno">Phone Number</string>
+    <string name="hint_firstname">Name</string>
+    <string name="hint_surname">Name</string>
+    <string name="hint_email">Email Address</string>
+    <!--string name="edit_username">Username</string-->
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="hint_profile_type">Select Profile Type</string>
+    <string name="hint_dob">DOB</string>
+    <string name="hint_phno">Phone Number</string>
     <string-array name="profile_types">
-        <item>Select Profile Type</item>
-        <item>p1</item>
-        <item>p2</item>
-        <item>p3</item>
+        <item>Select Profile Type...</item>
+        <item>Adult</item>
+        <item>Child/Teenager</item>
+        <item>Retiree/Elderly</item>
     </string-array>
     <string name="button_register">Register</string>
     <string name="button_login">Login</string>
+    <string name="login_link">Already Registered? Click Here</string>
+    <string name="register_link">Not Registered? Register Here</string>
 </resources>

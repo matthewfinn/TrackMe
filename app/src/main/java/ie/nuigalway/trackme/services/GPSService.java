@@ -1,11 +1,11 @@
-package ie.nuigalway.trackme;
+package ie.nuigalway.trackme.services;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-public class LocalDbService extends Service {
-    public LocalDbService() {
+public class GPSService extends Service {
+    public GPSService() {
     }
 
     @Override
