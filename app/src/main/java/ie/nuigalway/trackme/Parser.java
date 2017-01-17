@@ -55,10 +55,17 @@ public class Parser {
 
             if(m.equals("POST")) {
 
+
                 URL url = new URL(u);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
+                //Something to look at to post data to server
+                //http://www.xyzws.com/javafaq/how-to-use-httpurlconnection-post-data-to-web-server/139
+               // http://www.journaldev.com/7148/java-httpurlconnection-example-java-http-request-get-post
+
                 try {
+
+                    System.out.println("POSTING");
                     urlConnection.setDoOutput(true);
                     urlConnection.setChunkedStreamingMode(0);
                     is = new BufferedInputStream(urlConnection.getInputStream());
@@ -95,6 +102,7 @@ public class Parser {
             is.close();
 
             s = str.toString();
+            System.out.println("String BUILT: "+s);
 
         }catch(Exception e){
 
@@ -106,7 +114,6 @@ public class Parser {
             //trying to use all of json file.
 
         }catch(JSONException e){
-            System.out.println("PRINTING PARSER ST: " + s);
             e.printStackTrace();
         }
         return jso;

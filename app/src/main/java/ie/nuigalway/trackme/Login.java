@@ -70,8 +70,8 @@ public class Login extends AppCompatActivity {
 
             try {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
-                System.out.println(un);
-                System.out.println(pw);
+                System.out.println("USERNAME:" +un);
+                System.out.println("PASSWORD:" + pw);
                 params.add(new BasicNameValuePair("username", un));
                 params.add(new BasicNameValuePair("password", pw));
 
