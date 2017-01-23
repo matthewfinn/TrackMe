@@ -2,8 +2,8 @@
 <resources>
     <!--These are strings that can be accessed by any class in the project-->
     <string name="app_name">Track Me</string>
-    <string name="hint_firstname">Name</string>
-    <string name="hint_surname">Name</string>
+    <string name="hint_firstname">First Name</string>
+    <string name="hint_surname">Surname</string>
     <string name="hint_email">Email Address</string>
     <!--string name="edit_username">Username</string-->
     <string name="hint_password">Password</string>

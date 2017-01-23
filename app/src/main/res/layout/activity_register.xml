@@ -24,51 +24,34 @@
             android:textSize="20dip"
             android:textColor="#000000"/>
 
-        <EditText android:id="@+id/edit_name"
+        <EditText android:id="@+id/edit_fname"
             android:layout_weight="0.00"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/edit_name" />
+            android:hint="@string/hint_firstname" />
+
+        <EditText android:id="@+id/edit_surname"
+            android:layout_weight="0.00"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_surname" />
 
         <EditText android:id="@+id/edit_email"
+            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/edit_email" />
+            android:hint="@string/hint_email" />
 
-        <EditText android:id="@+id/edit_username"
+        <EditText android:id="@+id/edit_phno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/edit_username" />
+            android:hint="@string/hint_phno" />
 
         <EditText android:id="@+id/edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="@string/edit_password" />
-
-        <EditText android:id="@+id/edit_confirm_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:hint="@string/edit_confirm_password" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:id="@+id/editDOB"
-            android:layout_weight="0.00"
-            android:hint="@string/edit_dob" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/editPHNO"
-            android:layout_weight="0.00"
-            android:hint="@string/edit_phno"/>
+            android:hint="@string/hint_password" />
 
         <Spinner android:id="@+id/edit_profile_type_spinner"
             android:layout_width="match_parent"
@@ -77,12 +60,19 @@
             android:drawSelectorOnTop="true"
             android:entries="@array/profile_types"/>
 
-        <Button
+        <Button android:id="@+id/reg_btn"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/button_register"
-            android:onClick="registerUser"/>
+            android:onClick="attemptRegister"/>
+
+        <Button android:id="@+id/lgn_lnk"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/login_link"
+            android:onClick="attemptRedirectToLogin"/>
 
     </LinearLayout>
 

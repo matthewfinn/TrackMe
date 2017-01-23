@@ -15,7 +15,7 @@
 
 
         <activity android:name=".activity.MainActivity" />
-        <!-- activity android:name=".activity.Startup"/!!MAY NOT USE THIS YET!! -->
+        <activity android:name=".activity.Startup"/>
         <activity android:name=".activity.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,8 +37,6 @@
             android:name=".services.GPSService"
             android:enabled="true"
             android:exported="true" />
-
-        <activity android:name=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

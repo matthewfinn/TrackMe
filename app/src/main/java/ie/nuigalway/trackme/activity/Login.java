@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,8 +34,8 @@ import ie.nuigalway.trackme.helper.SessionManager;
 
 public class Login extends AppCompatActivity {
 
-    private static final String TAG = Register.class.getSimpleName();
-    private Button bLogin, bRegLink;
+    private static final String TAG = Login.class.getSimpleName();
+   // private Button bLogin, bRegLink;
 
     private EditText email, password;
     private SessionManager sesh;
@@ -53,11 +52,8 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         email = (EditText) findViewById(R.id.login_email);
         password = (EditText) findViewById(R.id.login_password);
-        bLogin = (Button) findViewById(R.id.login_button);
-        bRegLink = (Button) findViewById(R.id.login_reglink);
-
-        String em = email.getText().toString().trim();
-        String pw = password.getText().toString().trim();
+//        bLogin = (Button) findViewById(R.id.login_button);
+//        bRegLink = (Button) findViewById(R.id.login_reglink);
 
         pd = new ProgressDialog(this);
         pd.setCancelable(false);
@@ -76,8 +72,10 @@ public class Login extends AppCompatActivity {
 
     }
 
-    private void attemptLogin(View view) {
+    public void attemptLogin(View view) {
 
+        em = email.getText().toString().trim();
+        pw = password.getText().toString().trim();
 
 
         // Check for empty data in the form
@@ -93,15 +91,15 @@ public class Login extends AppCompatActivity {
     }
 
 
-    private void attemptRedirect(View view) {
+    public void attemptRedirectToRegister(View view) {
 
-        Intent i = new Intent(getApplicationContext(),Register.class);
+        Intent i = new Intent(this,Register.class);
         startActivity(i);
         finish();
 
     }
 
-    private void verifyLogin(String email, final String password){
+    private void verifyLogin(final String email, final String password){
 
         String req = "req_login";
 
@@ -146,15 +144,17 @@ public class Login extends AppCompatActivity {
                         startActivity(in);
                         finish();
 
+                        System.out.println("HAHAHA");
+
 
                     } else {
                         String err = j.getString("error_msg");
-                        Toast.makeText(getApplicationContext(), err, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "On Response: "+err, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException jse) {
 
                     jse.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Error" + jse.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "On Response Error" + jse.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -163,7 +163,7 @@ public class Login extends AppCompatActivity {
                 public void onErrorResponse(VolleyError e){
 
                     Log.e(TAG,"Login : "+ e.getMessage());
-                    Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"On Error Response: "+ e.getMessage(), Toast.LENGTH_LONG).show();
 
                     if(pd.isShowing()){
 
@@ -179,8 +179,8 @@ public class Login extends AppCompatActivity {
             protected Map<String, String> getParams(){
 
                 Map<String,String> p = new HashMap<String,String>();
-                p.put("email", em);
-                p.put("password",pw);
+                p.put("email", email);
+                p.put("password",password);
 
 
                 return p;
