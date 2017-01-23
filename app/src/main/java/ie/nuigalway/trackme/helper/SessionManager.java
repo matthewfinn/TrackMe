@@ -39,4 +39,8 @@ public class SessionManager {
 
         Log.d(TAG, "User login session modified!");
     }
+
+    public boolean isLoggedIn(){
+        return sp.getBoolean(KEY_L, false);
+    }
 }

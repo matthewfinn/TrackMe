@@ -6,32 +6,44 @@
 package ie.nuigalway.trackme.activity;
 
 
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.util.Log;
-import android.app.ProgressDialog;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.application.App;
+import ie.nuigalway.trackme.application.AppConfig;
+import ie.nuigalway.trackme.helper.LocalDBHandler;
+import ie.nuigalway.trackme.helper.SessionManager;
 
 public class Login extends AppCompatActivity {
 
-    private static final String URL = "http://danu6.it.nuigalway.ie/trackMeServer/login.php";
-    private static final String MESSAGE = "message";
-    private static final String SUCCESS = "success";
-    private EditText username, password;
+    private static final String TAG = Register.class.getSimpleName();
+    private Button bLogin, bRegLink;
+
+    private EditText email, password;
+    private SessionManager sesh;
+    private LocalDBHandler db;
     private ProgressDialog pd;
-    Parser p = new Parser();
+    private String em, pw;
+
 
 
     @Override
@@ -39,74 +51,143 @@ public class Login extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        username = (EditText) findViewById(R.id.login_username);
+        email = (EditText) findViewById(R.id.login_email);
         password = (EditText) findViewById(R.id.login_password);
-    }
+        bLogin = (Button) findViewById(R.id.login_button);
+        bRegLink = (Button) findViewById(R.id.login_reglink);
 
-    public void attemptLogin(View view) {
-        new CheckLogin().execute();
-    }
+        String em = email.getText().toString().trim();
+        String pw = password.getText().toString().trim();
 
-    class CheckLogin extends AsyncTask<String, String, String> {
-       // boolean loginFailed = false;
-        String pw = password.getText().toString();
-        String un = username.getText().toString();
-
-        @Override
-        protected void onPreExecute() {
+        pd = new ProgressDialog(this);
+        pd.setCancelable(false);
 
 
-            super.onPreExecute();
-            pd = new ProgressDialog(Login.this);
-            pd.setIndeterminate(false);
-            pd.setMessage("Logging In");
-            pd.setCancelable(true);
-            pd.show();
+        db = new LocalDBHandler(getApplicationContext());
+        sesh = new SessionManager(getApplicationContext());
 
+        if (sesh.isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+            Intent intent = new Intent(Login.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
 
-        @Override
-        protected String doInBackground(String... args) {
 
-            int s;
+    }
 
-            try {
-                List<NameValuePair> params = new ArrayList<NameValuePair>();
-                System.out.println("USERNAME:" +un);
-                System.out.println("PASSWORD:" + pw);
-                params.add(new BasicNameValuePair("username", un));
-                params.add(new BasicNameValuePair("password", pw));
+    private void attemptLogin(View view) {
 
-                Log.d("request","starting");
-                JSONObject js = p.makeRequest(URL, "POST", params);
 
-                Log.d("Login attempt", js.toString());
 
-                s = js.getInt(SUCCESS);
+        // Check for empty data in the form
+        if (!em.isEmpty() && !pw.isEmpty()) {
+            // login user
+            verifyLogin(em, pw);
+        } else {
 
-                if(s==1){
+            Toast.makeText(getApplicationContext(),
+                    "Incorrect Email/Password Combination", Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
 
-                    Log.d("Login Successful", js.toString());
-                    Intent i = new Intent(Login.this,Menu.class);
-                    finish();
-                    startActivity(i);
-                    return js.getString(MESSAGE);
 
-                }else{
-                    return js.getString(MESSAGE);
+    private void attemptRedirect(View view) {
+
+        Intent i = new Intent(getApplicationContext(),Register.class);
+        startActivity(i);
+        finish();
+
+    }
+
+    private void verifyLogin(String email, final String password){
+
+        String req = "req_login";
+
+        pd.setMessage("Logging In");
+
+        if(!pd.isShowing()){
+            pd.show();
+        }
+
+        StringRequest r = new StringRequest(Request.Method.POST, AppConfig.LOGIN_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String res) {
+
+                Log.d(TAG, "Response: " + res.toString());
+                if (pd.isShowing()) {
+                    pd.dismiss();
                 }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+                try {
+
+                    JSONObject j = new JSONObject(res);
+                    boolean error = j.getBoolean("error");
+
+                    if (!error) {
+                        sesh.setLogin(true);
+
+                        String uid = j.getString("uid");
+                        JSONObject user = j.getJSONObject("user");
+
+                        String fn = user.getString("first_name");
+                        String sn = user.getString("surname");
+                        String em = user.getString("email");
+                        String ph = user.getString("phone_no");
+                        String id = user.getString("unique_id");
+                        String cr = user.getString("created_at");
+
+                        db.addUser(fn, sn, em, ph, id, cr);
+
+                        Intent in = new Intent(Login.this, MainActivity.class);
+                        startActivity(in);
+                        finish();
+
+
+                    } else {
+                        String err = j.getString("error_msg");
+                        Toast.makeText(getApplicationContext(), err, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException jse) {
+
+                    jse.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Error" + jse.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
             }
-            return null;
+        },new Response.ErrorListener(){
+                @Override
+                public void onErrorResponse(VolleyError e){
+
+                    Log.e(TAG,"Login : "+ e.getMessage());
+                    Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_LONG).show();
+
+                    if(pd.isShowing()){
+
+                        pd.dismiss();
+                    }
+
+
+                }
+
+            }){
+
+            @Override
+            protected Map<String, String> getParams(){
+
+                Map<String,String> p = new HashMap<String,String>();
+                p.put("email", em);
+                p.put("password",pw);
+
+
+                return p;
+            }
+        };
+
+        App.getInstance().addToRQ(r, req);
+
         }
-
-        protected void onPostExecute(String s){
-            pd.dismiss();
-            if (s != null){ Toast.makeText(Login.this, s, Toast.LENGTH_LONG).show(); }
-
-        }
-    }
-
 }
