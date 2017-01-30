@@ -91,7 +91,7 @@ public class Register extends AppCompatActivity {
         } else {
 
             Toast.makeText(getApplicationContext(),
-                    "Incorrect Email/Password Combination", Toast.LENGTH_LONG)
+                    "Not all information..", Toast.LENGTH_LONG)
                     .show();
         }
     }
@@ -192,8 +192,6 @@ public class Register extends AppCompatActivity {
                 return p;
             }
         };
-
         App.getInstance().addToRQ(r, req);
-
     }
 }
