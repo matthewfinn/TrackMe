@@ -38,4 +38,7 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5'
     compile group: 'org.apache.httpcomponents' , name: 'httpclient-android' , version: '4.3.5.1'
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
+    androidTestCompile 'com.android.support:support-annotations:24.0.0'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
 }
