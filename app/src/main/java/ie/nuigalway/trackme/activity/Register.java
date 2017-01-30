@@ -188,7 +188,6 @@ public class Register extends AppCompatActivity {
                 p.put("email", em);
                 p.put("password", pw);
 
-
                 return p;
             }
         };
