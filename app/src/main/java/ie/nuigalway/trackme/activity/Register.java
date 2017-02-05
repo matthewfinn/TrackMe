@@ -181,7 +181,7 @@ public class Register extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams(){
 
-                Map<String,String> p = new HashMap<String,String>();
+                Map<String,String> p = new HashMap<>();
                 p.put("first_name", fn);
                 p.put("surname",sn);
                 p.put("phone_no", ph);

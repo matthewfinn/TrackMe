@@ -43,7 +43,17 @@
         <service
             android:name=".services.GPSService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.Settings"
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".activity.TrackMe" />
+        <activity
+            android:name=".activity.Preferences"
+            android:label="@string/title_activity_preferences" />
+        <activity android:name=".activity.Messaging" />
+        <activity android:name=".activity.GPSPreferences"></activity>
     </application>
 
 </manifest>
