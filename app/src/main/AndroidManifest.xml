@@ -53,7 +53,12 @@
             android:name=".activity.Preferences"
             android:label="@string/title_activity_preferences" />
         <activity android:name=".activity.Messaging" />
-        <activity android:name=".activity.GPSPreferences"></activity>
+        <activity android:name=".activity.GPSPreferences" />
+        <activity
+            android:name=".activity.Contacts"
+            android:label="@string/title_activity_contacts"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.Help"></activity>
     </application>
 
 </manifest>
