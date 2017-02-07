@@ -63,7 +63,7 @@ public class Login extends AppCompatActivity {
 
         if (sm.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(Login.this, MainActivity.class);
+            Intent intent = new Intent(Login.this, Menu.class);
             startActivity(intent);
             finish();
         }
@@ -139,7 +139,7 @@ public class Login extends AppCompatActivity {
 
                         db.addUser(fn, sn, em, ph, id, cr);
 
-                        Intent in = new Intent(Login.this, MainActivity.class);
+                        Intent in = new Intent(Login.this, Menu.class);
                         startActivity(in);
                         finish();
 

@@ -21,4 +21,10 @@ public class Menu extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    public void logOut(View view){
+
+
+        view.getContext().getSharedPreferences("TrackMePreferences", 0).edit().clear().commit();
+    }
 }

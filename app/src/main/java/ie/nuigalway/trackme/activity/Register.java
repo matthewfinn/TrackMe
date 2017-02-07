@@ -67,12 +67,10 @@ public class Register extends AppCompatActivity {
 
         if (sesh.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(Register.this, MainActivity.class);
+            Intent intent = new Intent(Register.this, Menu.class);
             startActivity(intent);
             finish();
         }
-
-
     }
 
     public void attemptRegister(View view) {

@@ -5,10 +5,11 @@ package ie.nuigalway.trackme.application;
  * Class that creates core Volley objects to handle data transmission.
  */
 import android.app.Application;
+import android.text.TextUtils;
+
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.android.volley.Request;
-import android.text.TextUtils;
 
 
 public class App extends Application {
