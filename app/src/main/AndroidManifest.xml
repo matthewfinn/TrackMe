@@ -14,8 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.Startup" />
+
         <activity android:name=".activity.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.Startup" />
         <activity android:name=".activity.Register" />
 
         <!-- this is auto-generated and I don't know what it does....yet.... -->
@@ -45,20 +47,22 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".activity.Settings"
-            android:label="@string/title_activity_settings" />
         <activity android:name=".activity.TrackMe" />
+
         <activity
             android:name=".activity.Preferences"
             android:label="@string/title_activity_preferences" />
         <activity android:name=".activity.Messaging" />
+
         <activity android:name=".activity.GPSPreferences" />
+
         <activity
             android:name=".activity.Contacts"
             android:label="@string/title_activity_contacts"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".activity.Help"></activity>
+
     </application>
 
 </manifest>
