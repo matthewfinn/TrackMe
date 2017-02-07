@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.Startup" />
+
         <activity android:name=".activity.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,8 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.Startup" />
+
         <activity android:name=".activity.Register" />
 
         <!-- this is auto-generated and I don't know what it does....yet.... -->
