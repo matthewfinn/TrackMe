@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity {
    // private Button bLogin, bRegLink;
 
     private EditText email, password;
-    private SessionManager sesh;
+    private SessionManager sm;
     private LocalDBHandler db;
     private ProgressDialog pd;
     private String em, pw;
@@ -59,9 +59,9 @@ public class Login extends AppCompatActivity {
 
 
         db = new LocalDBHandler(getApplicationContext());
-        sesh = new SessionManager(getApplicationContext());
+        sm = new SessionManager(getApplicationContext());
 
-        if (sesh.isLoggedIn()) {
+        if (sm.isLoggedIn()) {
             // User is already logged in. Take him to main activity
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
@@ -125,7 +125,7 @@ public class Login extends AppCompatActivity {
                     boolean error = j.getBoolean("error");
 
                     if (!error) {
-                        sesh.setLogin(true);
+                        sm.setLogin(true);
 
                         String uid = j.getString("uid");
                         JSONObject user = j.getJSONObject("user");

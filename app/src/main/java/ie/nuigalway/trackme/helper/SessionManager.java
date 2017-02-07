@@ -26,8 +26,6 @@ public class SessionManager {
         this.ctx = c;
         sp = ctx.getSharedPreferences(PREF, MODE);
         ed = sp.edit();
-
-
     }
 
     public void setLogin(boolean isLoggedIn) {
