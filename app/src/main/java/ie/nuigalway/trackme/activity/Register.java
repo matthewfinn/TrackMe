@@ -129,21 +129,25 @@ public class Register extends AppCompatActivity {
 
                     JSONObject j = new JSONObject(res);
                     boolean error = j.getBoolean("error");
+                    System.out.print(j.toString());
 
                     if (!error) {
-                        //String uid = j.getString("uid");
+                        String uid = j.getString("uid");
                         JSONObject user = j.getJSONObject("user");
 
                         String fn = user.getString("first_name");
                         String sn = user.getString("surname");
                         String em = user.getString("email");
                         String ph = user.getString("phone_no");
-                        String id = user.getString("unique_id");
+                       // String id = user.getString("unique_id");
                         String cr = user.getString("created_at");
 
-                        db.addUser(fn, sn, em, ph, id, cr);
+                        db.addUser(fn, sn, em, ph, uid, cr);
 
-                        sesh.setLogin(true);
+                       // sesh.startLoginSession(true,fn, sn, em, ph);
+
+                        Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
+
 
                         Intent in = new Intent(Register.this, Login.class);
                         startActivity(in);

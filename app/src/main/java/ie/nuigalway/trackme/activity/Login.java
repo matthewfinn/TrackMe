@@ -106,10 +106,10 @@ public class Login extends AppCompatActivity {
 
         if(!pd.isShowing()){
             pd.show();
+
         }
 
         StringRequest r = new StringRequest(Request.Method.POST, AppConfig.LOGIN_URL, new Response.Listener<String>() {
-
 
             @Override
             public void onResponse(String res) {
@@ -118,7 +118,6 @@ public class Login extends AppCompatActivity {
                 if (pd.isShowing()) {
                     pd.dismiss();
                 }
-
                 try {
 
                     JSONObject j = new JSONObject(res);
