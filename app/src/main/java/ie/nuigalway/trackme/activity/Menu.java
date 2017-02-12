@@ -1,13 +1,15 @@
 package ie.nuigalway.trackme.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.helper.SessionManager;
 
 public class Menu extends AppCompatActivity {
+
+    private SessionManager sm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,16 +17,21 @@ public class Menu extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
     }
 
-    public void onClick(View view){
+    /**
+     *
+     *
+     */
+    public void onClick( ){
 
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
 
     }
 
-    public void logOut(View view){
+    public void logOut(){
 
-
-        view.getContext().getSharedPreferences("TrackMePreferences", 0).edit().clear().commit();
+        sm.logOutUser();
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
     }
 }

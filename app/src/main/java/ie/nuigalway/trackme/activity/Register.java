@@ -107,7 +107,7 @@ public class Register extends AppCompatActivity {
 
         String req = "req_register";
 
-        pd.setMessage("Registering");
+        pd.setMessage("Registering Information on TrackMe Server");
 
         if(!pd.isShowing()){
             pd.show();
@@ -131,9 +131,7 @@ public class Register extends AppCompatActivity {
                     boolean error = j.getBoolean("error");
 
                     if (!error) {
-                        sesh.setLogin(true);
-
-                        String uid = j.getString("uid");
+                        //String uid = j.getString("uid");
                         JSONObject user = j.getJSONObject("user");
 
                         String fn = user.getString("first_name");
@@ -144,6 +142,8 @@ public class Register extends AppCompatActivity {
                         String cr = user.getString("created_at");
 
                         db.addUser(fn, sn, em, ph, id, cr);
+
+                        sesh.setLogin(true);
 
                         Intent in = new Intent(Register.this, Login.class);
                         startActivity(in);

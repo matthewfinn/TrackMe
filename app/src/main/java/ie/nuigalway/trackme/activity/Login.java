@@ -125,8 +125,6 @@ public class Login extends AppCompatActivity {
                     boolean error = j.getBoolean("error");
 
                     if (!error) {
-                        sm.setLogin(true);
-
                         String uid = j.getString("uid");
                         JSONObject user = j.getJSONObject("user");
 
@@ -137,18 +135,17 @@ public class Login extends AppCompatActivity {
                         String id = user.getString("unique_id");
                         String cr = user.getString("created_at");
 
+                        sm.startLoginSession(true, fn, sn, em, ph);
                         db.addUser(fn, sn, em, ph, id, cr);
 
                         Intent in = new Intent(Login.this, Menu.class);
                         startActivity(in);
                         finish();
 
-                        System.out.println("HAHAHA");
-
 
                     } else {
                         String err = j.getString("error_msg");
-                        Toast.makeText(getApplicationContext(), "On Response: "+err, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "On Response: "+err , Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException jse) {
 
