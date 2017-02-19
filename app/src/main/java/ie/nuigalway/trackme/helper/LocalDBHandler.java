@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class LocalDBHandler extends SQLiteOpenHelper{
 
     private static final String TAG = LocalDBHandler.class.getSimpleName();
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     private static final String DB_NAME = "trackMe_db";
 
     private static final String TABLE_USER_DETAILS = "user";
@@ -48,10 +48,11 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         /*
         * Creating User Table
         * */
-        String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER_DETAILS+ "("
-                + ID + " INTEGER PRIMARY KEY," + FN + " TEXT,"+ SN + " TEXT,"
-                + EMAIL + " TEXT UNIQUE," + PHNO + " TEXT,"
-                + UID + " TEXT" + CR + " TEXT" + ")";
+
+        String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER_DETAILS + "("
+                + ID + " INTEGER PRIMARY KEY," +  UID + " TEXT," + FN
+                + " TEXT," + SN + " TEXT," + PHNO + " TEXT,"
+                + EMAIL + " TEXT," + CR + " TEXT" + ")";
 
         db.execSQL(CREATE_USER_TABLE);
 
@@ -70,25 +71,24 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues vals = new ContentValues();//empty set of values that will be used to store user info
+        vals.put(UID,uid);
         vals.put(FN,fn);
         vals.put(SN,sn);
         vals.put(EMAIL, email);
         vals.put(PHNO,phno);
-        vals.put(UID,uid);
         vals.put(CR, cr);
 
         long ins = db.insert(TABLE_USER_DETAILS, null, vals);
         db.close(); // Closing database connection
 
-        Log.d(TAG, "User inserted into db table "+TABLE_USER_DETAILS+ "  " + ins);
-
+        Log.d(TAG, "User inserted into db table " +TABLE_USER_DETAILS+ "  " + ins);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int o, int n){
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_DETAILS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_LOCATION);
+      //  db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_LOCATION);
         onCreate(db);//creates db with tables again
 
     }

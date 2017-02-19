@@ -139,13 +139,11 @@ public class Register extends AppCompatActivity {
                         String sn = user.getString("surname");
                         String em = user.getString("email");
                         String ph = user.getString("phone_no");
-                       // String id = user.getString("unique_id");
                         String cr = user.getString("created_at");
 
-                        db.addUser(fn, sn, em, ph, uid, cr);
+                        db.addUser(uid, fn, sn, em, ph, cr);
 
-                       // sesh.startLoginSession(true,fn, sn, em, ph);
-
+                        //sesh.startLoginSession(true,fn, sn, em, ph);
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
 
