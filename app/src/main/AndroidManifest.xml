@@ -30,7 +30,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" /
         -->
-        <activity android:name=".activity.Menu" />
 
         <service
             android:name=".services.FallDetectionService"
@@ -44,7 +43,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.TrackMe" />
         <activity
             android:name=".activity.Preferences"
             android:label="@string/title_activity_preferences" />
@@ -57,12 +55,7 @@
         <activity android:name=".activity.ForgotPassword" />
         <activity
             android:name=".activity.GPSPreferences"
-            android:label="@string/title_activity_gpspreferences"
-            android:parentActivityName=".activity.Menu">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ie.nuigalway.trackme.activity.Menu" />
-        </activity>
+            android:label="@string/title_activity_gpspreferences"/>
         <activity
             android:name=".activity.MenuNav"
             android:label="@string/title_activity_menu_nav"

@@ -147,7 +147,7 @@ public class Login extends AppCompatActivity {
                         sm.startLoginSession(true, fn, sn, em, ph);
                         db.addUser(uid, fn, sn, em, ph, cr);
 
-                        Intent in = new Intent(Login.this, Menu.class);
+                        Intent in = new Intent(Login.this, MenuNav.class);
                         startActivity(in);
                         finish();
 
