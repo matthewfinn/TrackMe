@@ -77,36 +77,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener /*, 
 
         return view;
     }
-
-
-//    @Override
-//    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//    }
-//
-//    @Override
-//    public void onTextChanged(CharSequence s, int start, int before, int count) {
-//        em = email.getText().toString().trim();
-//        pw = password.getText().toString().trim();
-//    }
-//
-//    @Override
-//    public void afterTextChanged(Editable s) {
-//
-//        em = email.getText().toString().trim();
-//        pw = password.getText().toString().trim();
-//
-//    }
-    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri) {
-//
-//
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-
-
+    
     @Override
     public void onClick(View v) {
         switch (v.getId()) {

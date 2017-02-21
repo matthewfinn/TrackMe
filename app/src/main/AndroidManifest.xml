@@ -40,19 +40,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".activity.Preferences"
-            android:label="@string/title_activity_preferences" />
-        <activity android:name=".activity.Messaging" />
-        <activity
-            android:name=".activity.Contacts"
-            android:label="@string/title_activity_contacts"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.Help" />
-        <activity android:name=".activity.ForgotPassword" />
-        <activity
-            android:name=".activity.GPSPreferences"
-            android:label="@string/title_activity_gpspreferences" />
-        <activity
             android:name=".activity.MenuNav"
             android:label="@string/title_activity_menu_nav"
             android:theme="@style/AppTheme.NoActionBar" />
