@@ -5,7 +5,6 @@
 
 package ie.nuigalway.trackme.activity;
 
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,7 +34,6 @@ import ie.nuigalway.trackme.helper.SessionManager;
 public class Login extends AppCompatActivity {
 
     private static final String TAG = Login.class.getSimpleName();
-   // private Button bLogin, bRegLink;
 
     private EditText email, password;
     private SessionManager sm;
@@ -51,24 +49,20 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         email = (EditText) findViewById(R.id.login_email);
         password = (EditText) findViewById(R.id.login_password);
-//        bLogin = (Button) findViewById(R.id.login_button);
-//        bRegLink = (Button) findViewById(R.id.login_reglink);
 
         pd = new ProgressDialog(this);
         pd.setCancelable(false);
-
 
         db = new LocalDBHandler(getApplicationContext());
         sm = new SessionManager(getApplicationContext());
 
         if (sm.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
+
+            // User login session already active & take user to Main activity
             Intent intent = new Intent(Login.this, Menu.class);
             startActivity(intent);
             finish();
         }
-
-
     }
 
     public void attemptLogin(View view) {
@@ -77,14 +71,31 @@ public class Login extends AppCompatActivity {
         pw = password.getText().toString().trim();
 
 
-        // Check for empty data in the form
+        // else if block(s) to verify is user entered correct information.
+
         if (!em.isEmpty() && !pw.isEmpty()) {
-            // login user
+
+            // Verify user login using details provided
             verifyLogin(em, pw);
-        } else {
+        }else if (em.isEmpty()&&pw.isEmpty()){
 
             Toast.makeText(getApplicationContext(),
-                    "Incorrect Email/Password Combination", Toast.LENGTH_LONG)
+                    "Please Enter Email Address & Password To Log In", Toast.LENGTH_LONG)
+                    .show();
+        }
+        else if (em.isEmpty()){
+            Toast.makeText(getApplicationContext(),
+                    "Please Enter Email Address", Toast.LENGTH_LONG)
+                    .show();
+        }else if(pw.isEmpty()){
+            Toast.makeText(getApplicationContext(),
+                    "Please Enter Password", Toast.LENGTH_LONG)
+                    .show();
+        }
+        else{
+
+            Toast.makeText(getApplicationContext(),
+                    "Incorrect Login Details", Toast.LENGTH_LONG)
                     .show();
         }
     }
@@ -131,11 +142,10 @@ public class Login extends AppCompatActivity {
                         String sn = user.getString("surname");
                         String em = user.getString("email");
                         String ph = user.getString("phone_no");
-                        String id = user.getString("unique_id");
                         String cr = user.getString("created_at");
 
                         sm.startLoginSession(true, fn, sn, em, ph);
-                        db.addUser(fn, sn, em, ph, id, cr);
+                        db.addUser(uid, fn, sn, em, ph, cr);
 
                         Intent in = new Intent(Login.this, Menu.class);
                         startActivity(in);

@@ -9,6 +9,14 @@ import ie.nuigalway.trackme.helper.SessionManager;
 
 public class Menu extends AppCompatActivity {
 
+
+    /**
+     *
+     *
+     * TBDELETED AND MOVE FN TO MENUNAV
+     *
+     */
+
     private SessionManager sm;
 
     @Override
