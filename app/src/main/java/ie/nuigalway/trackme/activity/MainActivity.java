@@ -39,10 +39,16 @@ public class MainActivity extends AppCompatActivity
 
         if (savedInstanceState == null) {
 
+            // Session manager checks if logged in
+
+            // if logged in display ** fragment
+            // if not lgged in bring to login (or register.... tbd) fragment
             if(sm.isLoggedIn()) {
                 fragment = null;
                 fragmentClass = null;
                 fragmentClass = MenuFragment.class;
+
+
             }else{
                 fragment = null;
                 fragmentClass = null;
