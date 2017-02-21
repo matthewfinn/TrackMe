@@ -5,7 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,16 +76,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener /*, 
 
         return view;
     }
-    
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_button:
 
                 attemptLogin();
-
-
-
                 break;
         }
     }
@@ -181,12 +177,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener /*, 
                         sm.startLoginSession(true, fn, sn, em, ph);
                         db.addUser(uid, fn, sn, em, ph, cr);
 
-                        Fragment frag = new MenuFragment();
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.replace(R.id.fragment_login, frag);
-                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                        ft.addToBackStack(null);
-                        ft.commit();
+//                        Fragment frag = new MenuFragment();
+//                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                        ft.replace(R.id.fragment_login, frag);
+//                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+//                        ft.addToBackStack(null);
+//                        ft.commit();
 
                     } else {
                         String err = j.getString("error_msg");
