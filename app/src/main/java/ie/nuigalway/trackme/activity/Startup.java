@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import ie.nuigalway.trackme.R;
-import ie.nuigalway.trackme.activity.Login;
-import ie.nuigalway.trackme.activity.Register;
+
 
 public class Startup extends AppCompatActivity {
 

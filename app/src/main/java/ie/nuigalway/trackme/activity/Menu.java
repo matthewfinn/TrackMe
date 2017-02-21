@@ -29,10 +29,9 @@ public class Menu extends AppCompatActivity {
      *
      *
      */
-    public void onClick( ){
+    public void onClick(){
 
-        Intent intent = new Intent(this, Register.class);
-        startActivity(intent);
+       System.out.println();
 
     }
 

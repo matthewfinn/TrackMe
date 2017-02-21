@@ -59,7 +59,7 @@ public class Login extends AppCompatActivity {
         if (sm.isLoggedIn()) {
 
             // User login session already active & take user to Main activity
-            Intent intent = new Intent(Login.this, Menu.class);
+            Intent intent = new Intent(Login.this, MenuNav.class);
             startActivity(intent);
             finish();
         }

@@ -8,6 +8,138 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical">
+
+        <TextView android:id="@+id/menu_tm"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="TrackMe"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_myprofile"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="My Profile"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_gps"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="GPS Settings"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_msg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="Messaging"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_fd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="Fall Detection"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_cts"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="Contacts"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/title_register"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="TrackMe"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_ntfs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="Notifications Settings"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_help"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="Help"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="onClick"
+            android:clickable="true"/>
+
+        <TextView android:id="@+id/menu_logout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="20dip"
+            android:text="Logout"
+            android:gravity="center"
+            android:textSize="20dip"
+            android:textColor="#000000"
+            android:onClick="logOut"
+            android:clickable="true"/>
+
+    </LinearLayout>
+
     <include
         layout="@layout/app_bar_menu_nav"
         android:layout_width="match_parent"
