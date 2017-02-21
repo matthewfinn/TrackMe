@@ -15,11 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.Startup">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.Login" />
         <activity android:name=".activity.Register" />
@@ -55,11 +51,19 @@
         <activity android:name=".activity.ForgotPassword" />
         <activity
             android:name=".activity.GPSPreferences"
-            android:label="@string/title_activity_gpspreferences"/>
+            android:label="@string/title_activity_gpspreferences" />
         <activity
             android:name=".activity.MenuNav"
             android:label="@string/title_activity_menu_nav"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter></activity>
+
+
     </application>
 
 </manifest>
