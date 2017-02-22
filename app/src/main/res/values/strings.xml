@@ -19,6 +19,14 @@
         <item>Retiree/Elderly</item>
     </string-array>
 
+    <string name="menu_trackMe">Track Me</string>
+    <string name="menu_gps">GPS Settings</string>
+    <string name="menu_fd">Fall Detection Settings</string>
+    <string name="menu_pref">Preferences</string>
+    <string name="menu_profile">My Profile</string>
+
+    <string name="menu_logout">Logout</string>
+
 
     <string name="button_register">Register</string>
     <string name="button_login">Login</string>

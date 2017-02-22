@@ -124,18 +124,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Fragment fragment = null;
         Class fragmentClass = null;
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_tm) {
             fragmentClass = LoginFragment.class;
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_profile) {
             fragmentClass = HomeFragment.class;
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_gps) {
             fragmentClass = LoginFragment.class;
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_fd) {
             fragmentClass = LoginFragment.class;
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_prefs) {
             fragmentClass = LoginFragment.class;
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
             fragmentClass = LoginFragment.class;
+            sm.logOutUser();
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
