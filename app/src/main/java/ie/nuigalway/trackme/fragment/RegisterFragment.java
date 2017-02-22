@@ -5,6 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +51,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        if (container != null) {
+            container.removeAllViews();
+        }
+
         View view = inflater.inflate(R.layout.fragment_register, container, false);
 
         fName = (EditText) view.findViewById(R.id.edit_fname);
@@ -75,9 +81,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reg_btn:
-               attemptRegister();
+                attemptRegister();
                 break;
             case R.id.lgn_lnk:
+                switchFragmentToLogin();
                 break;
         }
     }
@@ -152,8 +159,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
                         Toast.makeText(getContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
-
-                       //Move to login fragment
+                        switchFragmentToLogin();
 
                     } else {
                         String err = j.getString("error_msg");
@@ -195,6 +201,16 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
             }
         };
         App.getInstance().addToRQ(r, req);
+    }
+
+    private void switchFragmentToLogin() {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment newFragment = new LoginFragment();
+        ft.replace(R.id.fragment_register, newFragment );
+       // ft.detach(this);
+    //   // ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
