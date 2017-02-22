@@ -30,14 +30,8 @@ import ie.nuigalway.trackme.application.AppConfig;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link LoginFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * create an instance of this fragment.
- */
-public class LoginFragment extends Fragment implements View.OnClickListener /*, TextWatcher*/ {
+public class LoginFragment extends Fragment implements View.OnClickListener{
+
     private static final String TAG = LoginFragment.class.getSimpleName();
 
     private EditText email, password;
@@ -46,6 +40,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener /*, 
     private LocalDBHandler db;
     private ProgressDialog pd;
     private String em, pw;
+
     private OnFragmentInteractionListener mListener;
 
     public LoginFragment() {
@@ -64,9 +59,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener /*, 
         login_button.setOnClickListener(this);
 
         email = (EditText) view.findViewById(R.id.login_email);
-      //  email.addTextChangedListener(this);
         password = (EditText) view.findViewById(R.id.login_password);
-//        password.addTextChangedListener(this);
 
         pd = new ProgressDialog(getContext());
         pd.setCancelable(false);
@@ -81,9 +74,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener /*, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_button:
-
                 attemptLogin();
                 break;
+            case R.id.login_reglink:
+                //Open register fragment here
         }
     }
     private void attemptLogin() {
@@ -177,7 +171,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener /*, 
                         sm.startLoginSession(true, fn, sn, em, ph);
                         db.addUser(uid, fn, sn, em, ph, cr);
 
-//                        Fragment frag = new MenuFragment();
+//                        Fragment frag = new HomeFragment();
 //                        FragmentTransaction ft = getFragmentManager().beginTransaction();
 //                        ft.replace(R.id.fragment_login, frag);
 //                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

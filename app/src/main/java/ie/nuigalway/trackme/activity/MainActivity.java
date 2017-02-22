@@ -14,13 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.fragment.LoginFragment;
-import ie.nuigalway.trackme.fragment.MenuFragment;
+import ie.nuigalway.trackme.fragment.RegisterFragment;
 import ie.nuigalway.trackme.helper.SessionManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.OnFragmentInteractionListener,
-        MenuFragment.OnFragmentInteractionListener{
+        HomeFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener{
 
     SessionManager sm;
 
@@ -46,13 +47,13 @@ public class MainActivity extends AppCompatActivity
             if(sm.isLoggedIn()) {
                 fragment = null;
                 fragmentClass = null;
-                fragmentClass = MenuFragment.class;
+                fragmentClass = RegisterFragment.class;
 
 
             }else{
                 fragment = null;
                 fragmentClass = null;
-                fragmentClass = LoginFragment.class;
+                fragmentClass = RegisterFragment.class;
 
             }
             try {
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_menu_nav_drawer, menu);
+        getMenuInflater().inflate(R.menu.activity_menu_drawer, menu);
         return true;
     }
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             fragmentClass = LoginFragment.class;
         } else if (id == R.id.nav_gallery) {
-            fragmentClass = MenuFragment.class;
+            fragmentClass = HomeFragment.class;
         } else if (id == R.id.nav_slideshow) {
             fragmentClass = LoginFragment.class;
         } else if (id == R.id.nav_manage) {

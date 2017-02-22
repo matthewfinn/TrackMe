@@ -4,10 +4,83 @@
     android:layout_height="match_parent"
     tools:context="ie.nuigalway.trackme.fragment.RegisterFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="vertical">
+
+            <TextView android:id="@+id/title_register"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:layout_marginBottom="20dip"
+                android:text="Registration"
+                android:gravity="center"
+                android:textSize="20dip"
+                android:textColor="#000000"/>
+
+            <EditText android:id="@+id/edit_fname"
+                android:layout_weight="0.00"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_firstname" />
+
+            <EditText android:id="@+id/edit_surname"
+                android:layout_weight="0.00"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_surname" />
+
+            <EditText android:id="@+id/edit_email"
+                android:inputType="textEmailAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_email" />
+
+            <EditText android:id="@+id/edit_phno"
+                android:inputType="phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_phno" />
+
+            <EditText android:id="@+id/edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="@string/hint_password" />
+
+            <Spinner android:id="@+id/edit_profile_type_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip"
+                android:drawSelectorOnTop="true"
+                android:entries="@array/profile_types"/>
+
+            <Button android:id="@+id/reg_btn"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/button_register"
+                android:onClick="attemptRegister"/>
+
+            <Button android:id="@+id/lgn_lnk"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/button_login_link"
+                android:onClick="attemptRedirectToLogin"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>

@@ -72,7 +72,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/login_link"
+            android:text="@string/button_login_link"
             android:onClick="attemptRedirectToLogin"/>
 
     </LinearLayout>

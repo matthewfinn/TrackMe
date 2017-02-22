@@ -45,7 +45,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/register_link"
+            android:text="@string/button_register_link"
             android:onClick="attemptRedirect"/>
 
     </LinearLayout>

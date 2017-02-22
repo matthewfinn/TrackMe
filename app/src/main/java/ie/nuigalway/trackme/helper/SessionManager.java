@@ -1,14 +1,12 @@
 package ie.nuigalway.trackme.helper;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
 
 import java.util.HashMap;
 
-import ie.nuigalway.trackme.activity.Login;
 
 /**
  * Created by matthew on 17/01/2017.
@@ -86,13 +84,6 @@ public class SessionManager {
 
     private void redirectToLogin() {
 
-        Intent login = new Intent(ctx, Login.class);
-
-        // Close Activities
-        login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        // Staring Login Activity
-        ctx.startActivity(login);
+        //open login fragment here
     }
 }

@@ -48,8 +48,8 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/register_link"
-                android:onClick="attemptRedirectToRegister"/>
+                android:text="@string/button_register_link"
+                />
         </LinearLayout>
     </ScrollView>
 

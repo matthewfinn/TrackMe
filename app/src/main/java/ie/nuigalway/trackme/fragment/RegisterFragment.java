@@ -1,78 +1,200 @@
 package ie.nuigalway.trackme.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.application.App;
+import ie.nuigalway.trackme.application.AppConfig;
+import ie.nuigalway.trackme.helper.LocalDBHandler;
+import ie.nuigalway.trackme.helper.SessionManager;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RegisterFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class RegisterFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class RegisterFragment extends Fragment implements View.OnClickListener{
+
+
+    private static final String TAG = RegisterFragment.class.getSimpleName();
+    private EditText fName,surname,email, password, phno;
+    private Button register_button, login_link;
+    private SessionManager sesh;
+    private LocalDBHandler db;
+    private ProgressDialog pd;
 
     private OnFragmentInteractionListener mListener;
 
-    public RegisterFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegisterFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegisterFragment newInstance(String param1, String param2) {
-        RegisterFragment fragment = new RegisterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public RegisterFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_register, container, false);
+
+        fName = (EditText) view.findViewById(R.id.edit_fname);
+        surname = (EditText) view.findViewById(R.id.edit_surname);
+        phno = (EditText) view.findViewById(R.id.edit_phno);
+        email = (EditText) view.findViewById(R.id.edit_email);
+        password = (EditText) view.findViewById(R.id.edit_password);
+
+        register_button = (Button) view.findViewById(R.id.reg_btn);
+        register_button.setOnClickListener(this);
+        login_link = (Button) view.findViewById(R.id.lgn_lnk);
+        login_link.setOnClickListener(this);
+
+        pd = new ProgressDialog(getContext());
+        pd.setCancelable(false);
+
+        db = new LocalDBHandler(getContext());
+        sesh = new SessionManager(getContext());
+
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.reg_btn:
+               attemptRegister();
+                break;
+            case R.id.lgn_lnk:
+                break;
         }
+    }
+
+    public void attemptRegister() {
+
+        String fn = fName.getText().toString().trim();
+        String sn = surname.getText().toString().trim();
+        String ph = phno.getText().toString().trim();
+        String em = email.getText().toString().trim();
+        String pw = password.getText().toString().trim();
+
+        // Check for empty data in the form
+        if (!fn.isEmpty() && !sn.isEmpty() && !ph.isEmpty() && !em.isEmpty() && !pw.isEmpty()) {
+
+            registerUser(fn,sn, ph, em, pw);
+
+        } else {
+
+            Toast.makeText(getContext(),
+                    "Not all information..", Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+
+
+    public void attemptRedirectToLogin(View view) {
+
+
+
+    }
+
+    private void registerUser(final String fn, final String sn,final String ph, final String em, final String pw){
+
+        String req = "req_register";
+
+        pd.setMessage("Registering Information on TrackMe Server");
+
+        if(!pd.isShowing()){
+            pd.show();
+        }
+
+        StringRequest r = new StringRequest(Request.Method.POST, AppConfig.REGISTRATION_URL, new Response.Listener<String>() {
+
+
+            @Override
+            public void onResponse(String res) {
+
+                Log.d(TAG, "Register Response: " + res);
+
+                if (pd.isShowing()) {
+                    pd.dismiss();
+                }
+
+                try {
+
+                    JSONObject j = new JSONObject(res);
+                    boolean error = j.getBoolean("error");
+                    System.out.print(j.toString());
+
+                    if (!error) {
+                        String uid = j.getString("uid");
+                        JSONObject user = j.getJSONObject("user");
+
+                        String fn = user.getString("first_name");
+                        String sn = user.getString("surname");
+                        String em = user.getString("email");
+                        String ph = user.getString("phone_no");
+                        String cr = user.getString("created_at");
+
+                        db.addUser(uid, fn, sn, em, ph, cr);
+
+                        Toast.makeText(getContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
+
+
+                       //Move to login fragment
+
+                    } else {
+                        String err = j.getString("error_msg");
+                        Toast.makeText(getContext(), "On Response: "+err, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException jse) {
+
+                    jse.printStackTrace();
+                    Toast.makeText(getContext(), "On Response Error" + jse.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError e){
+
+                Log.e(TAG,"Registration Error : "+ e.getMessage());
+                Toast.makeText(getContext(),"On Error Response: "+ e.getMessage(), Toast.LENGTH_LONG).show();
+
+                if(pd.isShowing()){
+
+                    pd.dismiss();
+                }
+            }
+
+        }){
+
+            @Override
+            protected Map<String, String> getParams(){
+
+                Map<String,String> p = new HashMap<>();
+                p.put("first_name", fn);
+                p.put("surname",sn);
+                p.put("phone_no", ph);
+                p.put("email", em);
+                p.put("password", pw);
+
+                return p;
+            }
+        };
+        App.getInstance().addToRQ(r, req);
     }
 
     @Override
