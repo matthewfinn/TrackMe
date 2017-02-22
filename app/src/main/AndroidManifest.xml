@@ -14,9 +14,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.Login" />
-        <activity android:name=".activity.Register" />
-
         <!-- this is auto-generated and I don't know what it does....yet.... -->
         <!--
             meta-data
@@ -36,14 +33,16 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"><intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter></activity>
-
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.Splash"></activity>
     </application>
 
 </manifest>
