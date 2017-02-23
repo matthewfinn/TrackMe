@@ -17,6 +17,7 @@ import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.fragment.LoginFragment;
 import ie.nuigalway.trackme.fragment.RegisterFragment;
+import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
 public class MainActivity extends AppCompatActivity
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity
         HomeFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener{
 
     SessionManager sm;
+    LocalDBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +36,27 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         sm = new SessionManager(getApplicationContext());
-        Fragment fragment;
-        Class fragmentClass;
+        Fragment fragment = null;
+        Class fragmentClass = null;
 
 
         if (savedInstanceState == null) {
 
             // Session manager checks if logged in
 
-            // if logged in display ** fragment
-            // if not lgged in bring to login (or register.... tbd) fragment
+            /*
+            1. If log in display home fragment
+            2. If not logged in but there's a db created on device storage display login fragment
+            3. Else bring to register screen (Happens in case on new installation of application)
+            */
+
             if(sm.isLoggedIn()) {
-                fragment = null;
-                fragmentClass = null;
-                fragmentClass = RegisterFragment.class;
-
-
+                fragmentClass = HomeFragment.class;
+            }else if(db.getReadableDatabase()!=null){
+                fragmentClass = LoginFragment.class;
             }else{
-                fragment = null;
-                fragmentClass = null;
-                fragmentClass = RegisterFragment.class;
 
+                fragmentClass = RegisterFragment.class;
             }
             try {
                 fragment = (Fragment) fragmentClass.newInstance();

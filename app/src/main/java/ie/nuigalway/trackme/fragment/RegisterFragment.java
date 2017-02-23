@@ -109,14 +109,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                     .show();
         }
     }
-
-
-    public void attemptRedirectToLogin(View view) {
-
-
-
-    }
-
+    
     private void registerUser(final String fn, final String sn,final String ph, final String em, final String pw){
 
         String req = "req_register";
@@ -208,8 +201,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         FragmentTransaction ft = fm.beginTransaction();
         Fragment newFragment = new LoginFragment();
         ft.replace(R.id.fragment_register, newFragment );
-       // ft.detach(this);
-    //   // ft.addToBackStack(null);
+
         ft.commit();
     }
 

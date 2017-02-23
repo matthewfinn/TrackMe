@@ -67,21 +67,46 @@ public class LocalDBHandler extends SQLiteOpenHelper{
 
     public void addUser(String fn, String sn, String email, String phno, String uid, String cr){
 
+        Cursor cursor = null;
+        int counter;
+        SQLiteDatabase db1 = this.getReadableDatabase();
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            String query = "select count(*) from TableName where name = ?";
+            cursor = db1.rawQuery(query, new String[]{email});
+            if (cursor.moveToFirst()) {
+                counter = cursor.getInt(0);
+            }else {
+                counter = 0; //data not found in readable db
+            }
 
-        ContentValues vals = new ContentValues();//empty set of values that will be used to store user info
-        vals.put(UID,uid);
-        vals.put(FN,fn);
-        vals.put(SN,sn);
-        vals.put(EMAIL, email);
-        vals.put(PHNO,phno);
-        vals.put(CR, cr);
+        }finally{
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db1 != null) {
+                db1.close();
+            }
+            Log.d(TAG, "User already exists in " +TABLE_USER_DETAILS+ "");
+        }
 
-        long ins = db.insert(TABLE_USER_DETAILS, null, vals);
-        db.close(); // Closing database connection
 
-        Log.d(TAG, "User inserted into db table " +TABLE_USER_DETAILS+ "  " + ins);
+        if(counter==0) {
+            SQLiteDatabase db2 = this.getWritableDatabase();
+            ContentValues vals = new ContentValues();//empty set of values that will be used to store user info
+            vals.put(UID, uid);
+            vals.put(FN, fn);
+            vals.put(SN, sn);
+            vals.put(EMAIL, email);
+            vals.put(PHNO, phno);
+            vals.put(CR, cr);
+
+            long ins = db2.insert(TABLE_USER_DETAILS, null, vals);
+            db2.close(); // Closing database connection
+            Log.d(TAG, "User inserted into db table " +TABLE_USER_DETAILS+ "  " + ins);
+        }
+
+
     }
 
     @Override
@@ -114,11 +139,11 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            userDetails.put("first_name", cursor.getString(1));
-            userDetails.put("surname", cursor.getString(2));
-            userDetails.put("email", cursor.getString(3));
-            userDetails.put("phone_no", cursor.getString(4));
-            userDetails.put("unique_id", cursor.getString(5));
+            userDetails.put("unique_id", cursor.getString(1));
+            userDetails.put("first_name", cursor.getString(2));
+            userDetails.put("surname", cursor.getString(3));
+            userDetails.put("email", cursor.getString(4));
+            userDetails.put("phone_no", cursor.getString(5));
             userDetails.put("created_at", cursor.getString(6));
         }
         cursor.close();
