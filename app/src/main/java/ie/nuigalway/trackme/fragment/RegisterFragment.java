@@ -109,7 +109,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                     .show();
         }
     }
-    
+
     private void registerUser(final String fn, final String sn,final String ph, final String em, final String pw){
 
         String req = "req_register";

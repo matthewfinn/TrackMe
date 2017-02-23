@@ -36,14 +36,12 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         sm = new SessionManager(getApplicationContext());
+        db = new LocalDBHandler(getApplicationContext());
         Fragment fragment = null;
         Class fragmentClass = null;
 
 
         if (savedInstanceState == null) {
-
-            // Session manager checks if logged in
-
             /*
             1. If log in display home fragment
             2. If not logged in but there's a db created on device storage display login fragment
@@ -55,7 +53,6 @@ public class MainActivity extends AppCompatActivity
             }else if(db.getReadableDatabase()!=null){
                 fragmentClass = LoginFragment.class;
             }else{
-
                 fragmentClass = RegisterFragment.class;
             }
             try {
