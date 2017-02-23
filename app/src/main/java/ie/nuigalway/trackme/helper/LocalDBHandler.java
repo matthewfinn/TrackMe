@@ -45,18 +45,15 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db){
 
-        /*
-        * Creating User Table
-        * */
 
+        //Creating User Table
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER_DETAILS + "("
                 + ID + " INTEGER PRIMARY KEY," +  UID + " TEXT," + FN
                 + " TEXT," + SN + " TEXT," + PHNO + " TEXT,"
                 + EMAIL + " TEXT," + CR + " TEXT" + ")";
 
         db.execSQL(CREATE_USER_TABLE);
-
-        Log.d(TAG, "Database tables created");
+        Log.d(TAG, "User Details Database Table created.");
 
         /*
         * Placeholder to create user location table
@@ -72,7 +69,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         SQLiteDatabase db1 = this.getReadableDatabase();
 
         try {
-            String query = "select count(*) from TableName where name = ?";
+            String query = "select count(*) from "+TABLE_USER_DETAILS+" where email = ?";
             cursor = db1.rawQuery(query, new String[]{email});
             if (cursor.moveToFirst()) {
                 counter = cursor.getInt(0);
@@ -87,7 +84,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
             if (db1 != null) {
                 db1.close();
             }
-            Log.d(TAG, "User already exists in " +TABLE_USER_DETAILS+ "");
+            Log.d(TAG, "User already exists in "+ TABLE_USER_DETAILS +" table.");
         }
 
 
