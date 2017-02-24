@@ -81,9 +81,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.login_button:
                 attemptLogin();
-                break;
+
             case R.id.login_reglink:
-                //Open register fragment here
+                switchToRegFrag();
         }
     }
     private void attemptLogin() {
@@ -177,7 +177,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         sm.startLoginSession(true, fn, sn, em, ph);
                         db.addUser(uid, fn, sn, em, ph, cr);
 
-                        SwitchToRegFrag();
+                        switchToHomeFrag();
 
                     } else {
                         String err = j.getString("error_msg");
@@ -221,10 +221,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     }
 
-    private void SwitchToRegFrag() {
+    private void switchToRegFrag() {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Fragment newFragment = new RegisterFragment();
+        ft.replace(R.id.fragment_login, newFragment );
+        ft.commit();
+    }
+    private void switchToHomeFrag() {
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment newFragment = new HomeFragment();
         ft.replace(R.id.fragment_login, newFragment );
         ft.commit();
     }

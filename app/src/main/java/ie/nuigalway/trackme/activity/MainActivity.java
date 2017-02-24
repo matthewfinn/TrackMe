@@ -94,10 +94,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
+    /**
+     *
+     * THIS IS THE MENU THING ON TOP RIGHT...... SHOULD BE DELETED FROM XMLS
+     *
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_menu_drawer, menu);
+//       / getMenuInflater().inflate(R.menu.activity_menu_drawer, menu);
         return true;
     }
 
@@ -106,14 +112,14 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
-        return super.onOptionsItemSelected(item);
+       return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -134,8 +140,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_prefs) {
             fragmentClass = LoginFragment.class;
         } else if (id == R.id.nav_logout) {
-            fragmentClass = LoginFragment.class;
             sm.logOutUser();
+            fragmentClass = LoginFragment.class;
+
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();

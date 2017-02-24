@@ -48,18 +48,18 @@ public class SessionManager {
         // commit changes
         ed.commit();
 
-        Log.d(TAG, "User login session modified!");
+        Log.d(TAG, "User login session modified. Session started for user.");
     }
 
     public boolean isLoggedIn(){
         return sp.getBoolean(KEY_L, false);
     }
 
-    public void checkLogIn(){
-        if(!this.isLoggedIn()){
-            redirectToLogin();
-        }
-    }
+//    public void checkLogIn(){
+//        if(!this.isLoggedIn()){
+//
+//        }
+//    }
 
     public HashMap<String,String> getUserDetails(){
 
@@ -78,12 +78,6 @@ public class SessionManager {
 
         ed.clear();
         ed.commit();
-
-        redirectToLogin();
-    }
-
-    private void redirectToLogin() {
-
-        //open login fragment here
+        Log.d(TAG ,sp.toString());
     }
 }

@@ -46,7 +46,10 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".activity.StartupActivity"></activity>
+        <activity
+            android:name=".activity.StartupActivity"
+            android:label="@string/title_activity_startup"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
