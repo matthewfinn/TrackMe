@@ -3,6 +3,7 @@ package ie.nuigalway.trackme.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceFragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,14 +16,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.fragment.ContactsFragment;
+import ie.nuigalway.trackme.fragment.FDPreferencesFragment;
+import ie.nuigalway.trackme.fragment.GPSPreferencesFragment;
 import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.fragment.LoginFragment;
+import ie.nuigalway.trackme.fragment.PreferencesFragment;
+import ie.nuigalway.trackme.fragment.ProfileFragment;
 import ie.nuigalway.trackme.fragment.RegisterFragment;
 import ie.nuigalway.trackme.helper.SessionManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener{
+        HomeFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener, FDPreferencesFragment.OnFragmentInteractionListener,
+        PreferencesFragment.OnFragmentInteractionListener{
 
     SessionManager sm;
 
@@ -100,15 +108,15 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass = null;
         if (id == R.id.nav_tm) {
-            fragmentClass = LoginFragment.class;
-        } else if (id == R.id.nav_profile) {
             fragmentClass = HomeFragment.class;
+        } else if (id == R.id.nav_profile) {
+            fragmentClass = ProfileFragment.class;
         } else if (id == R.id.nav_gps) {
-            fragmentClass = LoginFragment.class;
+            fragmentClass = GPSPreferencesFragment.class;
         } else if (id == R.id.nav_fd) {
-            fragmentClass = LoginFragment.class;
+            fragmentClass = FDPreferencesFragment.class;
         } else if (id == R.id.nav_prefs) {
-            fragmentClass = LoginFragment.class;
+            fragmentClass = PreferenceFragment.class;
         } else if (id == R.id.nav_logout) {
             b=false;
             sm.logOutUser();
