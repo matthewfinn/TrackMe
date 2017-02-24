@@ -2,11 +2,12 @@ package ie.nuigalway.trackme.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.activity.MainActivity;
 import ie.nuigalway.trackme.application.App;
 import ie.nuigalway.trackme.application.AppConfig;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
@@ -37,7 +39,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = LoginFragment.class.getSimpleName();
 
     private EditText email, password;
-    private Button login_button;
+    private Button login_button, login_reglink;
     private SessionManager sm;
     private LocalDBHandler db;
     private ProgressDialog pd;
@@ -63,6 +65,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         login_button = (Button) view.findViewById(R.id.login_button);
         login_button.setOnClickListener(this);
+
+        login_reglink = (Button) view.findViewById(R.id.login_reglink);
+        login_reglink.setOnClickListener(this);
 
         email = (EditText) view.findViewById(R.id.login_email);
         password = (EditText) view.findViewById(R.id.login_password);
@@ -177,7 +182,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         sm.startLoginSession(true, fn, sn, em, ph);
                         db.addUser(uid, fn, sn, em, ph, cr);
 
-                        switchToHomeFrag();
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intent);
 
                     } else {
                         String err = j.getString("error_msg");

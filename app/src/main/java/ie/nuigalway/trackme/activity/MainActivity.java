@@ -1,5 +1,6 @@
 package ie.nuigalway.trackme.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -17,7 +18,6 @@ import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.fragment.LoginFragment;
 import ie.nuigalway.trackme.fragment.RegisterFragment;
-import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
 public class MainActivity extends AppCompatActivity
@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity
         HomeFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener{
 
     SessionManager sm;
-    LocalDBHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +35,14 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         sm = new SessionManager(getApplicationContext());
-        db = new LocalDBHandler(getApplicationContext());
+
         Fragment fragment = null;
         Class fragmentClass = null;
 
-
         if (savedInstanceState == null) {
-            /*
-            1. If log in display home fragment
-            2. If not logged in but there's a db created on device storage display login fragment
-            3. Else bring to register screen (Happens in case on new installation of application)
-            */
 
-            if(sm.isLoggedIn()) {
-                fragmentClass = HomeFragment.class;
-            }else if(db.getReadableDatabase()!=null){
-                fragmentClass = LoginFragment.class;
-            }else{
-                fragmentClass = RegisterFragment.class;
+            fragmentClass = HomeFragment.class;
+
             }
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -64,15 +53,6 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
-//            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//            fab.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                            .setAction("Action", null).show();
-//                }
-//            });
-
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -82,7 +62,7 @@ public class MainActivity extends AppCompatActivity
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
         }
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -102,23 +82,11 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//       / getMenuInflater().inflate(R.menu.activity_menu_drawer, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        //int id = item.getItemId();
-
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
        return true;
     }
 
@@ -126,6 +94,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        boolean b = true;
+
         int id = item.getItemId();
         Fragment fragment = null;
         Class fragmentClass = null;
@@ -140,20 +110,26 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_prefs) {
             fragmentClass = LoginFragment.class;
         } else if (id == R.id.nav_logout) {
+            b=false;
             sm.logOutUser();
-            fragmentClass = LoginFragment.class;
+            Intent i= new Intent(this, StartupActivity.class);
+            startActivity(i);
+            finish();
 
         }
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        if(b) {
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 
