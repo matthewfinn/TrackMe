@@ -17,7 +17,6 @@ public class GPSService extends Service {
     private LocationManager lm = null;
     //private;
 
-
     private class LocationListener implements android.location.LocationListener
     {
         Location mLastLocation;
