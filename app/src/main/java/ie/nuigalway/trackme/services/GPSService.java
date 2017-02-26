@@ -98,7 +98,7 @@ public class GPSService extends Service {
                 try {
                     lm.removeUpdates(mLocationListeners[i]);
                 } catch (SecurityException ex) {
-                    Log.i(TAG, "fail to remove location listners, ignore", ex);
+                    Log.i(TAG, "fail to remove location listeners, ignore", ex);
                 }
             }
         }

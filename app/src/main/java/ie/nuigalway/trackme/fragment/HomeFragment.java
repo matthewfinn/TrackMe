@@ -8,7 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.helper.GPSHelper;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,22 +27,24 @@ import ie.nuigalway.trackme.R;
 public class HomeFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private LatLng currentLocation;
+    private GPSHelper gh;
+    private GoogleMap gm;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        currentLocation = gh.getCurrentStaticLocation();
+
+        SupportMapFragment sm = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map));
+        //sm.getMapAsync(OnMapReadyCallback );
+
+        
+
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
