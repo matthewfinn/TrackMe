@@ -42,7 +42,7 @@ public class StartupActivity extends AppCompatActivity
 
         if (db.getReadableDatabase() != null) {
                 fragmentClass = LoginFragment.class;
-            } else {
+            } else if(db.getReadableDatabase()==null) {
                 fragmentClass = RegisterFragment.class;
             }
             try {
