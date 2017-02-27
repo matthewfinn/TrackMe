@@ -49,23 +49,24 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sm = new SessionManager(getApplicationContext());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sm = new SessionManager(getApplicationContext());
+
 
         fragment = null;
         fragmentClass = null;
 
         int aflCheck = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
-        int aclCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION);
-        int anpCheck = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_NETWORK_STATE);
+//        int aclCheck = ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION);
+//        int anpCheck = ContextCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_NETWORK_STATE);
 
 //        if(anpCheck != PackageManager.PERMISSION_GRANTED){
 //            //CL_PERMISSION=1;
@@ -84,16 +85,17 @@ public class MainActivity extends AppCompatActivity
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     FL_PERMISSION);
 
+
         }else {
 
-        if (savedInstanceState == null) {
-            fragmentClass = HomeFragment.class;
-        }
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            if (savedInstanceState == null) {
+                fragmentClass = HomeFragment.class;
+            }
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -185,6 +187,9 @@ public class MainActivity extends AppCompatActivity
 
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
+
+        Fragment f;
+        Class c;
         switch (requestCode) {
 
             case FL_PERMISSION: {
@@ -195,16 +200,16 @@ public class MainActivity extends AppCompatActivity
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
 
-                    fragmentClass = HomeFragment.class;
+                    c = HomeFragment.class;
 
                 } else {
 
-                    fragmentClass = LoginFragment.class;
+                    c = LoginFragment.class;
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
                 try {
-                    fragment = (Fragment) fragmentClass.newInstance();
+                    f = (Fragment) c.newInstance();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
