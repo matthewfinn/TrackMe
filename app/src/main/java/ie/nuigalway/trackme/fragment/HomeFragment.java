@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.GPSHelper;
@@ -21,15 +22,15 @@ import ie.nuigalway.trackme.helper.GPSHelper;
  * Activities that contain this fragment must implement the
  * {@link HomeFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link HomeFragment#newInstance} factory method to
+ * Use the {@link HomeFragment newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
     private OnFragmentInteractionListener mListener;
     private LatLng currentLocation;
     private GPSHelper gh;
-    private GoogleMap gm;
+    private GoogleMap map;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -38,14 +39,17 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        currentLocation = gh.getCurrentStaticLocation();
 
-        SupportMapFragment sm = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map));
-        //sm.getMapAsync(OnMapReadyCallback );
+        View v = inflater.inflate(R.layout.fragment_home, null, false);
+        SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        smf.getMapAsync(this);
 
-        
+        return v;
+    }
 
-        return inflater.inflate(R.layout.fragment_home, container, false);
+    private void getMap() {
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -85,5 +89,15 @@ public class HomeFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+        gh = new GPSHelper(this.getContext());
+        currentLocation = gh.getCurrentStaticLocation();
+        map.addMarker(new MarkerOptions().position(currentLocation)
+                .title("Your Location"));
+        getMap();
     }
 }

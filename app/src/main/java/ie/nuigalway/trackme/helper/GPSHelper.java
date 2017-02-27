@@ -27,7 +27,7 @@ public class GPSHelper implements LocationListener{
     private static String TAG = GPSHelper.class.getName();
     protected LocationManager lm; // Declaring a Location Manager
     private  Context c;
-    double lng, lat;
+   // double lng, lat;
     Location loc;
     private String provider;
     private boolean gpsEnabled, netEnabled;
@@ -54,7 +54,6 @@ public class GPSHelper implements LocationListener{
 
             if(!provider.isEmpty()){
 
-                //LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener
                 lm.requestLocationUpdates(provider, 1000, 1, this);
                 loc = lm.getLastKnownLocation(provider);
 
