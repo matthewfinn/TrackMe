@@ -109,6 +109,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             Toast.makeText(getActivity(),
                     "Please Enter Email Address & Password To Log In", Toast.LENGTH_LONG)
                     .show();
+
         }
         else if (em.isEmpty()){
             Toast.makeText(getContext(),
