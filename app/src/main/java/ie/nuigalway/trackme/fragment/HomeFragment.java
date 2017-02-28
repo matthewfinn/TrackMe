@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.android.gms.maps.CameraUpdateFactory;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,7 +40,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     private GPSHelper gh;
     private GoogleMap map;
     private int aflCheck;
-   // private int cl;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -56,13 +56,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
         Log.d("Location Permission = ",String.valueOf(aflCheck));
 
-//        if(ContextCompat.checkSelfPermission(getActivity(),
-//                Manifest.permission.ACCESS_FINE_LOCATION)  == PackageManager.PERMISSION_GRANTED
-//                ||
-//                ContextCompat.checkSelfPermission(getActivity(),
-//                        Manifest.permission.ACCESS_COARSE_LOCATION)  == PackageManager.PERMISSION_GRANTED) {
-
-
         if (aflCheck != PackageManager.PERMISSION_GRANTED) {
            ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -71,14 +64,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
             SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
             smf.getMapAsync(this);
-       // }
 
         return v;
-    }
-
-    private void getMap() {
-
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -130,22 +117,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
         map = googleMap;
 
         if(aflCheck!=-1){
-            gh = new GPSHelper(getContext());
 
-            currentLocation = gh.getCurrentStaticLocation();
-            map.setBuildingsEnabled(true);
-            map.setPadding(10,10,10,10);
-            map.addMarker(new MarkerOptions().position(currentLocation)
-                    .title("Your Location"));
+            Log.d("134 PERMISSION REQUEST", String.valueOf(aflCheck));
+
             getMap();
+
         }
-
-
     }
 
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        
+
         switch (requestCode) {
 
             case fl: {
@@ -155,26 +137,30 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
                     aflCheck = ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION);
-                    gh = new GPSHelper(getContext());
-                    Log.d("158 PERMISSION REQUEST", String.valueOf(aflCheck));
+                    Log.d("Permission Request: ", String.valueOf(aflCheck));
 
-                    currentLocation = gh.getCurrentStaticLocation();
-                    map.setBuildingsEnabled(true);
-                    map.setPadding(10, 10, 10, 10);
-                    map.addMarker(new MarkerOptions().position(currentLocation)
-                            .title("Your Location"));
-                    getMap();
-                }else{
+                    getMap();                }
+                else{
+                    //Do Nothing....for now.
+                }
 
-                    //Do Nothing
+
                 }
 
             }
         }
 
+    private void getMap() {
+        gh = new GPSHelper(getContext());
+        currentLocation = gh.getCurrentStaticLocation();
+        map.setPadding(10, 10, 10, 10);
+        map.addMarker(new MarkerOptions().position(currentLocation)
+                .title("Your Location"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
     }
 
 }
+
 
 
 

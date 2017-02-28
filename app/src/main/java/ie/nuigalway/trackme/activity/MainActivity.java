@@ -59,33 +59,6 @@ public class MainActivity extends AppCompatActivity
         fragment = null;
         fragmentClass = null;
 
-//        int aflCheck = ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_FINE_LOCATION);
-////        int aclCheck = ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION);
-//        int anpCheck = ContextCompat.checkSelfPermission(this,
-//                Manifest.permission.ACCESS_NETWORK_STATE);
-
-//        if(anpCheck != PackageManager.PERMISSION_GRANTED){
-//            //CL_PERMISSION=1;
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, NS_PERMISSION);
-//
-//        }
-//        if(aclCheck != PackageManager.PERMISSION_GRANTED){
-//            //CL_PERMISSION=1;
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, CL_PERMISSION);
-//
-//        }
-//        if (aflCheck != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-//                    FL_PERMISSION);
-//
-
-       // }else {
-
             if (savedInstanceState == null) {
                 fragmentClass = HomeFragment.class;
             }
@@ -97,7 +70,6 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-     //   }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -181,45 +153,6 @@ public class MainActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
-
-
-//    public void onRequestPermissionsResult(int requestCode,
-//                                           String permissions[], int[] grantResults) {
-//
-//        Fragment f;
-//        Class c;
-//        switch (requestCode) {
-//
-//            case FL_PERMISSION: {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    // permission was granted, yay! Do the
-//                    // contacts-related task you need to do.
-//
-//                    c = HomeFragment.class;
-//
-//                } else {
-//
-//                    c = LoginFragment.class;
-//                    // permission denied, boo! Disable the
-//                    // functionality that depends on this permission.
-//                }
-//                try {
-//                    f = (Fragment) c.newInstance();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-//
-//                // other 'case' lines to check for other
-//                // permissions this app might request
-//            }
-//        }
-//
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

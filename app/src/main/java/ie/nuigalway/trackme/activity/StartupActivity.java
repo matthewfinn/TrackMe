@@ -29,7 +29,6 @@ public class StartupActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-      //  sm = new SessionManager(getApplicationContext());
         db = new LocalDBHandler(getApplicationContext());
         Fragment fragment = null;
         Class fragmentClass = null;
