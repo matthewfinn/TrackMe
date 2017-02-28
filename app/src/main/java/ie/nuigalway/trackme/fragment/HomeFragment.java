@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -12,13 +13,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.android.gms.maps.CameraUpdateFactory;
+import android.location.Geocoder;
+import android.location.Address;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+//import com.google.android.gms.identity.intents.Address;
+
+import java.io.IOException;
+import java.util.Locale;
+import java.util.List;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.GPSHelper;
@@ -120,13 +128,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
             Log.d("134 PERMISSION REQUEST", String.valueOf(aflCheck));
 
-            getMap();
+            try{
+                getMap();
+            }catch(IOException e){
+
+                e.printStackTrace();
+            }
 
         }
     }
 
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+                                           String permissions[], int[] grantResults)  {
 
         switch (requestCode) {
 
@@ -139,10 +152,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
                             Manifest.permission.ACCESS_FINE_LOCATION);
                     Log.d("Permission Request: ", String.valueOf(aflCheck));
 
-                    getMap();                }
+                    try{
+                        getMap();
+                    }catch(IOException e){
+
+                        e.printStackTrace();
+                    }
+                }
                 else{
                     //Do Nothing....for now.
                 }
+
 
 
                 }
@@ -150,13 +170,33 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             }
         }
 
-    private void getMap() {
+
+    private void getMap() throws IOException{
+        double lat =0 , lng=0;
+
         gh = new GPSHelper(getContext());
         currentLocation = gh.getCurrentStaticLocation();
         map.setPadding(10, 10, 10, 10);
-        map.addMarker(new MarkerOptions().position(currentLocation)
-                .title("Your Location"));
+        String address = getAddressString();
+        
+        Log.d("Getting Map",address );
+        map.addMarker(new MarkerOptions().position(currentLocation).title(address));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+    }
+
+    @NonNull
+    private String getAddressString() throws IOException {
+        //Reverse Geocoding to get address string
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        List<Address> addresses = geocoder.getFromLocation(currentLocation.latitude, currentLocation.longitude, 1);
+        StringBuilder sb = new StringBuilder();
+        if (addresses.size() > 0) {
+            Address address = addresses.get(0);
+            for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                sb.append(address.getAddressLine(i)).append(", ");
+            sb.append(address.getCountryName());
+        }
+        return sb.toString();
     }
 
 }
