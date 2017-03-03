@@ -21,6 +21,7 @@ public class GPSService extends Service {
     {
         Location mLastLocation;
 
+
         public LocationListener(String provider)
         {
             Log.e(TAG, "LocationListener " + provider);

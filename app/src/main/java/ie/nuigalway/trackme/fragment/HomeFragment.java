@@ -2,7 +2,10 @@ package ie.nuigalway.trackme.fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,8 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.location.Geocoder;
-import android.location.Address;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,14 +24,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-//import com.google.android.gms.identity.intents.Address;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.List;
+import java.util.Locale;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.services.GPSService;
+
+//import com.google.android.gms.identity.intents.Address;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +43,7 @@ import ie.nuigalway.trackme.helper.GPSHelper;
  * Use the {@link HomeFragment newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment implements OnMapReadyCallback{
+public class HomeFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener{
 
     private static final int fl = 1;
 
@@ -48,6 +52,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
     private GPSHelper gh;
     private GoogleMap map;
     private int aflCheck;
+    private Button trackMeButton;
+    private Intent myGpsService;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,6 +64,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_home, null, false);
+
+        trackMeButton = (Button) v.findViewById(R.id.trackme_button);
+        trackMeButton.setOnClickListener(this);
 
         aflCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -172,13 +181,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
 
 
     private void getMap() throws IOException{
-        double lat =0 , lng=0;
 
         gh = new GPSHelper(getContext());
         currentLocation = gh.getCurrentStaticLocation();
         map.setPadding(10, 10, 10, 10);
         String address = getAddressString();
-        
+
         Log.d("Getting Map",address );
         map.addMarker(new MarkerOptions().position(currentLocation).title(address));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
@@ -197,6 +205,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback{
             sb.append(address.getCountryName());
         }
         return sb.toString();
+    }
+
+    @Override
+    public void onClick(View v) {
+        myGpsService = new Intent(getActivity(), GPSService.class);
+        Log.d("Service created",myGpsService.toString());
+        //startActivity(myGpsService);
+
+        switch (v.getId()) {
+            case R.id.trackme_button:
+            //    startService(myGpsService);
+
+        }
     }
 
 }

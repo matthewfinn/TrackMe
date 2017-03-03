@@ -86,9 +86,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.login_button:
                 attemptLogin();
+                break;
 
             case R.id.login_reglink:
                 switchToRegFrag();
+                break;
         }
     }
     private void attemptLogin() {
