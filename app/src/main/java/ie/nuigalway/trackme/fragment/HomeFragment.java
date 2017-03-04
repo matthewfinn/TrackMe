@@ -184,6 +184,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
         gh = new GPSHelper(getContext());
         currentLocation = gh.getCurrentStaticLocation();
+
         map.setPadding(10, 10, 10, 10);
         String address = getAddressString();
 

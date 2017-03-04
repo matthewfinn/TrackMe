@@ -50,7 +50,6 @@ public class GPSHelper implements LocationListener{
             Log.d(this.getClass().toString()+" | Network Enabled", String.valueOf(netEnabled));
 
             if(gpsEnabled){
-
                 provider = lm.GPS_PROVIDER;
             }
             else if(netEnabled){
@@ -64,7 +63,14 @@ public class GPSHelper implements LocationListener{
             try{
                 if(!provider.isEmpty()) {
 
-                    lm.requestLocationUpdates(provider, 1000, 1, this);
+                    //lm.requestLocationUpdates(provider, 1000, 1, this);
+                    lm.requestSingleUpdate(provider, this, null );
+                   try{
+
+                       Thread.sleep(2000);
+                   }catch (InterruptedException e){
+                       Log.e("Waiting","Waiting");
+                   }
                     loc = lm.getLastKnownLocation(provider);
 
                     currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
@@ -74,8 +80,7 @@ public class GPSHelper implements LocationListener{
                     return currentLocation;
                 }
             }catch(NullPointerException e){
-                Log.e(TAG, "provider not initialised because no provider accessible");
-
+               Log.e(TAG, "Provider not initialised because no provider accessible");
             }
 
         }catch (SecurityException e){

@@ -59,7 +59,7 @@ public class SessionManager {
     public boolean hasLocationServiceOn(){
 
         LocationManager lm = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
-        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
             Log.d(TAG,"Application has location services enabled");
             return true;
@@ -69,11 +69,6 @@ public class SessionManager {
         return false;
     }
 
-//    public void checkLogIn(){
-//        if(!this.isLoggedIn()){
-//
-//        }
-//    }
 
     public HashMap<String,String> getUserDetails(){
 
