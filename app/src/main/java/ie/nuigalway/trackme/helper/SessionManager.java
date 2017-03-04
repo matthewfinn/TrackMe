@@ -3,6 +3,7 @@ package ie.nuigalway.trackme.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.location.LocationManager;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -53,6 +54,19 @@ public class SessionManager {
 
     public boolean isLoggedIn(){
         return sp.getBoolean(KEY_L, false);
+    }
+
+    public boolean hasLocationServiceOn(){
+
+        LocationManager lm = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            Log.d(TAG,"Application has location services enabled");
+            return true;
+
+        }
+        Log.d(TAG,"Application has not got location services enabled");
+        return false;
     }
 
 //    public void checkLogIn(){

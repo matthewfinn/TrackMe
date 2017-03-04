@@ -20,6 +20,8 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         sm = new SessionManager(getApplicationContext());
 
+        
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
