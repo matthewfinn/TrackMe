@@ -205,6 +205,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         switch (v.getId()) {
             case R.id.trackme_button:
 
+                Log.d(TAG, sm.getUserDetails().toString());
                 Intent intent = new Intent(getActivity(), GPSService.class);
                 getActivity().startService(intent);
 

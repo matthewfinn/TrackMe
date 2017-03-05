@@ -79,11 +79,14 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         }finally{
             if (cursor != null) {
                 cursor.close();
+                Log.d(TAG,  "User exists in "+TABLE_USER_DETAILS + " table. Cursor closed");
+
             }
             if (db1 != null) {
                 db1.close();
+                Log.d(TAG,  "User exists in "+TABLE_USER_DETAILS + " table. Database connection closed");
+
             }
-            Log.d(TAG, "User already exists in "+ TABLE_USER_DETAILS +" table.");
         }
 
 
@@ -101,8 +104,6 @@ public class LocalDBHandler extends SQLiteOpenHelper{
             db2.close(); // Closing database connection
             Log.d(TAG, "User inserted into db table " +TABLE_USER_DETAILS+ "  " + ins);
         }
-
-
     }
 
     @Override
