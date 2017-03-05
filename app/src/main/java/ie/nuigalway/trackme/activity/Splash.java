@@ -19,7 +19,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import ie.nuigalway.trackme.R;
@@ -30,6 +29,8 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
         ActivityCompat.OnRequestPermissionsResultCallback{
 
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private static String TAG = Splash.class.getSimpleName();
+
     // Splash screen timeout, amount of time screen wants to be shown for
 
     private static int TIMEOUT = 3000;
@@ -75,9 +76,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                    // final LocationSettingsStates LS_state = locationSettingsResult.getLocationSettingsStates();
                     switch (status.getStatusCode()) {
                         case LocationSettingsStatusCodes.SUCCESS:
-                            // All location settings are satisfied. The client can initialize location
-                            // requests here.
-
+                            // All location settings are satisfied.
                             break;
                         case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                             // Location settings are not satisfied. But could be fixed by showing the user
@@ -143,7 +142,8 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
+        //final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
+
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS:
                 switch (resultCode) {

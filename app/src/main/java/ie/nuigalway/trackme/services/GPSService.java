@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 
@@ -35,10 +39,16 @@ public class GPSService extends Service {
         @Override
         public void onLocationChanged(Location location)
         {
-                Log.e(TAG, "onLocationChanged: " + location.toString());
-//                        gh.getAddressString
-//                                (new LatLng(location.getLatitude(),
-//                        location.getLongitude())));
+
+
+            try {
+                Log.e(TAG, "onLocationChanged: " + gh.getAddressString
+                        (new LatLng(location.getLatitude(),
+                        location.getLongitude())));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             mLastLocation.set(location);
         }
 

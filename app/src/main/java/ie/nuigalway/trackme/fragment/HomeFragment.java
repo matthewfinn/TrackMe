@@ -186,15 +186,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         currentLocation = gh.getCurrentStaticLocation();
 
         map.setPadding(10, 10, 10, 10);
-       // String address = gh.getAddressString(currentLocation);
+        String address = gh.getAddressString(currentLocation);
 
-        String address = currentLocation.toString();
+       // String address = currentLocation.toString();
 
         Log.d(TAG, address );
         map.addMarker(new MarkerOptions().position(currentLocation).title(address));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
     }
-
 
     @Override
     public void onClick(View v) {

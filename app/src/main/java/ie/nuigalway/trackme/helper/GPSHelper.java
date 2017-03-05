@@ -5,13 +5,13 @@ package ie.nuigalway.trackme.helper;
  */
 
 
-
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -26,7 +26,7 @@ import java.util.Locale;
 public class GPSHelper implements LocationListener{
 
 
-    private static String TAG = GPSHelper.class.getName();
+    private static String TAG = GPSHelper.class.getSimpleName();
     protected LocationManager lm; // Declaring a Location Manager
     private  Context c;
    // double lng, lat;
@@ -46,10 +46,10 @@ public class GPSHelper implements LocationListener{
             lm = (LocationManager) c.getSystemService(c.LOCATION_SERVICE);
 
             gpsEnabled = lm.isProviderEnabled(lm.GPS_PROVIDER); // gps status
-            Log.d(this.getClass().toString()+" | GPS Enabled", String.valueOf(gpsEnabled));
+            Log.i(TAG+" | GPS Enabled", String.valueOf(gpsEnabled));
 
             netEnabled = lm.isProviderEnabled(lm.NETWORK_PROVIDER); // net status
-            Log.d(this.getClass().toString()+" | Network Enabled", String.valueOf(netEnabled));
+            Log.i(TAG+" | Network Enabled", String.valueOf(netEnabled));
 
             if(gpsEnabled){
                 provider = lm.GPS_PROVIDER;
@@ -59,24 +59,20 @@ public class GPSHelper implements LocationListener{
                 provider = lm.NETWORK_PROVIDER;
             }else{
 
-                Log.d(this.getClass().toString(),"Nothing is enabled");
+                Log.w(TAG,"Nothing is enabled");
             }
 
             try{
                 if(!provider.isEmpty()) {
 
                     lm.requestSingleUpdate(provider, this, null );
-//                   try{
-//
-//                       Thread.sleep(2000);
-//                   }catch (InterruptedException e){
-//                       Log.e(TAG,"Waiting");
-//                   }
+
                     loc = lm.getLastKnownLocation(provider);
 
                     currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
 
-                    Log.d(TAG+ " | Current Location" ,currentLocation.toString());
+                    Log.i(TAG+ " | Current Location" ,"location obj. :" +loc.toString());
+                    Log.i(TAG+ " | Current Location" ,"latlng obj. :" +currentLocation.toString());
 
                     return currentLocation;
                 }
@@ -92,20 +88,56 @@ public class GPSHelper implements LocationListener{
         return null;
     }
 
+    private boolean checkInternetServiceAvailable(){
+
+        boolean status;
+
+        ConnectivityManager connMgr= (ConnectivityManager)
+                c.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        final android.net.NetworkInfo wifi = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        final android.net.NetworkInfo mobile = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if (wifi.isConnected()) {
+            status = true;
+            Log.i(TAG, "Wifi Connected");
+        } else if (mobile.isConnected()) {
+            status = true;
+            Log.i(TAG,"Mobile Network(LTE/3G/4g) Connected");
+        } else {
+            status = false;
+            Log.w(TAG,"No Internet Connection Available");
+        }
+
+        return status;
+    }
+
+
     @NonNull
     public String getAddressString(LatLng loc) throws IOException {
 
-        //Reverse Geocoding to get address string
-        Geocoder geocoder = new Geocoder(c, Locale.getDefault());
-        List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
-        StringBuilder sb = new StringBuilder();
-        if (addresses.size() > 0) {
-            Address address = addresses.get(0);
-            for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                sb.append(address.getAddressLine(i)).append(", ");
-            sb.append(address.getCountryName());
-        }
-        return sb.toString();
+       // String add = loc.toString();
+
+        //if(checkInternetServiceAvailable()) {
+
+            Geocoder geocoder = new Geocoder(c, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
+            StringBuilder sb = new StringBuilder();
+            if (!addresses.isEmpty()) {
+                Address address = addresses.get(0);
+
+                Log.d(TAG,"Address ="+address);
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                    sb.append(address.getAddressLine(i)).append(", ");
+                sb.append(address.getCountryName());
+                return sb.toString();
+            }else {
+                return loc.toString();
+            }
+        //}
+
+        //return add;
+
     }
 
     @Override

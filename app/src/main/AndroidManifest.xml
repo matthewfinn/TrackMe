@@ -43,10 +43,6 @@
             android:name=".services.FallDetectionService"
             android:exported="false" />
         <service
-            android:name=".services.MessageService"
-            android:enabled="true"
-            android:exported="true" />
-        <service
             android:name=".services.GPSService"
             android:enabled="true"
             android:exported="true" />
