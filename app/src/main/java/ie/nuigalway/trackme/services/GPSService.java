@@ -1,21 +1,25 @@
 package ie.nuigalway.trackme.services;
 
 import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.location.LocationManager;
-import android.location.Location;
-import android.util.Log;
-import android.os.Bundle;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+
+import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.LocalDBHandler;
 
 public class GPSService extends Service {
 
-    private static final String TAG = "TrackMeGPS";
-    private static final int L_INT = 100;
-    private static final float L_DIST = 10f; //Cast to float, compiler understands to treat as fp num
+    private static final String TAG = GPSService.class.getSimpleName();
+    private static final int L_INT = 10000;
+    private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
-    //private;
+    private GPSHelper gh;
+    private LocalDBHandler db;
 
     private class LocationListener implements android.location.LocationListener
     {
@@ -31,7 +35,10 @@ public class GPSService extends Service {
         @Override
         public void onLocationChanged(Location location)
         {
-            Log.e(TAG, "onLocationChanged: " + location);
+                Log.e(TAG, "onLocationChanged: " + location.toString());
+//                        gh.getAddressString
+//                                (new LatLng(location.getLatitude(),
+//                        location.getLongitude())));
             mLastLocation.set(location);
         }
 
@@ -68,6 +75,7 @@ public class GPSService extends Service {
     public void onCreate()
     {
         Log.e(TAG, "onCreate");
+        gh = new GPSHelper(GPSService.this);
         initializeLocationManager();
         try {
             lm.requestLocationUpdates(
@@ -82,6 +90,7 @@ public class GPSService extends Service {
             lm.requestLocationUpdates(
                     LocationManager.GPS_PROVIDER, L_INT, L_DIST,
                     mLocationListeners[0]);
+
         } catch (java.lang.SecurityException ex) {
             Log.i(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {

@@ -4,11 +4,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -26,11 +23,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.SessionManager;
 import ie.nuigalway.trackme.services.GPSService;
 
 //import com.google.android.gms.identity.intents.Address;
@@ -46,6 +42,7 @@ import ie.nuigalway.trackme.services.GPSService;
 public class HomeFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener{
 
     private static final int fl = 1;
+    private static final String TAG = HomeFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
     private LatLng currentLocation;
@@ -54,6 +51,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private int aflCheck;
     private Button trackMeButton;
     private Intent myGpsService;
+    private SessionManager sm;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -64,6 +62,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_home, null, false);
+
+        sm = new SessionManager(getContext());
 
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
@@ -186,37 +186,27 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         currentLocation = gh.getCurrentStaticLocation();
 
         map.setPadding(10, 10, 10, 10);
-        String address = getAddressString();
+       // String address = gh.getAddressString(currentLocation);
 
-        Log.d("Getting Map",address );
+        String address = currentLocation.toString();
+
+        Log.d(TAG, address );
         map.addMarker(new MarkerOptions().position(currentLocation).title(address));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
     }
 
-    @NonNull
-    private String getAddressString() throws IOException {
-        //Reverse Geocoding to get address string
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
-        List<Address> addresses = geocoder.getFromLocation(currentLocation.latitude, currentLocation.longitude, 1);
-        StringBuilder sb = new StringBuilder();
-        if (addresses.size() > 0) {
-            Address address = addresses.get(0);
-            for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                sb.append(address.getAddressLine(i)).append(", ");
-            sb.append(address.getCountryName());
-        }
-        return sb.toString();
-    }
 
     @Override
     public void onClick(View v) {
         myGpsService = new Intent(getActivity(), GPSService.class);
-        Log.d("Service created",myGpsService.toString());
+        Log.d(TAG,myGpsService.toString());
         //startActivity(myGpsService);
 
         switch (v.getId()) {
             case R.id.trackme_button:
-            //    startService(myGpsService);
+
+                Intent intent = new Intent(getActivity(), GPSService.class);
+                getActivity().startService(intent);
 
         }
     }

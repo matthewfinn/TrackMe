@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,10 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.annotation.NonNull;
 
 import java.util.List;
-
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.fragment.ContactsFragment;
@@ -36,15 +35,12 @@ public class MainActivity extends AppCompatActivity
         ProfileFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener, FDPreferencesFragment.OnFragmentInteractionListener,
         PreferencesFragment.OnFragmentInteractionListener {
 
-    SessionManager sm;
-
-    private static final int FL_PERMISSION = 1;
-    private static final int CL_PERMISSION = 0;
-    private static final int NS_PERMISSION = 2;
-
+    private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment fragment;
     private Class fragmentClass;
     Toolbar toolbar;
+    SessionManager sm;
+
 
 
     @Override

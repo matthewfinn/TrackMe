@@ -21,6 +21,7 @@ public class SessionManager {
     public static final String PHONE = "phone";
     private static final String PREF = "TrackMePreferences";
     private static final String KEY_L = "LoggedIn";
+    private static final String KEY_G = "GPSRunning";
     private static String TAG = SessionManager.class.getSimpleName();
     int MODE = 0; //private preferences mode used to set preference permissions
 
@@ -67,6 +68,18 @@ public class SessionManager {
         }
         Log.d(TAG,"Application has not got location services enabled");
         return false;
+    }
+
+    public boolean isGPSRunning(){
+        return sp.getBoolean(KEY_L, false);
+    }
+
+    public void setGPSStatus(boolean b){
+
+        ed.putBoolean(KEY_G,b);
+        ed.commit();
+
+        Log.d(TAG, "User login session modified. GPS Service Tracking Modified.");
     }
 
 

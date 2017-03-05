@@ -2,23 +2,25 @@ package ie.nuigalway.trackme.helper;
 
 /**
  * Created by matthew on 25/02/2017.
- *
- *
- *
- *
- * THIS COULD BE A PRIVATE CLASS WITHIN THE HOME FRAGMENT??????/
  */
 
 
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 
 public class GPSHelper implements LocationListener{
@@ -63,19 +65,18 @@ public class GPSHelper implements LocationListener{
             try{
                 if(!provider.isEmpty()) {
 
-                    //lm.requestLocationUpdates(provider, 1000, 1, this);
                     lm.requestSingleUpdate(provider, this, null );
-                   try{
-
-                       Thread.sleep(2000);
-                   }catch (InterruptedException e){
-                       Log.e("Waiting","Waiting");
-                   }
+//                   try{
+//
+//                       Thread.sleep(2000);
+//                   }catch (InterruptedException e){
+//                       Log.e(TAG,"Waiting");
+//                   }
                     loc = lm.getLastKnownLocation(provider);
 
                     currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
 
-                    Log.d(this.getClass().toString()+" | Current Location" ,currentLocation.toString());
+                    Log.d(TAG+ " | Current Location" ,currentLocation.toString());
 
                     return currentLocation;
                 }
@@ -89,6 +90,22 @@ public class GPSHelper implements LocationListener{
 
 
         return null;
+    }
+
+    @NonNull
+    public String getAddressString(LatLng loc) throws IOException {
+
+        //Reverse Geocoding to get address string
+        Geocoder geocoder = new Geocoder(c, Locale.getDefault());
+        List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
+        StringBuilder sb = new StringBuilder();
+        if (addresses.size() > 0) {
+            Address address = addresses.get(0);
+            for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                sb.append(address.getAddressLine(i)).append(", ");
+            sb.append(address.getCountryName());
+        }
+        return sb.toString();
     }
 
     @Override

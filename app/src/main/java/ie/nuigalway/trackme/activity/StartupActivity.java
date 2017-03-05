@@ -21,7 +21,9 @@ import ie.nuigalway.trackme.helper.LocalDBHandler;
 public class StartupActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,LoginFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener {
   //  SessionManager sm;
+
     LocalDBHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
