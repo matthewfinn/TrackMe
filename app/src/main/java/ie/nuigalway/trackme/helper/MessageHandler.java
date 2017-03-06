@@ -5,4 +5,7 @@ package ie.nuigalway.trackme.helper;
  */
 
 public class MessageHandler {
+
+    private static String TAG = MessageHandler.class.getSimpleName();
+
 }

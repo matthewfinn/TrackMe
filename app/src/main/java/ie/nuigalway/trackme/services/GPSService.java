@@ -3,15 +3,16 @@ package ie.nuigalway.trackme.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import java.io.IOException;
+import java.util.Locale;
 
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
@@ -19,11 +20,17 @@ import ie.nuigalway.trackme.helper.LocalDBHandler;
 public class GPSService extends Service {
 
     private static final String TAG = GPSService.class.getSimpleName();
-    private static final int L_INT = 10000;
+    private static final String PREF = "TrackMePreferences";
+    int MODE = 0; //private preferences mode used to set preference permissions
+    private static final int L_INT = 10000; //
     private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
     private GPSHelper gh;
     private LocalDBHandler db;
+    Context ctx;
+    SharedPreferences sp;
+    Editor ed; //May not be needed
+
 
     private class LocationListener implements android.location.LocationListener
     {
@@ -32,42 +39,38 @@ public class GPSService extends Service {
 
         public LocationListener(String provider)
         {
-            Log.e(TAG, "LocationListener " + provider);
+            Log.i(TAG, "LocationListener " + provider);
             mLastLocation = new Location(provider);
         }
 
         @Override
         public void onLocationChanged(Location location)
         {
+            Address ad = new Address(new Locale("English"));
+            ad.setLatitude(location.getLatitude());
+            ad.setLongitude(location.getLongitude());
+            ad.getCountryName();
+            Log.i(TAG, "onLocationChanged: " +ad.getCountryName());
 
-
-            try {
-                Log.e(TAG, "onLocationChanged: " + gh.getAddressString
-                        (new LatLng(location.getLatitude(),
-                        location.getLongitude())));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            mLastLocation.set(location);
+                    mLastLocation.set(location);
         }
 
         @Override
         public void onProviderDisabled(String provider)
         {
-            Log.e(TAG, "onProviderDisabled: " + provider);
+            Log.w(TAG, "onProviderDisabled: " + provider);
         }
 
         @Override
         public void onProviderEnabled(String provider)
         {
-            Log.e(TAG, "onProviderEnabled: " + provider);
+            Log.i(TAG, "onProviderEnabled: " + provider);
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras)
         {
-            Log.e(TAG, "onStatusChanged: " + provider);
+            Log.i(TAG, "onStatusChanged: " + provider);
         }
     }
 
@@ -84,7 +87,7 @@ public class GPSService extends Service {
     @Override
     public void onCreate()
     {
-        Log.e(TAG, "onCreate");
+        Log.i(TAG, "onCreate");
         gh = new GPSHelper(GPSService.this);
         initializeLocationManager();
         try {
@@ -92,9 +95,9 @@ public class GPSService extends Service {
                     LocationManager.NETWORK_PROVIDER, L_INT, L_DIST,
                     mLocationListeners[1]);
         } catch (java.lang.SecurityException ex) {
-            Log.i(TAG, "fail to request location update, ignore", ex);
+            Log.e(TAG, "fail to request location update, ignore", ex);
         } catch (IllegalArgumentException ex) {
-            Log.d(TAG, "network provider does not exist, " + ex.getMessage());
+            Log.e(TAG, "network provider does not exist, " + ex.getMessage());
         }
         try {
             lm.requestLocationUpdates(
@@ -111,7 +114,7 @@ public class GPSService extends Service {
     @Override
     public void onDestroy()
     {
-        Log.e(TAG, "onDestroy");
+        Log.i(TAG, "onDestroy");
         super.onDestroy();
         if (lm != null) {
             for (int i = 0; i < mLocationListeners.length; i++) {
@@ -126,7 +129,7 @@ public class GPSService extends Service {
     }
 
     private void initializeLocationManager() {
-        Log.e(TAG, "initializeLocationManager");
+        Log.i(TAG, "initializeLocationManager");
         if (lm == null) {
             lm = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         }
@@ -135,7 +138,13 @@ public class GPSService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.e(TAG, "onStartCommand");
+        // Shared preferences got. to be used to get user preference for location tracking
+        // i.e. "sp.getString("firstname",null)" gets the 'value' stored for 'key' firstname
+        this.ctx = getApplicationContext();
+        sp = ctx.getSharedPreferences(PREF,MODE);
+
+        Log.i(TAG, "onStartCommand ");
+
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }

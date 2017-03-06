@@ -25,16 +25,13 @@ import java.util.Locale;
 
 public class GPSHelper implements LocationListener{
 
-
     private static String TAG = GPSHelper.class.getSimpleName();
-    protected LocationManager lm; // Declaring a Location Manager
-    private  Context c;
-   // double lng, lat;
-    Location loc;
+    private Context c;
+    private LocationManager lm; // Declaring a Location Manager
+    private Location loc;
     private String provider;
     private LatLng currentLocation;
     private boolean gpsEnabled, netEnabled;
-
 
     public GPSHelper(Context ctx){
         this.c = ctx;
@@ -116,10 +113,9 @@ public class GPSHelper implements LocationListener{
     @NonNull
     public String getAddressString(LatLng loc) throws IOException {
 
-       // String add = loc.toString();
+        String add = loc.toString();
 
-        //if(checkInternetServiceAvailable()) {
-
+       if(this.checkInternetServiceAvailable()==true){
             Geocoder geocoder = new Geocoder(c, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
             StringBuilder sb = new StringBuilder();
@@ -130,13 +126,11 @@ public class GPSHelper implements LocationListener{
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
                     sb.append(address.getAddressLine(i)).append(", ");
                 sb.append(address.getCountryName());
-                return sb.toString();
-            }else {
-                return loc.toString();
+                add = sb.toString();
             }
-        //}
+        }
 
-        //return add;
+        return add;
 
     }
 

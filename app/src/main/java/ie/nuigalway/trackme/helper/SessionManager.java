@@ -100,6 +100,6 @@ public class SessionManager {
 
         ed.clear();
         ed.commit();
-        Log.d(TAG ,sp.toString());
+        Log.d(TAG , sp.getAll().values().toString());
     }
 }

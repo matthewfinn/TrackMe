@@ -71,10 +71,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         aflCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
 
-        Log.d("Location Permission = ",String.valueOf(aflCheck));
+        Log.i(TAG, "Permission already given to access location using device");
 
         if (aflCheck != PackageManager.PERMISSION_GRANTED) {
-           ActivityCompat.requestPermissions(getActivity(),
+            Log.i(TAG, "Requesting permission to access location");
+
+            ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     fl);
         }
@@ -83,13 +85,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
             smf.getMapAsync(this);
 
         return v;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -124,18 +119,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         void onFragmentInteraction(Uri uri);
     }
 
-    private void getUserPermissions(){
-
-
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
         if(aflCheck!=-1){
-
-            Log.d("134 PERMISSION REQUEST", String.valueOf(aflCheck));
 
             try{
                 getMap();
@@ -159,7 +147,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
                     aflCheck = ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION);
-                    Log.d("Permission Request: ", String.valueOf(aflCheck));
+                    Log.i(TAG, "Checking if location permission given. Status: "+aflCheck);
 
                     try{
                         getMap();
@@ -169,16 +157,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     }
                 }
                 else{
-                    //Do Nothing....for now.
+                    Log.i(TAG, "Location permission denied by user"+aflCheck);
                 }
-
-
-
                 }
-
             }
         }
-
 
     private void getMap() throws IOException{
 
@@ -186,6 +169,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         currentLocation = gh.getCurrentStaticLocation();
 
         map.setPadding(10, 10, 10, 10);
+
         String address = gh.getAddressString(currentLocation);
 
        // String address = currentLocation.toString();
@@ -204,7 +188,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         switch (v.getId()) {
             case R.id.trackme_button:
 
-                Log.d(TAG, sm.getUserDetails().toString());
+                Log.d(TAG, "Tracking Enabled");
                 Intent intent = new Intent(getActivity(), GPSService.class);
                 getActivity().startService(intent);
 
