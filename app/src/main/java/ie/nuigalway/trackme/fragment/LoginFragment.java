@@ -242,7 +242,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         };
 
         App.getInstance().addToRQ(r, req);
-
     }
 
     private void switchToRegFrag() {
