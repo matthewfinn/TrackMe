@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import java.util.Map;
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.application.App;
 import ie.nuigalway.trackme.application.AppConfig;
+import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
@@ -42,6 +44,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private SessionManager sesh;
     private LocalDBHandler db;
     private ProgressDialog pd;
+    private GPSHelper gh;
 
     private OnFragmentInteractionListener mListener;
 
@@ -73,6 +76,16 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
         db = new LocalDBHandler(getContext());
         sesh = new SessionManager(getContext());
+        gh = new GPSHelper(getContext());
+
+        if(!gh.checkInternetServiceAvailable()) {
+
+            new AlertDialog.Builder(getContext()).
+                    setTitle("No Connection").
+                    setMessage("Internet Connection Needed To Register.\n" +
+                            "Please Enable Internet Connection To Continue").
+                    setNeutralButton("Close", null).show();
+        }
 
         return view;
     }
@@ -81,7 +94,11 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.reg_btn:
-                attemptRegister();
+                if(gh.checkInternetServiceAvailable()) {
+                    attemptRegister();
+                }else{
+                    Toast.makeText(getContext(),"No Internet Connection", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.lgn_lnk:
                 switchFragmentToLogin();

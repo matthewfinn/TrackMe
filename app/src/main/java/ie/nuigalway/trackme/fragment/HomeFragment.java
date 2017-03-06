@@ -1,6 +1,8 @@
 package ie.nuigalway.trackme.fragment;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -9,11 +11,13 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -50,11 +54,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private GoogleMap map;
     private int aflCheck;
     private Button trackMeButton;
-    private Intent myGpsService;
     private SessionManager sm;
+    private ProgressDialog pd;
 
     public HomeFragment() {
-        // Required empty public constructor
+    }
+
+    public Fragment getFragment(){
+        return this;
     }
 
     @Override
@@ -81,8 +88,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     fl);
         }
 
-            SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-            smf.getMapAsync(this);
+        SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        smf.getMapAsync(this);
 
         return v;
     }
@@ -124,14 +131,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         map = googleMap;
 
         if(aflCheck!=-1){
-
             try{
                 getMap();
             }catch(IOException e){
 
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -165,36 +170,55 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
     private void getMap() throws IOException{
 
+        String address;
         gh = new GPSHelper(getContext());
+        if(!gh.checkInternetServiceAvailable()) {
+
+            new AlertDialog.Builder(getActivity()).
+                    setTitle("No Connection").
+                    setMessage("Enable Internet Connection If You Want Address To Be Displayed\n"+
+                            "Otherwise on Latitude/Longitude Values will be displayed").
+                    setNeutralButton("Close", null).show();
+        }
+
         currentLocation = gh.getCurrentStaticLocation();
 
         map.setPadding(10, 10, 10, 10);
 
-        String address = gh.getAddressString(currentLocation);
+            address = gh.getAddressString(currentLocation);
 
-       // String address = currentLocation.toString();
 
-        Log.d(TAG, address );
+        Log.d(TAG, "User Location is" + address );
         map.addMarker(new MarkerOptions().position(currentLocation).title(address));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
     }
 
     @Override
     public void onClick(View v) {
-        myGpsService = new Intent(getActivity(), GPSService.class);
-        Log.d(TAG,myGpsService.toString());
-        //startActivity(myGpsService);
-
         switch (v.getId()) {
             case R.id.trackme_button:
 
-                Log.d(TAG, "Tracking Enabled");
+                Toast.makeText(getContext(), "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
+                Log.d(TAG, "Starting Service: "+GPSService.class.getSimpleName());
                 Intent intent = new Intent(getActivity(), GPSService.class);
                 getActivity().startService(intent);
-
+                break;
+                    //map.clear();
         }
     }
 
+    public void addToMap(LatLng loc, String add){
+        map.clear();
+        map.addMarker(new MarkerOptions().position(loc).title(add));
+    }
+
+    private BroadcastReceiver br  = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
 }
 
 

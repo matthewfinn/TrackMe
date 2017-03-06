@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.activity.MainActivity;
 import ie.nuigalway.trackme.application.App;
 import ie.nuigalway.trackme.application.AppConfig;
+import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
@@ -42,6 +44,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private Button login_button, login_reglink;
     private SessionManager sm;
     private LocalDBHandler db;
+    private GPSHelper gh;
     private ProgressDialog pd;
     private String em, pw;
 
@@ -77,6 +80,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         db = new LocalDBHandler(getContext());
         sm = new SessionManager(getContext());
+        gh = new GPSHelper(getContext());
+
+        if(!gh.checkInternetServiceAvailable()) {
+
+            new AlertDialog.Builder(getContext()).
+                    setTitle("No Connection").
+                    setMessage("Internet Connection Needed To Log In.\n" +
+                            "Please Enable Internet Connection To Continue").
+                    setNeutralButton("Close", null).show();
+        }
 
         return view;
     }
@@ -85,7 +98,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_button:
-                attemptLogin();
+                if(gh.checkInternetServiceAvailable()) {
+                    attemptLogin();
+                }else{
+                    Toast.makeText(getContext(),"No Internet Connection", Toast.LENGTH_LONG).show();
+                }
                 break;
 
             case R.id.login_reglink:
@@ -99,14 +116,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         pw = password.getText().toString().trim();
 
         // else if block(s) to verify is user entered correct information.
-
         if (!em.isEmpty() && !pw.isEmpty()) {
 
             // Verify user login using details provided
             verifyLogin(em, pw);
 
         }else if (em.isEmpty()&&pw.isEmpty()){
-
 
             Toast.makeText(getActivity(),
                     "Please Enter Email Address & Password To Log In", Toast.LENGTH_LONG)
@@ -190,12 +205,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
                     } else {
                         String err = j.getString("error_msg");
-                        Toast.makeText(getContext(), "On Response: "+err , Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), err , Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException jse) {
 
                     jse.printStackTrace();
-                    Toast.makeText(getContext(), "On Response Error" + jse.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), jse.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -204,7 +219,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             public void onErrorResponse(VolleyError e){
 
                 Log.e(TAG,"Login : "+ e.getMessage());
-                Toast.makeText(getContext(),"On Error Response: "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
 
                 if(pd.isShowing()) {
 
@@ -237,16 +252,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         ft.replace(R.id.fragment_login, newFragment );
         ft.commit();
     }
-    private void switchToHomeFrag() {
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment newFragment = new HomeFragment();
-        ft.replace(R.id.fragment_login, newFragment );
-        ft.commit();
-    }
 
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

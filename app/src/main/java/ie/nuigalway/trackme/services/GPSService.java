@@ -5,15 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.location.Address;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.util.Locale;
+import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
+
+import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 
@@ -27,6 +29,8 @@ public class GPSService extends Service {
     private LocationManager lm = null;
     private GPSHelper gh;
     private LocalDBHandler db;
+    private HomeFragment h;
+    String address;
     Context ctx;
     SharedPreferences sp;
     Editor ed; //May not be needed
@@ -46,13 +50,22 @@ public class GPSService extends Service {
         @Override
         public void onLocationChanged(Location location)
         {
-            Address ad = new Address(new Locale("English"));
-            ad.setLatitude(location.getLatitude());
-            ad.setLongitude(location.getLongitude());
-            ad.getCountryName();
-            Log.i(TAG, "onLocationChanged: " +ad.getCountryName());
 
-                    mLastLocation.set(location);
+            if(gh.checkInternetServiceAvailable()){
+                try {
+                    address = gh.getAddressString(new LatLng(location.getLatitude(),location.getLongitude()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }else{
+
+                address = location.toString();
+            }
+            Log.i(TAG, "onLocationChanged: " + address);
+            mLastLocation.set(location);
+
+            //Fragment home = HomeFragment.
+
         }
 
         @Override

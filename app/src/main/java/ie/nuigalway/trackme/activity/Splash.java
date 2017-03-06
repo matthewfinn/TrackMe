@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,7 +34,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 
     // Splash screen timeout, amount of time screen wants to be shown for
 
-    private static int TIMEOUT = 3000;
+    private static int TIMEOUT = 5000;
     SessionManager sm;
     GoogleApiClient gac;
 
@@ -45,6 +46,8 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
 
         if(!sm.hasLocationServiceOn()) {
             if (gac == null) {
+
+                Log.i(TAG, "Requesting User To Enable Location Services");
                 gac = new GoogleApiClient.Builder(this)
                         .addConnectionCallbacks(this)
                         .addOnConnectionFailedListener(this)
@@ -149,9 +152,11 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
                 switch (resultCode) {
                     case Activity.RESULT_OK:
                         // All required changes were successfully made
-                        createDelayHandler();//FINALLY YOUR OWN METHOD TO GET YOUR USER LOCATION HERE
+                        Log.i(TAG,"User Granted Permission To User Location Services");
+                        createDelayHandler();
                         break;
                     case Activity.RESULT_CANCELED:
+                        Log.e(TAG,"Permission to user location services denied");
                         System.exit(0);
                         finish();
                         break;

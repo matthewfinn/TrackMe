@@ -85,7 +85,7 @@ public class GPSHelper implements LocationListener{
         return null;
     }
 
-    private boolean checkInternetServiceAvailable(){
+    public boolean checkInternetServiceAvailable(){
 
         boolean status;
 
@@ -115,14 +115,12 @@ public class GPSHelper implements LocationListener{
 
         String add = loc.toString();
 
-       if(this.checkInternetServiceAvailable()==true){
+       if(checkInternetServiceAvailable()==true){
             Geocoder geocoder = new Geocoder(c, Locale.getDefault());
             List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
             StringBuilder sb = new StringBuilder();
             if (!addresses.isEmpty()) {
                 Address address = addresses.get(0);
-
-                Log.d(TAG,"Address ="+address);
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
                     sb.append(address.getAddressLine(i)).append(", ");
                 sb.append(address.getCountryName());
