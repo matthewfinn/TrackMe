@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,6 +50,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
+    private static final String IDENTIFIER = "Location";
+    private static final String KEY = "locData";
+
+    private static final String LAT = "latData";
+    private static final String LNG = "lngData";
+    private static final String CDT = "timeData";
     private LatLng currentLocation;
     private GPSHelper gh;
     private GoogleMap map;
@@ -56,14 +63,35 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private Button trackMeButton;
     private SessionManager sm;
     private ProgressDialog pd;
+    private Context ctx;
+
 
     public HomeFragment() {
     }
 
-    public Fragment getFragment(){
-        return this;
-    }
+//    public Fragment getFragment(){
+    //    return this;
+    //}
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+    }
+    @Override
+    public void onResume() {
+
+        super.onResume();
+        getActivity().registerReceiver(rec, new IntentFilter(IDENTIFIER));
+
+    }
+    @Override
+    public void onPause() {
+
+        super.onPause();
+        getActivity().unregisterReceiver(rec);
+
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,7 +99,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         View v = inflater.inflate(R.layout.fragment_home, null, false);
 
         sm = new SessionManager(getContext());
-
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
 
@@ -96,6 +123,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
     @Override
     public void onAttach(Context context) {
+        ctx = context;
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -106,9 +134,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     }
 
     @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+       // ctx.unregisterReceiver(null);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     /**
@@ -122,7 +162,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
@@ -207,18 +246,36 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         }
     }
 
+    private BroadcastReceiver rec = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+           // String s = intent.getExtras().get(KEY).toString();
+            map.clear();
+
+            Double lat = intent.getDoubleExtra(LAT,0.0);
+            Double lon = intent.getDoubleExtra(LNG,0.0);
+            String cdt = intent.getExtras().get(CDT).toString();
+            Log.d(TAG, "onReceive Location Data: "+lat+"||"+lon+"||"+cdt);
+
+            LatLng currPos = new LatLng(lat,lon);
+            try {
+                map.addMarker(new MarkerOptions().position(currPos).title(gh.getAddressString(currPos)+" @ "+cdt
+                        ));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    };
+
+
     public void addToMap(LatLng loc, String add){
         map.clear();
         map.addMarker(new MarkerOptions().position(loc).title(add));
     }
 
-    private BroadcastReceiver br  = new BroadcastReceiver(){
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-        }
-    };
 }
 
 

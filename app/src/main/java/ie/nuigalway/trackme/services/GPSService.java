@@ -9,11 +9,14 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.helper.GPSHelper;
@@ -22,18 +25,27 @@ import ie.nuigalway.trackme.helper.LocalDBHandler;
 public class GPSService extends Service {
 
     private static final String TAG = GPSService.class.getSimpleName();
+
+    private static final String IDENTIFIER = "Location";
+    private static final String KEY = "locData";
+
+    private static final String LAT = "latData";
+    private static final String LNG = "lngData";
+    private static final String CDT = "timeData";
     private static final String PREF = "TrackMePreferences";
     int MODE = 0; //private preferences mode used to set preference permissions
     private static final int L_INT = 10000; //
     private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
     private GPSHelper gh;
+    private LocalBroadcastManager broadcaster;
+    private String address;
+    private Context ctx;
+
+    private SharedPreferences sp;
+    private Editor ed; //May not be needed
     private LocalDBHandler db;
     private HomeFragment h;
-    String address;
-    Context ctx;
-    SharedPreferences sp;
-    Editor ed; //May not be needed
 
 
     private class LocationListener implements android.location.LocationListener
@@ -51,9 +63,16 @@ public class GPSService extends Service {
         public void onLocationChanged(Location location)
         {
 
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+            String cdt = sdf.format(new Date());
+            LatLng lCurr = new LatLng(lat,lng);
+
             if(gh.checkInternetServiceAvailable()){
                 try {
-                    address = gh.getAddressString(new LatLng(location.getLatitude(),location.getLongitude()));
+                    address = gh.getAddressString(lCurr);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -61,10 +80,18 @@ public class GPSService extends Service {
 
                 address = location.toString();
             }
+            Intent intent = new Intent(IDENTIFIER); //FILTER is a string to identify this intent
+            //intent.putExtra(KEY,lat+","+lng+","+cdt);
+
+            intent.putExtra(LAT,lat);
+            intent.putExtra(LNG,lng);
+            intent.putExtra(CDT, cdt);
+            sendBroadcast(intent);
+
             Log.i(TAG, "onLocationChanged: " + address);
             mLastLocation.set(location);
 
-            //Fragment home = HomeFragment.
+            Log.i(TAG,"Sending Location Data To Update UI");
 
         }
 
@@ -103,6 +130,8 @@ public class GPSService extends Service {
         Log.i(TAG, "onCreate");
         gh = new GPSHelper(GPSService.this);
         initializeLocationManager();
+        broadcaster = LocalBroadcastManager.getInstance(this);
+
         try {
             lm.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, L_INT, L_DIST,
@@ -161,6 +190,7 @@ public class GPSService extends Service {
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
+
 
 
 }
