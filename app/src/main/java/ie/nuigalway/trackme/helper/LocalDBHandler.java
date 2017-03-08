@@ -34,7 +34,9 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     private static final String PHNO = "phone_no";
     private static final String UID = "unique_id";
     private static final String CR = "created_at";
-
+    private static final String LAT = "latitude";
+    private static final String LNG = "longitude";
+    private static final String TS = "timestamp";
 
     public LocalDBHandler(Context ctx){
 
@@ -57,6 +59,13 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         /*
         * Placeholder to create user location table
         * */
+
+        String CREATE_LOCATION_TABLE = "CREATE TABLE " + TABLE_USER_LOCATION + "("
+                + ID + " INTEGER PRIMARY KEY," + LAT + " TEXT," + LNG
+                + " TEXT," + TS + " TEXT"+")";
+
+       // db.execSQL(CREATE_LOCATION_TABLE);
+        Log.d(TAG, "User Location Database Table created.");
 
 
     }
@@ -116,6 +125,11 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     }
 
     public void deleteTables(){
+
+
+    }
+
+    public void updateLocation(String id, String lt, String ln, String t){
 
 
     }
