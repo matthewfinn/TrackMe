@@ -61,7 +61,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         * */
 
         String CREATE_LOCATION_TABLE = "CREATE TABLE " + TABLE_USER_LOCATION + "("
-                + ID + " INTEGER PRIMARY KEY," + LAT + " TEXT," + LNG
+                + ID + " INTEGER PRIMARY KEY,"  +  UID + " TEXT," + LAT + " TEXT," + LNG
                 + " TEXT," + TS + " TEXT"+")";
 
        // db.execSQL(CREATE_LOCATION_TABLE);
@@ -129,8 +129,19 @@ public class LocalDBHandler extends SQLiteOpenHelper{
 
     }
 
-    public void updateLocation(String id, String lt, String ln, String t){
+    public void updateLocation(String id, String email, String lt, String ln, String t){
 
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vals = new ContentValues();//empty set of values that will be used to store user info
+        vals.put(UID, id);
+        vals.put(EMAIL, email);
+        vals.put(LAT, lt);
+        vals.put(LNG, ln);
+        vals.put(TS, t);
+
+        long ins = db.insert(TABLE_USER_LOCATION, null, vals);
+        db.close(); // Closing database connection
+        Log.d(TAG, "User inserted into db table " +TABLE_USER_LOCATION+ "  " + ins);
 
     }
 

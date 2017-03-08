@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -17,8 +16,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
-import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 
@@ -27,7 +26,10 @@ public class GPSService extends Service {
     private static final String TAG = GPSService.class.getSimpleName();
 
     private static final String IDENTIFIER = "Location";
-    private static final String KEY = "locData";
+   // private static final String KEY = "locData";
+
+    private static final String ID = "id";
+    private static final String EMAIL = "email";
 
     private static final String LAT = "latData";
     private static final String LNG = "lngData";
@@ -38,16 +40,15 @@ public class GPSService extends Service {
     private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
     private GPSHelper gh;
+    private LocalDBHandler ldb;
+   // private CloudDBHandler cdb;
     private LocalBroadcastManager broadcaster;
     private String address;
     private Context ctx;
 
     private SharedPreferences sp;
-    private Editor ed; //May not be needed
-    private LocalDBHandler db;
-    private HomeFragment h;
-
-
+    //private Editor ed; //May not be needed
+    
     private class LocationListener implements android.location.LocationListener
     {
         Location mLastLocation;
@@ -55,21 +56,28 @@ public class GPSService extends Service {
 
         public LocationListener(String provider)
         {
-            Log.i(TAG, "LocationListener " + provider);
+            //Define locationListener object passing in network provider as a string
             mLastLocation = new Location(provider);
+            Log.i(TAG, "LocationListener " + provider);
         }
 
         @Override
         public void onLocationChanged(Location location)
         {
 
+            //get latitude & longitude values from location object;
             double lat = location.getLatitude();
             double lng = location.getLongitude();
 
+            //Define date format
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
             String cdt = sdf.format(new Date());
+
+            //Create LatLng Object (To Be Used to Create Google Maps Marker)
             LatLng lCurr = new LatLng(lat,lng);
 
+            //Check if internet service is available and get address string either using Geocoder
+            //Or if internet is not available getAddressString(LatLng obj) will return co-ordinates
             if(gh.checkInternetServiceAvailable()){
                 try {
                     address = gh.getAddressString(lCurr);
@@ -80,15 +88,27 @@ public class GPSService extends Service {
 
                 address = location.toString();
             }
-            Intent intent = new Intent(IDENTIFIER); //FILTER is a string to identify this intent
-            //intent.putExtra(KEY,lat+","+lng+","+cdt);
+            //Create an identified intent to broadcast updated location to fragment object
+            Intent intent = new Intent(IDENTIFIER); //IDENTIFIER is a string to identify this intent
 
-            intent.putExtra(LAT,lat);
-            intent.putExtra(LNG,lng);
-            intent.putExtra(CDT, cdt);
+            //Get user details from local database so that new location can be updated in db.
+            HashMap<String,String> uDetails = ldb.getUserDetails();
+            String id = uDetails.get(ID);
+            String email = uDetails.get(EMAIL);
+
+            //call updateLocation method on localDatabase Handling class with values passed in
+            ldb.updateLocation(id, email,String.valueOf(lat),String.valueOf(lng), cdt);
+
+            //Add values of current location to intent
+            intent.putExtra(LAT,lat); //Latitude of current location
+            intent.putExtra(LNG,lng); //Longitude of current location
+            intent.putExtra(CDT, cdt); //Timestamp i.e. When location was recorded/changed
+
+            //Broadcast this data to be received by Broadcast Receiver in HomeFragment class.
             sendBroadcast(intent);
 
             Log.i(TAG, "onLocationChanged: " + address);
+            //Set Location as current location in LocationListener obj.
             mLastLocation.set(location);
 
             Log.i(TAG,"Sending Location Data To Update UI");
@@ -128,11 +148,17 @@ public class GPSService extends Service {
     public void onCreate()
     {
         Log.i(TAG, "onCreate");
+        //Initialise GPSHelper class;
         gh = new GPSHelper(GPSService.this);
+
+        //Initialise LocationManager
         initializeLocationManager();
+
+        //Initialise broadcaster object
         broadcaster = LocalBroadcastManager.getInstance(this);
 
         try {
+            //Request location updates from LocationManager
             lm.requestLocationUpdates(
                     LocationManager.NETWORK_PROVIDER, L_INT, L_DIST,
                     mLocationListeners[1]);
@@ -184,6 +210,7 @@ public class GPSService extends Service {
         // i.e. "sp.getString("firstname",null)" gets the 'value' stored for 'key' firstname
         this.ctx = getApplicationContext();
         sp = ctx.getSharedPreferences(PREF,MODE);
+        ldb = new LocalDBHandler(getApplicationContext());
 
         Log.i(TAG, "onStartCommand ");
 
