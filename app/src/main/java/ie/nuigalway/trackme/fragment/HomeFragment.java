@@ -31,6 +31,7 @@ import java.io.IOException;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 import ie.nuigalway.trackme.services.GPSService;
 
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private static final String CDT = "timeData";
     private LatLng currentLocation;
     private GPSHelper gh;
+    private LocalDBHandler ldb;
     private GoogleMap map;
     private int aflCheck;
     private Button trackMeButton;
@@ -99,6 +101,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         View v = inflater.inflate(R.layout.fragment_home, null, false);
 
         sm = new SessionManager(getContext());
+        ldb = new LocalDBHandler(getContext());
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
 
@@ -224,7 +227,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
         map.setPadding(10, 10, 10, 10);
 
-            address = gh.getAddressString(currentLocation);
+        address = gh.getAddressString(currentLocation);
 
 
         Log.d(TAG, "User Location is" + address );
@@ -237,12 +240,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         switch (v.getId()) {
             case R.id.trackme_button:
 
-                Toast.makeText(getContext(), "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Starting Service: "+GPSService.class.getSimpleName());
-                Intent intent = new Intent(getActivity(), GPSService.class);
-                getActivity().startService(intent);
+                if(!sm.isGPSServiceRunning()) {
+                    Log.i(TAG,"Button Click :"+sm.isGPSServiceRunning());
+                    Toast.makeText(getContext(), "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
+                    Intent intent = new Intent(getActivity(), GPSService.class);
+                    getActivity().startService(intent);
+                }else{
+                    Toast.makeText(getContext(), "Tracking Already Started", Toast.LENGTH_LONG).show();
+                }
                 break;
-                    //map.clear();
+
         }
     }
 
@@ -256,7 +264,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
             Double lat = intent.getDoubleExtra(LAT,0.0);
             Double lon = intent.getDoubleExtra(LNG,0.0);
             String cdt = intent.getExtras().get(CDT).toString();
-            Log.d(TAG, "onReceive Location Data: "+lat+"||"+lon+"||"+cdt);
+            Log.d(TAG, "onReceive Location Data: "+ldb.getUserLocation().toString());
 
             LatLng currPos = new LatLng(lat,lon);
             try {
@@ -270,11 +278,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         }
     };
 
-
-    public void addToMap(LatLng loc, String add){
-        map.clear();
-        map.addMarker(new MarkerOptions().position(loc).title(add));
-    }
+//
+//    public void addToMap(LatLng loc, String add){
+//        map.clear();
+//        map.addMarker(new MarkerOptions().position(loc).title(add));
+//    }
 
 }
 

@@ -114,7 +114,6 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
             public void run() {
 
                 Intent i;
-
                 if (sm.isLoggedIn()) {
                     i = new Intent(Splash.this, MainActivity.class);
                     startActivity(i);

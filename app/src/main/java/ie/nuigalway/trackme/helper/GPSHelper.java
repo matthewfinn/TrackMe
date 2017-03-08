@@ -68,8 +68,7 @@ public class GPSHelper implements LocationListener{
 
                     currentLocation = new LatLng(loc.getLatitude(), loc.getLongitude());
 
-                    Log.i(TAG+ " | Current Location" ,"location obj. :" +loc.toString());
-                    Log.i(TAG+ " | Current Location" ,"latlng obj. :" +currentLocation.toString());
+                    Log.i(TAG, "Current Location Updated");
 
                     return currentLocation;
                 }
@@ -97,13 +96,13 @@ public class GPSHelper implements LocationListener{
 
         if (wifi.isConnected()) {
             status = true;
-            Log.i(TAG, "Wifi Connected");
+            //Log.i(TAG, "Wifi Connected");
         } else if (mobile.isConnected()) {
             status = true;
-            Log.i(TAG,"Mobile Network(LTE/3G/4g) Connected");
+            //Log.i(TAG,"Mobile Network(LTE/3G/4g) Connected");
         } else {
             status = false;
-            Log.w(TAG,"No Internet Connection Available");
+            //Log.w(TAG,"No Internet Connection Available");
         }
 
         return status;

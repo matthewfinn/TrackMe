@@ -13,7 +13,6 @@ import com.android.volley.toolbox.Volley;
 
 
 public class App extends Application {
-
     public final static String TAG = App.class.getSimpleName();
     private static App app;
     private RequestQueue rq;
@@ -35,20 +34,19 @@ public class App extends Application {
 
         return rq;
     }
-
     public <T> void addToRQ(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRQ().add(req);
     }
 
-    public <T> void addToTQ(Request<T> req) {
-        req.setTag(TAG);
-        getRQ().add(req);
-    }
+//    public <T> void addToTQ(Request<T> req) {
+//        req.setTag(TAG);
+//        getRQ().add(req);
+//    }
 
-    public void cancelPendingRequests(Object tag) {
-        if (rq != null) {
-            rq.cancelAll(tag);
-        }
-    }
+//    public void cancelPendingRequests(Object tag) {
+//        if (rq != null) {
+//            rq.cancelAll(tag);
+//        }
+//    }
 }

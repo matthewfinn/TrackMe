@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
+import ie.nuigalway.trackme.helper.SessionManager;
 
 public class GPSService extends Service {
 
@@ -28,7 +29,7 @@ public class GPSService extends Service {
     private static final String IDENTIFIER = "Location";
    // private static final String KEY = "locData";
 
-    private static final String ID = "id";
+    private static final String ID = "uid";
     private static final String EMAIL = "email";
 
     private static final String LAT = "latData";
@@ -41,14 +42,12 @@ public class GPSService extends Service {
     private LocationManager lm = null;
     private GPSHelper gh;
     private LocalDBHandler ldb;
-   // private CloudDBHandler cdb;
+    private SessionManager sm;
     private LocalBroadcastManager broadcaster;
     private String address;
     private Context ctx;
-
     private SharedPreferences sp;
-    //private Editor ed; //May not be needed
-    
+
     private class LocationListener implements android.location.LocationListener
     {
         Location mLastLocation;
@@ -64,7 +63,6 @@ public class GPSService extends Service {
         @Override
         public void onLocationChanged(Location location)
         {
-
             //get latitude & longitude values from location object;
             double lat = location.getLatitude();
             double lng = location.getLongitude();
@@ -93,11 +91,15 @@ public class GPSService extends Service {
 
             //Get user details from local database so that new location can be updated in db.
             HashMap<String,String> uDetails = ldb.getUserDetails();
+
+            Log.e(TAG, "USER DETAILS: "+uDetails.toString());
             String id = uDetails.get(ID);
             String email = uDetails.get(EMAIL);
 
             //call updateLocation method on localDatabase Handling class with values passed in
             ldb.updateLocation(id, email,String.valueOf(lat),String.valueOf(lng), cdt);
+
+            Log.d(TAG,id+email+String.valueOf(lat)+String.valueOf(lng)+cdt);
 
             //Add values of current location to intent
             intent.putExtra(LAT,lat); //Latitude of current location
@@ -151,11 +153,21 @@ public class GPSService extends Service {
         //Initialise GPSHelper class;
         gh = new GPSHelper(GPSService.this);
 
+        //Initialise local db handler
+        ldb = new LocalDBHandler(GPSService.this);
+
+
+
         //Initialise LocationManager
         initializeLocationManager();
 
         //Initialise broadcaster object
         broadcaster = LocalBroadcastManager.getInstance(this);
+
+        //Initialise Shared Preferences
+        //sp = ctx.getSharedPreferences(PREF,MODE);
+
+
 
         try {
             //Request location updates from LocationManager
@@ -209,9 +221,9 @@ public class GPSService extends Service {
         // Shared preferences got. to be used to get user preference for location tracking
         // i.e. "sp.getString("firstname",null)" gets the 'value' stored for 'key' firstname
         this.ctx = getApplicationContext();
-        sp = ctx.getSharedPreferences(PREF,MODE);
-        ldb = new LocalDBHandler(getApplicationContext());
 
+        sm = new SessionManager(getApplicationContext());
+        sm.setGPSServiceRunning(true);
         Log.i(TAG, "onStartCommand ");
 
         super.onStartCommand(intent, flags, startId);

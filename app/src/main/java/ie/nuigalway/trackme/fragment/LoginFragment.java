@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,7 +42,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = LoginFragment.class.getSimpleName();
 
     private EditText email, password;
-    private Button login_button, login_reglink;
+    private Button login_button;
+    private TextView login_reglink;
     private SessionManager sm;
     private LocalDBHandler db;
     private GPSHelper gh;
@@ -69,7 +71,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         login_button = (Button) view.findViewById(R.id.login_button);
         login_button.setOnClickListener(this);
 
-        login_reglink = (Button) view.findViewById(R.id.login_reglink);
+        login_reglink =  (TextView) view.findViewById(R.id.login_reglink);
         login_reglink.setOnClickListener(this);
 
         email = (EditText) view.findViewById(R.id.login_email);

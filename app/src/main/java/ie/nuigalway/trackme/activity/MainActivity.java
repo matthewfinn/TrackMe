@@ -28,6 +28,7 @@ import ie.nuigalway.trackme.fragment.PreferencesFragment;
 import ie.nuigalway.trackme.fragment.ProfileFragment;
 import ie.nuigalway.trackme.fragment.RegisterFragment;
 import ie.nuigalway.trackme.helper.SessionManager;
+import ie.nuigalway.trackme.services.GPSService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.OnFragmentInteractionListener,
@@ -123,10 +124,16 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = PreferenceFragment.class;
         } else if (id == R.id.nav_logout) {
             b = false;
+
+            if(sm.isGPSRunning()){
+                Intent intent = new Intent(this, GPSService.class);
+                stopService(intent);
+            }
             sm.logOutUser();
             Intent i = new Intent(this, StartupActivity.class);
-            startActivity(i);
             finish();
+            this.startActivity(i);
+
 
         }
         if (b) {
