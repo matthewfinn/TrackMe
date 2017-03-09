@@ -230,7 +230,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         address = gh.getAddressString(currentLocation);
 
 
-        Log.d(TAG, "User Location is" + address );
+        Log.d(TAG, "User Location is :" + address );
         map.addMarker(new MarkerOptions().position(currentLocation).title(address));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
     }

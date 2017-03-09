@@ -15,6 +15,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -108,7 +109,6 @@ public class GPSHelper implements LocationListener{
         return status;
     }
 
-
     @NonNull
     public String getAddressString(LatLng loc) throws IOException {
 
@@ -116,16 +116,21 @@ public class GPSHelper implements LocationListener{
 
        if(checkInternetServiceAvailable()==true){
             Geocoder geocoder = new Geocoder(c, Locale.getDefault());
-            List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
-            StringBuilder sb = new StringBuilder();
-            if (!addresses.isEmpty()) {
-                Address address = addresses.get(0);
-                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                    sb.append(address.getAddressLine(i)).append(", ");
-                sb.append(address.getCountryName());
-                add = sb.toString();
-            }
-        }
+           try {
+               List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
+               StringBuilder sb = new StringBuilder();
+               if (!addresses.isEmpty()) {
+                   Address address = addresses.get(0);
+                   for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                       sb.append(address.getAddressLine(i)).append(", ");
+                   sb.append(address.getCountryName());
+
+                   add = sb.toString();}
+           }catch (IOException e){
+
+               Toast.makeText(c, "Could not connect to Geocoder to get address string,\n Connection timed out" , Toast.LENGTH_LONG).show();
+           }
+       }
 
         return add;
 

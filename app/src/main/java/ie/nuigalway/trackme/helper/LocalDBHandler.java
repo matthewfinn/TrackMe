@@ -129,7 +129,12 @@ public class LocalDBHandler extends SQLiteOpenHelper{
 
     }
 
-    public void updateLocation(String id, String email, String lt, String ln, String t){
+    public void updateLocation(String lt, String ln, String t){
+
+        HashMap<String,String> uDetails = getUserDetails();
+        Log.e(TAG, "USER DETAILS: "+uDetails.toString());
+        String id = uDetails.get(UID);
+        String email = uDetails.get(EMAIL);
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues vals = new ContentValues();//empty set of values that will be used to store user info
@@ -142,6 +147,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         long ins = db.insert(TABLE_USER_LOCATION, null, vals);
         db.close(); // Closing database connection
         Log.d(TAG, "User location into db table " +TABLE_USER_LOCATION+ "  " + ins);
+        Log.d(TAG, vals.toString());
 
     }
 
@@ -156,12 +162,12 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         Cursor cursor = db.rawQuery(query, null);
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            userDetails.put(UID, cursor.getString(0));
-            userDetails.put(FN, cursor.getString(1));
-            userDetails.put(SN, cursor.getString(2));
-            userDetails.put(EMAIL, cursor.getString(3));
+            userDetails.put(UID, cursor.getString(1));
+            userDetails.put(FN, cursor.getString(2));
+            userDetails.put(SN, cursor.getString(3));
             userDetails.put(PHNO, cursor.getString(4));
-            userDetails.put(CR, cursor.getString(5));
+            userDetails.put(EMAIL, cursor.getString(5));
+            userDetails.put(CR, cursor.getString(6));
         }
         cursor.close();
 

@@ -43,6 +43,7 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         sm = new SessionManager(getApplicationContext());
+        sm.setGPSServiceRunning(false);
 
         if(!sm.hasLocationServiceOn()) {
             if (gac == null) {

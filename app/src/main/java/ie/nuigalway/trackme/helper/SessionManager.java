@@ -54,6 +54,7 @@ public class SessionManager {
 
 
     public boolean isLoggedIn(){
+
         return sp.getBoolean(KEY_L, false);
     }
 

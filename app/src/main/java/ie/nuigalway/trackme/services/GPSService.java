@@ -16,7 +16,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
@@ -37,7 +36,7 @@ public class GPSService extends Service {
     private static final String CDT = "timeData";
     private static final String PREF = "TrackMePreferences";
     int MODE = 0; //private preferences mode used to set preference permissions
-    private static final int L_INT = 10000; //
+    private static final int L_INT = 60000; //
     private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
     private GPSHelper gh;
@@ -89,17 +88,10 @@ public class GPSService extends Service {
             //Create an identified intent to broadcast updated location to fragment object
             Intent intent = new Intent(IDENTIFIER); //IDENTIFIER is a string to identify this intent
 
-            //Get user details from local database so that new location can be updated in db.
-            HashMap<String,String> uDetails = ldb.getUserDetails();
-
-            Log.e(TAG, "USER DETAILS: "+uDetails.toString());
-            String id = uDetails.get(ID);
-            String email = uDetails.get(EMAIL);
-
             //call updateLocation method on localDatabase Handling class with values passed in
-            ldb.updateLocation(id, email,String.valueOf(lat),String.valueOf(lng), cdt);
+            ldb.updateLocation(String.valueOf(lat),String.valueOf(lng), cdt);
 
-            Log.d(TAG,id+email+String.valueOf(lat)+String.valueOf(lng)+cdt);
+            Log.d(TAG,String.valueOf(lat)+String.valueOf(lng)+cdt);
 
             //Add values of current location to intent
             intent.putExtra(LAT,lat); //Latitude of current location
@@ -153,11 +145,6 @@ public class GPSService extends Service {
         //Initialise GPSHelper class;
         gh = new GPSHelper(GPSService.this);
 
-        //Initialise local db handler
-        ldb = new LocalDBHandler(GPSService.this);
-
-
-
         //Initialise LocationManager
         initializeLocationManager();
 
@@ -166,8 +153,6 @@ public class GPSService extends Service {
 
         //Initialise Shared Preferences
         //sp = ctx.getSharedPreferences(PREF,MODE);
-
-
 
         try {
             //Request location updates from LocationManager
@@ -224,12 +209,12 @@ public class GPSService extends Service {
 
         sm = new SessionManager(getApplicationContext());
         sm.setGPSServiceRunning(true);
+
+        ldb = new LocalDBHandler(getApplicationContext());
+
         Log.i(TAG, "onStartCommand ");
 
         super.onStartCommand(intent, flags, startId);
         return START_STICKY;
     }
-
-
-
 }
