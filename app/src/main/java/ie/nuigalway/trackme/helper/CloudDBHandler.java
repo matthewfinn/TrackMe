@@ -45,25 +45,17 @@ public class CloudDBHandler {
             @Override
             public void onResponse(String res) {
 
-                Log.d(TAG,"ResponseL "+res.toString());
+                Log.d(TAG,"Response "+res.toString());
 
                 try {
 
                     JSONObject j = new JSONObject(res);
                     boolean error = j.getBoolean("error");
-                    System.out.print(j.toString());
-
+                    Log.d(TAG, "JSON Obj: "+j.toString());
                     if (!error) {
-                        //String uid = j.getString("uid");
-                       // JSONObject user = j.getJSONObject("user");
-//                        String email = user.getString("email");
-//                        String lat = user.getString("latitude");
-//                        String lon = user.getString("longitude");
-//                        String ts = user.getString("timestamp");
 
-                       Toast.makeText(c, "User Location Pushed To Cloud Server", Toast.LENGTH_LONG).show();
-                        Log.e(TAG,"Location Data Pushed To Cloud Server");
-
+                        //Toast.makeText(c, "User Location Pushed To Cloud Server", Toast.LENGTH_LONG).show();
+                        Log.d(TAG,"Location Data Pushed To Cloud Server");
 
                     } else {
                         String err = j.getString("error_msg");
