@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import ie.nuigalway.trackme.helper.CloudDBHandler;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
@@ -41,6 +42,7 @@ public class GPSService extends Service {
     private LocationManager lm = null;
     private GPSHelper gh;
     private LocalDBHandler ldb;
+    private CloudDBHandler cdb;
     private SessionManager sm;
     private LocalBroadcastManager broadcaster;
     private String address;
@@ -90,6 +92,8 @@ public class GPSService extends Service {
 
             //call updateLocation method on localDatabase Handling class with values passed in
             ldb.updateLocation(String.valueOf(lat),String.valueOf(lng), cdt);
+
+            cdb.addLatestLocation(String.valueOf(lat),String.valueOf(lng), cdt);
 
             Log.d(TAG,String.valueOf(lat)+String.valueOf(lng)+cdt);
 
@@ -211,6 +215,8 @@ public class GPSService extends Service {
         sm.setGPSServiceRunning(true);
 
         ldb = new LocalDBHandler(getApplicationContext());
+        cdb = new CloudDBHandler(getApplicationContext());
+
 
         Log.i(TAG, "onStartCommand ");
 

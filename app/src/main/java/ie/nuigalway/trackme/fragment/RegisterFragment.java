@@ -32,7 +32,6 @@ import ie.nuigalway.trackme.application.App;
 import ie.nuigalway.trackme.application.AppConfig;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
-import ie.nuigalway.trackme.helper.SessionManager;
 
 
 public class RegisterFragment extends Fragment implements View.OnClickListener{
@@ -41,7 +40,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = RegisterFragment.class.getSimpleName();
     private EditText fName,surname,email, password, phno;
     private Button register_button, login_link;
-    private SessionManager sesh;
+  //  private SessionManager sesh;
     private LocalDBHandler db;
     private ProgressDialog pd;
     private GPSHelper gh;
@@ -75,7 +74,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         pd.setCancelable(false);
 
         db = new LocalDBHandler(getContext());
-        sesh = new SessionManager(getContext());
+       // sesh = new SessionManager(getContext());
         gh = new GPSHelper(getContext());
 
         if(!gh.checkInternetServiceAvailable()) {
@@ -86,7 +85,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                             "Please Enable Internet Connection To Continue").
                     setNeutralButton("Close", null).show();
         }
-
         return view;
     }
 

@@ -4,8 +4,10 @@ package ie.nuigalway.trackme.application;
  * Created by matthew on 17/01/2017.
  * Class that creates core Volley objects to handle data transmission.
  */
+
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,6 +30,7 @@ public class App extends Application {
     }
 
     public RequestQueue getRQ() {
+        Log.d(TAG, "Getting Request Queue");
         if (rq == null) {
             rq = Volley.newRequestQueue(getApplicationContext());
         }
@@ -35,18 +38,19 @@ public class App extends Application {
         return rq;
     }
     public <T> void addToRQ(Request<T> req, String tag) {
+        Log.d(TAG, "Adding Request "+req.toString()+" to Request Queue");
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRQ().add(req);
     }
 
-//    public <T> void addToTQ(Request<T> req) {
-//        req.setTag(TAG);
-//        getRQ().add(req);
-//    }
+    public <T> void addToTQ(Request<T> req) {
+        req.setTag(TAG);
+        getRQ().add(req);
+    }
 
-//    public void cancelPendingRequests(Object tag) {
-//        if (rq != null) {
-//            rq.cancelAll(tag);
-//        }
-//    }
+    public void cancelPendingRequests(Object tag) {
+        if (rq != null) {
+            rq.cancelAll(tag);
+        }
+    }
 }

@@ -23,6 +23,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     private static final String DB_NAME = "trackMe_db";
     private static final String TABLE_USER_DETAILS = "user";
     private static final String TABLE_USER_LOCATION = "location";
+    Context ctx;
 
     /*
     * Fields created for use in local database tables
@@ -47,6 +48,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db){
 
 
+
         //Creating User Table
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER_DETAILS + "("
                 + ID + " INTEGER PRIMARY KEY," +  UID + " TEXT," + FN
@@ -66,7 +68,6 @@ public class LocalDBHandler extends SQLiteOpenHelper{
 
         db.execSQL(CREATE_LOCATION_TABLE);
         Log.d(TAG, "User Location Database Table created.");
-
 
     }
 
@@ -113,6 +114,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
             db2.close(); // Closing database connection
             Log.d(TAG, "User inserted into db table " +TABLE_USER_DETAILS+ "  " + ins);
         }
+
     }
 
     @Override
@@ -148,6 +150,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         db.close(); // Closing database connection
         Log.d(TAG, "User location into db table " +TABLE_USER_LOCATION+ "  " + ins);
         Log.d(TAG, vals.toString());
+
 
     }
 
