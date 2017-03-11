@@ -25,6 +25,11 @@ import ie.nuigalway.trackme.application.AppConfig;
 public class CloudDBHandler {
 
     private static final String TAG = CloudDBHandler.class.getSimpleName();
+    private static final String UID = "uid";
+    private static final String EM = "email";
+    private static final String LAT = "latitude";
+    private static final String LON = "longitude";
+    private static final String TS = "timestamp";
     private LocalDBHandler ldb;
     private Context c;
 
@@ -86,16 +91,70 @@ public class CloudDBHandler {
             protected Map<String, String> getParams(){
 
                 Map<String,String> p = new HashMap<>();
-                p.put("uid", uid);
-                p.put("email",email);
-                p.put("latitude", lat);
-                p.put("longitude", lon);
-                p.put("timestamp", ts);
+                p.put(UID, uid);
+                p.put(EM,email);
+                p.put(LAT, lat);
+                p.put(LON, lon);
+                p.put(TS, ts);
 
                 Log.d(TAG,p.toString());
                 return p;
             }
         };
         App.getInstance().addToRQ(r, req);
+    }
+
+    public HashMap<String,String> requestUserLocation(final String email){
+        final String req = "req_userloc";
+
+        StringRequest r = new StringRequest(Request.Method.POST, AppConfig.GET_LOCATION_URL, new Response.Listener<String>(){
+            @Override
+            public void onResponse(String res) {
+
+                Log.d(TAG, req + " Response " + res.toString());
+
+                try {
+
+                    JSONObject j = new JSONObject(res);
+                    boolean error = j.getBoolean("error");
+                    Log.d(TAG, req + " JSON Obj: "+j.toString());
+                    if (!error) {
+
+                        JSONObject user = j.getJSONObject("userLocation");
+                        String lon = user.getString(LON);
+                        String lat = user.getString(LAT);
+                        String ts = user.getString(TS);
+
+                        Log.d(TAG,"User '" + email + "' Location Received From Server");
+
+                    } else {
+                        String err = j.getString("error_msg");
+                        Log.e(TAG, req + ": Failed To Retrieve User Location From Server: "+ err);
+                    }
+                } catch (JSONException jse) {
+
+
+                    Log.e(TAG,req + ": Cloud Server JSON Exception : "+ jse.getMessage());
+                }
+
+            }
+        },new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError e){
+
+                Log.e(TAG,req + ": Data Retrieval Error: "+ e.toString());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams(){
+
+                Map<String,String> p = new HashMap<>();
+                p.put(EM,email);
+                Log.d(TAG,req + ": POST Parameters: "+p.toString());
+                return p;
+            }
+        };
+        App.getInstance().addToRQ(r, req);
+        return null;
     }
 }

@@ -8,4 +8,5 @@ public class AppConfig {
     public static String REGISTRATION_URL = "http://danu6.it.nuigalway.ie/trackMeServer/register.php";
     public static String LOGIN_URL = "http://danu6.it.nuigalway.ie/trackMeServer/login.php";
     public static String LOCATION_URL = "http://danu6.it.nuigalway.ie/trackMeServer/updateLocation.php";
+    public static String GET_LOCATION_URL = "http://danu6.it.nuigalway.ie/trackMeServer/getLocation.php";
 }

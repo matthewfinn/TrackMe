@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.IOException;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.helper.CloudDBHandler;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
@@ -59,10 +60,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private static final String CDT = "timeData";
     private LatLng currentLocation;
     private GPSHelper gh;
+    private CloudDBHandler cdb;
     private LocalDBHandler ldb;
     private GoogleMap map;
     private int aflCheck;
-    private Button trackMeButton;
+    private Button trackMeButton, trackUserButton;
     private SessionManager sm;
     private ProgressDialog pd;
     private Context ctx;
@@ -102,8 +104,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
         sm = new SessionManager(getContext());
         ldb = new LocalDBHandler(getContext());
+        cdb = new CloudDBHandler(getContext());
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
+
+        trackUserButton = (Button) v.findViewById(R.id.trackuser_button);
+        trackUserButton.setOnClickListener(this);
 
         aflCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -250,6 +256,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     Toast.makeText(getContext(), "Tracking Already Started", Toast.LENGTH_LONG).show();
                 }
                 break;
+            case R.id.trackuser_button:
+                cdb.requestUserLocation("matt.finn@hotmail.com");
+
+
 
         }
     }
