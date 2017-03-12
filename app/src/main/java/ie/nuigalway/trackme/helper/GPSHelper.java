@@ -41,20 +41,20 @@ public class GPSHelper implements LocationListener{
 
     public LatLng getCurrentStaticLocation() throws NullPointerException{
         try {
-            lm = (LocationManager) c.getSystemService(c.LOCATION_SERVICE);
+            lm = (LocationManager) c.getSystemService(Context.LOCATION_SERVICE);
 
-            gpsEnabled = lm.isProviderEnabled(lm.GPS_PROVIDER); // gps status
+            gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER); // gps status
             Log.i(TAG+" | GPS Enabled", String.valueOf(gpsEnabled));
 
-            netEnabled = lm.isProviderEnabled(lm.NETWORK_PROVIDER); // net status
+            netEnabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER); // net status
             Log.i(TAG+" | Network Enabled", String.valueOf(netEnabled));
 
             if(gpsEnabled){
-                provider = lm.GPS_PROVIDER;
+                provider = LocationManager.GPS_PROVIDER;
             }
             else if(netEnabled){
                 gpsEnabled = true;
-                provider = lm.NETWORK_PROVIDER;
+                provider = LocationManager.NETWORK_PROVIDER;
             }else{
 
                 Log.w(TAG,"Nothing is enabled");
@@ -98,13 +98,9 @@ public class GPSHelper implements LocationListener{
         if (wifi.isConnected()) {
             status = true;
             //Log.i(TAG, "Wifi Connected");
-        } else if (mobile.isConnected()) {
-            status = true;
-            //Log.i(TAG,"Mobile Network(LTE/3G/4g) Connected");
-        } else {
-            status = false;
-            //Log.w(TAG,"No Internet Connection Available");
-        }
+        } else //Log.i(TAG,"Mobile Network(LTE/3G/4g) Connected");
+//Log.w(TAG,"No Internet Connection Available");
+            status = mobile.isConnected();
 
         return status;
     }

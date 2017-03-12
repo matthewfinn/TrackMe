@@ -180,7 +180,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(String res) {
 
-                Log.d(TAG, "Response: " + res.toString());
+                Log.d(TAG, "Response: " + res);
                 if (pd.isShowing()) {
                     pd.dismiss();
                 }

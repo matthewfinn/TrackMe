@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -72,10 +75,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
     public HomeFragment() {
     }
-
-//    public Fragment getFragment(){
-    //    return this;
-    //}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -256,8 +255,43 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     Toast.makeText(getContext(), "Tracking Already Started", Toast.LENGTH_LONG).show();
                 }
                 break;
+
+
             case R.id.trackuser_button:
-                cdb.requestUserLocation("matt.finn@hotmail.com");
+
+                final EditText txtUrl = new EditText(getContext());
+                txtUrl.setHint("Enter Email Address Here");
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Track User")
+                        .setMessage("Enter Email Address Of User You Would Like To Track")
+                        .setView(txtUrl)
+                        .setPositiveButton("Track", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                String email = txtUrl.getText().toString();
+                                if(email.isEmpty()){
+
+                                    Toast.makeText(getContext(), "Please Enter Email Address To Track", Toast.LENGTH_LONG).show();
+                                }else {
+
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("email", email);
+                                    TrackUserFragment fragment = new TrackUserFragment();
+                                    fragment.setArguments(bundle);
+
+                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                    ft.replace(R.id.flContent, fragment );
+                                    ft.commit();
+                                }
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                            }
+                        })
+                        .show();
+                break;
+
+
 
 
 

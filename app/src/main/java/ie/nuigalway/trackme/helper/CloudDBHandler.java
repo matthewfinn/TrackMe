@@ -32,6 +32,7 @@ public class CloudDBHandler {
     private static final String TS = "timestamp";
     private LocalDBHandler ldb;
     private Context c;
+    private HashMap<String, String> location;
 
 
     public CloudDBHandler(Context ctx){
@@ -50,7 +51,7 @@ public class CloudDBHandler {
             @Override
             public void onResponse(String res) {
 
-                Log.d(TAG,"Response "+res.toString());
+                Log.d(TAG,"Response "+ res);
 
                 try {
 
@@ -104,14 +105,16 @@ public class CloudDBHandler {
         App.getInstance().addToRQ(r, req);
     }
 
-    public HashMap<String,String> requestUserLocation(final String email){
-        final String req = "req_userloc";
+    public void requestUserLocation(final String email){
 
+        location = new HashMap<>();
+
+        final String req = "req_userloc";
         StringRequest r = new StringRequest(Request.Method.POST, AppConfig.GET_LOCATION_URL, new Response.Listener<String>(){
             @Override
             public void onResponse(String res) {
 
-                Log.d(TAG, req + " Response " + res.toString());
+                Log.d(TAG, req + " Response " + res);
 
                 try {
 
@@ -121,15 +124,23 @@ public class CloudDBHandler {
                     if (!error) {
 
                         JSONObject user = j.getJSONObject("userLocation");
-                        String lon = user.getString(LON);
                         String lat = user.getString(LAT);
+                        String lon = user.getString(LON);
                         String ts = user.getString(TS);
 
+                        location.put(LAT,lat);
+                        location.put(LON, lon);
+                        location.put(TS,ts);
+                        Log.d(TAG, "Location:" +location.toString());
                         Log.d(TAG,"User '" + email + "' Location Received From Server");
 
+
                     } else {
+                        location = null;
                         String err = j.getString("error_msg");
                         Log.e(TAG, req + ": Failed To Retrieve User Location From Server: "+ err);
+                        Toast.makeText(c, err, Toast.LENGTH_LONG).show();
+
                     }
                 } catch (JSONException jse) {
 
@@ -155,6 +166,10 @@ public class CloudDBHandler {
             }
         };
         App.getInstance().addToRQ(r, req);
-        return null;
+    }
+
+    public HashMap<String,String> getLocationMap(){
+
+        return location;
     }
 }
