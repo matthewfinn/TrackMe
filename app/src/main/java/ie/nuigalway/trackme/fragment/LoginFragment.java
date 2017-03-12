@@ -92,7 +92,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                             "Please Enable Internet Connection To Continue").
                     setNeutralButton("Close", null).show();
         }
-
         return view;
     }
 
@@ -146,7 +145,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     .show();
         }
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -185,7 +183,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     pd.dismiss();
                 }
                 try {
-
                     JSONObject j = new JSONObject(res);
                     boolean error = j.getBoolean("error");
 
@@ -224,11 +221,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
 
                 if(pd.isShowing()) {
-
                     pd.dismiss();
                 }
             }
-
         }){
 
             @Override
@@ -237,7 +232,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                 Map<String,String> p = new HashMap<String,String>();
                 p.put("email", email);
                 p.put("password",password);
-
 
                 return p;
             }

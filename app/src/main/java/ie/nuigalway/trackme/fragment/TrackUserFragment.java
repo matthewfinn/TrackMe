@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -148,19 +149,23 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
 
     }
     private void getMap() throws IOException{
-        new CallServerLocation().execute();
-        dialog = ProgressDialog.show(getContext(), "", "Detecting...",
-                true);
-        dialog.show();
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                dialog.dismiss();
-            }
-        }, 4500);
+        if(gh.checkInternetServiceAvailable()) {
+            new CallServerLocation().execute();
+            dialog = ProgressDialog.show(getContext(), "", "Detecting...",
+                    true);
+            dialog.show();
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    dialog.dismiss();
+                }
+            }, 4500);
+        }else{
+            Toast.makeText(getContext(),"No Internet Connection. Cannot Track User.", Toast.LENGTH_LONG).show();
+        }
     }
-
 
     private class CallServerLocation extends AsyncTask<Void, Void, Void>
     {
@@ -174,8 +179,6 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
-
-
             return null;
         }
 
@@ -197,9 +200,12 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
                 Log.d(TAG, "User Location is :" + locationAddress);
                 map.addMarker(new MarkerOptions().position(currentLocation).title(locationAddress));
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+            }else{
+
+                //open dialog with options...
+                //Either reenter email address or go back to homefrag.
             }
         }
-
     }
 }
 

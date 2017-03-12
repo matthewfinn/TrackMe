@@ -145,7 +145,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     public void onDestroyView()
     {
         super.onDestroyView();
-       // ctx.unregisterReceiver(null);
     }
 
     @Override
@@ -223,17 +222,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
             new AlertDialog.Builder(getActivity()).
                     setTitle("No Connection").
-                    setMessage("Enable Internet Connection If You Want Address To Be Displayed\n"+
-                            "Otherwise on Latitude/Longitude Values will be displayed").
+                    setMessage("Enable Internet Connection For Better Accuracy.\n"+
+                            "Otherwise Addresses Can't Be Displayed").
                     setNeutralButton("Close", null).show();
         }
 
         currentLocation = gh.getCurrentStaticLocation();
-
         map.setPadding(10, 10, 10, 10);
-
         address = gh.getAddressString(currentLocation);
-
 
         Log.d(TAG, "User Location is :" + address );
         map.addMarker(new MarkerOptions().position(currentLocation).title(address));
@@ -290,11 +286,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                         })
                         .show();
                 break;
-
-
-
-
-
         }
     }
 
@@ -302,7 +293,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         @Override
         public void onReceive(Context context, Intent intent) {
 
-           // String s = intent.getExtras().get(KEY).toString();
             map.clear();
 
             Double lat = intent.getDoubleExtra(LAT,0.0);
@@ -317,17 +307,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         }
     };
-
-//
-//    public void addToMap(LatLng loc, String add){
-//        map.clear();
-//        map.addMarker(new MarkerOptions().position(loc).title(add));
-//    }
-
 }
 
 

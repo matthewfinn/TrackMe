@@ -50,17 +50,12 @@ public class CloudDBHandler {
         StringRequest r = new StringRequest(Request.Method.POST, AppConfig.LOCATION_URL, new Response.Listener<String>(){
             @Override
             public void onResponse(String res) {
-
                 Log.d(TAG,"Response "+ res);
-
                 try {
-
                     JSONObject j = new JSONObject(res);
                     boolean error = j.getBoolean("error");
                     Log.d(TAG, "JSON Obj: "+j.toString());
                     if (!error) {
-
-                        //Toast.makeText(c, "User Location Pushed To Cloud Server", Toast.LENGTH_LONG).show();
                         Log.d(TAG,"Location Data Pushed To Cloud Server");
 
                     } else {
@@ -70,20 +65,16 @@ public class CloudDBHandler {
                     }
                 } catch (JSONException jse) {
 
-
                     Log.e(TAG,"Cloud Server JSON Exception : "+ jse.getMessage());
                     Toast.makeText(c, "Cloud Server JSON Exception: " + jse.getMessage(), Toast.LENGTH_LONG).show();
                 }
-
             }
         },new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError e){
 
-
                 Log.e(TAG,"Cloud Push Error : "+ e.toString());
                 Toast.makeText(c,"Cloud Server Error Response: "+ e.getMessage(), Toast.LENGTH_LONG).show();
-
             }
 
         }){
@@ -144,10 +135,8 @@ public class CloudDBHandler {
                     }
                 } catch (JSONException jse) {
 
-
                     Log.e(TAG,req + ": Cloud Server JSON Exception : "+ jse.getMessage());
                 }
-
             }
         },new Response.ErrorListener(){
             @Override
@@ -169,7 +158,6 @@ public class CloudDBHandler {
     }
 
     public HashMap<String,String> getLocationMap(){
-
         return location;
     }
 }

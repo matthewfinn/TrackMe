@@ -74,7 +74,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         pd.setCancelable(false);
 
         db = new LocalDBHandler(getContext());
-       // sesh = new SessionManager(getContext());
         gh = new GPSHelper(getContext());
 
         if(!gh.checkInternetServiceAvailable()) {
@@ -114,11 +113,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
         // Check for empty data in the form
         if (!fn.isEmpty() && !sn.isEmpty() && !ph.isEmpty() && !em.isEmpty() && !pw.isEmpty()) {
-
             registerUser(fn,sn, ph, em, pw);
-
         } else {
-
             Toast.makeText(getContext(),
                     "Not all information..", Toast.LENGTH_LONG)
                     .show();
@@ -136,7 +132,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         }
 
         StringRequest r = new StringRequest(Request.Method.POST, AppConfig.REGISTRATION_URL, new Response.Listener<String>() {
-
 
             @Override
             public void onResponse(String res) {
