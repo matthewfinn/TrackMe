@@ -242,12 +242,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
             case R.id.trackme_button:
 
                 if(!sm.isGPSServiceRunning()) {
+                    Log.d(TAG,"Should be false: " +String.valueOf(sm.isGPSServiceRunning()));
                     Log.i(TAG,"Button Click :"+sm.isGPSServiceRunning());
                     Toast.makeText(getContext(), "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
                     Intent intent = new Intent(getActivity(), GPSService.class);
                     getActivity().startService(intent);
-                }else{
+                }else if(sm.isGPSServiceRunning()){
+                    Log.d(TAG,"Should be true: " +String.valueOf(sm.isGPSServiceRunning()));
                     Toast.makeText(getContext(), "Tracking Already Started", Toast.LENGTH_LONG).show();
                 }
                 break;

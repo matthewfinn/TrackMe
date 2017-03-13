@@ -6,14 +6,14 @@
     android:padding="@dimen/widget_margin"
     android:background="#55000000">
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/trackMeImage"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:src="@drawable/track_me_logo"/>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/trackMeTV"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

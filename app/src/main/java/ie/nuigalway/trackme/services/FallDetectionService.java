@@ -40,6 +40,11 @@ public class FallDetectionService extends Service implements SensorEventListener
     @Override
     public void onSensorChanged(SensorEvent event) {
 
+        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+
+            
+        }
+
     }
 
     @Override
