@@ -185,6 +185,7 @@ public class GPSService extends Service {
     {
         Log.i(TAG, "onDestroy");
         super.onDestroy();
+        sm.setGPSServiceRunning(false);
         if (lm != null) {
             for (int i = 0; i < mLocationListeners.length; i++) {
                 try {
