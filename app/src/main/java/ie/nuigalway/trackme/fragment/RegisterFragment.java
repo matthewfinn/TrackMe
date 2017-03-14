@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -38,9 +39,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
 
     private static final String TAG = RegisterFragment.class.getSimpleName();
-    private EditText fName,surname,email, password, phno;
+    private EditText fName,surname,email,username, password, phno;
     private Button register_button, login_link;
-  //  private SessionManager sesh;
+    private Spinner profile_type;
     private LocalDBHandler db;
     private ProgressDialog pd;
     private GPSHelper gh;
@@ -63,7 +64,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         surname = (EditText) view.findViewById(R.id.edit_surname);
         phno = (EditText) view.findViewById(R.id.edit_phno);
         email = (EditText) view.findViewById(R.id.edit_email);
+        username = (EditText) view.findViewById(R.id.edit_username);
         password = (EditText) view.findViewById(R.id.edit_password);
+        profile_type = (Spinner) view.findViewById(R.id.edit_profile_type_spinner);
 
         register_button = (Button) view.findViewById(R.id.reg_btn);
         register_button.setOnClickListener(this);
@@ -109,11 +112,20 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         String sn = surname.getText().toString().trim();
         String ph = phno.getText().toString().trim();
         String em = email.getText().toString().trim();
+        String un = username.getText().toString().trim();
         String pw = password.getText().toString().trim();
+        String pt = profile_type.getSelectedItem().toString().trim();
+
+        Log.d(TAG,"REGISTER PROFILE TYPE: "+pt);
+
+//        if(pt.isEmpty()){
+//
+//            pt = "Not Set";
+//        }
 
         // Check for empty data in the form
-        if (!fn.isEmpty() && !sn.isEmpty() && !ph.isEmpty() && !em.isEmpty() && !pw.isEmpty()) {
-            registerUser(fn,sn, ph, em, pw);
+        if (!fn.isEmpty() && !sn.isEmpty() && !ph.isEmpty() && !em.isEmpty() &&!em.isEmpty() && !pw.isEmpty()) {
+            registerUser(fn,sn, ph, em, un, pw, pt);
         } else {
             Toast.makeText(getContext(),
                     "Not all information..", Toast.LENGTH_LONG)
@@ -121,7 +133,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    private void registerUser(final String fn, final String sn,final String ph, final String em, final String pw){
+    private void registerUser(final String fn, final String sn,final String ph, final String em, final String un, final String pw, final String pt){
 
         String req = "req_register";
 
@@ -155,10 +167,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                         String fn = user.getString("first_name");
                         String sn = user.getString("surname");
                         String em = user.getString("email");
+                        String un = user.getString("username");
                         String ph = user.getString("phone_no");
+                        String pt = user.getString("type");
                         String cr = user.getString("created_at");
 
-                        db.addUser(uid, fn, sn, em, ph, cr);
+                        db.addUser(uid, fn, sn, em, un, ph, pt, cr);
 
                         Toast.makeText(getContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -198,7 +212,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                 p.put("surname",sn);
                 p.put("phone_no", ph);
                 p.put("email", em);
+                p.put("username", un);
                 p.put("password", pw);
+                p.put("type",pt);
 
                 return p;
             }

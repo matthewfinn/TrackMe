@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class LocalDBHandler extends SQLiteOpenHelper{
 
     private static final String TAG = LocalDBHandler.class.getSimpleName();
-    private static final int VERSION = 7;
+    private static final int VERSION = 9;
     private static final String DB_NAME = "trackMe_db";
     private static final String TABLE_USER_DETAILS = "user";
     private static final String TABLE_USER_LOCATION = "location";
@@ -32,7 +32,9 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     private static final String FN = "first_name";
     private static final String SN = "surname";
     private static final String EMAIL = "email";
+    private static final String USERNAME = "username";
     private static final String PHNO = "phone_no";
+    private static final String TYPE = "type";
     private static final String UID = "unique_id";
     private static final String CR = "created_at";
     private static final String LAT = "latitude";
@@ -53,7 +55,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER_DETAILS + "("
                 + ID + " INTEGER PRIMARY KEY," +  UID + " TEXT," + FN
                 + " TEXT," + SN + " TEXT," + PHNO + " TEXT,"
-                + EMAIL + " TEXT," + CR + " TEXT" + ")";
+                + EMAIL + " TEXT,"+ USERNAME + " TEXT,"+ TYPE + " TEXT," + CR + " TEXT" + ")";
 
         db.execSQL(CREATE_USER_TABLE);
         Log.d(TAG, "User Details Database Table created.");
@@ -63,7 +65,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         * */
 
         String CREATE_LOCATION_TABLE = "CREATE TABLE " + TABLE_USER_LOCATION + "("
-                +  UID + " TEXT," + EMAIL + " TEXT," + LAT + " TEXT," + LNG
+                +  UID + " TEXT," + USERNAME + " TEXT," + LAT + " TEXT," + LNG
                 + " TEXT," + TS + " TEXT"+")";
 
         db.execSQL(CREATE_LOCATION_TABLE);
@@ -71,7 +73,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
 
     }
 
-    public void addUser(String uid, String fn, String sn, String email, String phno,  String cr){
+    public void addUser(String uid, String fn, String sn, String phno, String email, String un, String ty,  String cr){
 
         Cursor cursor = null;
         int counter;
@@ -107,7 +109,9 @@ public class LocalDBHandler extends SQLiteOpenHelper{
             vals.put(FN, fn);
             vals.put(SN, sn);
             vals.put(EMAIL, email);
+            vals.put(USERNAME, un);
             vals.put(PHNO, phno);
+            vals.put(TYPE, ty);
             vals.put(CR, cr);
 
             long ins = db2.insert(TABLE_USER_DETAILS, null, vals);
@@ -136,12 +140,12 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         HashMap<String,String> uDetails = getUserDetails();
         Log.e(TAG, "USER DETAILS: "+uDetails.toString());
         String id = uDetails.get(UID);
-        String email = uDetails.get(EMAIL);
+        String username = uDetails.get(USERNAME);
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues vals = new ContentValues();//empty set of values that will be used to store user info
         vals.put(UID, id);
-        vals.put(EMAIL, email);
+        vals.put(USERNAME, username);
         vals.put(LAT, lt);
         vals.put(LNG, ln);
         vals.put(TS, t);
@@ -170,6 +174,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
             userDetails.put(SN, cursor.getString(3));
             userDetails.put(PHNO, cursor.getString(4));
             userDetails.put(EMAIL, cursor.getString(5));
+            userDetails.put(USERNAME, cursor.getString(5));
             userDetails.put(CR, cursor.getString(6));
         }
         cursor.close();
@@ -191,7 +196,7 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
             userLocation.put(UID, cursor.getString(0));
-            userLocation.put(EMAIL, cursor.getString(1));
+            userLocation.put(USERNAME, cursor.getString(1));
             userLocation.put(LAT, cursor.getString(2));
             userLocation.put(LNG, cursor.getString(3));
             userLocation.put(TS, cursor.getString(4));

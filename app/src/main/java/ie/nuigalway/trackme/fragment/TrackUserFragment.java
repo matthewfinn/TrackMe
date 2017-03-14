@@ -87,7 +87,7 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_home, null, false);
+        View v = inflater.inflate(R.layout.fragment_track_user, null, false);
 
         sm = new SessionManager(getContext());
         ldb = new LocalDBHandler(getContext());

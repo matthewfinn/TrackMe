@@ -26,7 +26,7 @@ public class CloudDBHandler {
 
     private static final String TAG = CloudDBHandler.class.getSimpleName();
     private static final String UID = "uid";
-    private static final String EM = "email";
+    private static final String UN = "username";
     private static final String LAT = "latitude";
     private static final String LON = "longitude";
     private static final String TS = "timestamp";
@@ -44,7 +44,7 @@ public class CloudDBHandler {
 
         HashMap<String,String> uDetails = ldb.getUserDetails();
         final String uid = uDetails.get("unique_id");
-        final String email = uDetails.get("email");
+        final String username = uDetails.get("username");
         String req = "req_loc";
 
         StringRequest r = new StringRequest(Request.Method.POST, AppConfig.LOCATION_URL, new Response.Listener<String>(){
@@ -84,7 +84,7 @@ public class CloudDBHandler {
 
                 Map<String,String> p = new HashMap<>();
                 p.put(UID, uid);
-                p.put(EM,email);
+                p.put(UN,username);
                 p.put(LAT, lat);
                 p.put(LON, lon);
                 p.put(TS, ts);
@@ -96,7 +96,7 @@ public class CloudDBHandler {
         App.getInstance().addToRQ(r, req);
     }
 
-    public void requestUserLocation(final String email){
+    public void requestUserLocation(final String username){
 
         location = new HashMap<>();
 
@@ -123,7 +123,7 @@ public class CloudDBHandler {
                         location.put(LON, lon);
                         location.put(TS,ts);
                         Log.d(TAG, "Location:" +location.toString());
-                        Log.d(TAG,"User '" + email + "' Location Received From Server");
+                        Log.d(TAG,"User '" + username + "' Location Received From Server");
 
 
                     } else {
@@ -149,7 +149,7 @@ public class CloudDBHandler {
             protected Map<String, String> getParams(){
 
                 Map<String,String> p = new HashMap<>();
-                p.put(EM,email);
+                p.put(UN,username);
                 Log.d(TAG,req + ": POST Parameters: "+p.toString());
                 return p;
             }

@@ -33,12 +33,12 @@
 
             <EditText
 
-                android:id="@+id/login_email"
+                android:id="@+id/login_username"
                 android:inputType="textEmailAddress"
                 android:layout_weight="0.00"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_email" />
+                android:hint="@string/hint_username" />
 
             <EditText
 

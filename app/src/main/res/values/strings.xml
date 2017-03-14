@@ -5,6 +5,7 @@
     <string name="hint_firstname">First Name</string>
     <string name="hint_surname">Surname</string>
     <string name="hint_email">Email Address</string>
+    <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_confirm_password">Confirm Password</string>
     <string name="hint_profile_type">Select Profile Type</string>
@@ -19,14 +20,12 @@
         <item>Retiree/Elderly</item>
     </string-array>
 
-    <string name="menu_trackMe">Track Me</string>
+    <string name="menu_trackMe">Home</string>
     <string name="menu_gps">GPS Settings</string>
     <string name="menu_fd">Fall Detection Settings</string>
     <string name="menu_pref">Preferences</string>
-    <string name="menu_profile">My Profile</string>
-
+    <string name="menu_profile">My Details</string>
     <string name="menu_logout">Logout</string>
-
 
     <string name="button_register">Register</string>
     <string name="button_login">Login</string>

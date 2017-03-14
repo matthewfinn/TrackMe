@@ -41,14 +41,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = LoginFragment.class.getSimpleName();
 
-    private EditText email, password;
+    private EditText username, password;
     private Button login_button;
     private TextView login_reglink;
     private SessionManager sm;
     private LocalDBHandler db;
     private GPSHelper gh;
     private ProgressDialog pd;
-    private String em, pw;
+    private String un, pw;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         login_reglink =  (TextView) view.findViewById(R.id.login_reglink);
         login_reglink.setOnClickListener(this);
 
-        email = (EditText) view.findViewById(R.id.login_email);
+        username = (EditText) view.findViewById(R.id.login_username);
         password = (EditText) view.findViewById(R.id.login_password);
 
         pd = new ProgressDialog(getContext());
@@ -113,25 +113,25 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
     private void attemptLogin() {
 
-        em = email.getText().toString().trim();
+        un = username.getText().toString().trim();
         pw = password.getText().toString().trim();
 
         // else if block(s) to verify is user entered correct information.
-        if (!em.isEmpty() && !pw.isEmpty()) {
+        if (!un.isEmpty() && !pw.isEmpty()) {
 
             // Verify user login using details provided
-            verifyLogin(em, pw);
+            verifyLogin(un, pw);
 
-        }else if (em.isEmpty()&&pw.isEmpty()){
+        }else if (un.isEmpty()&&pw.isEmpty()){
 
             Toast.makeText(getActivity(),
-                    "Please Enter Email Address & Password To Log In", Toast.LENGTH_LONG)
+                    "Please Enter Username & Password To Log In", Toast.LENGTH_LONG)
                     .show();
 
         }
-        else if (em.isEmpty()){
+        else if (un.isEmpty()){
             Toast.makeText(getContext(),
-                    "Please Enter Email Address", Toast.LENGTH_LONG)
+                    "Please Enter Username Address", Toast.LENGTH_LONG)
                     .show();
         }else if(pw.isEmpty()){
             Toast.makeText(getContext(),
@@ -162,7 +162,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         mListener = null;
     }
 
-    private void verifyLogin(final String email, final String password){
+    private void verifyLogin(final String username, final String password){
 
         String req = "req_login";
 
@@ -193,11 +193,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         String fn = user.getString("first_name");
                         String sn = user.getString("surname");
                         String em = user.getString("email");
+                        String uname = user.getString("username");
                         String ph = user.getString("phone_no");
+                        String ty = user.getString("type");
                         String cr = user.getString("created_at");
 
-                        sm.startLoginSession(true, fn, sn, em, ph);
-                        db.addUser(uid, fn, sn, em, ph, cr);
+                        sm.startLoginSession(true, fn, sn, em, uname, ph);
+                        db.addUser(uid, fn, sn, em, uname, ph, ty, cr);
 
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         startActivity(intent);
@@ -230,7 +232,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
             protected Map<String, String> getParams(){
 
                 Map<String,String> p = new HashMap<String,String>();
-                p.put("email", email);
+                p.put("username", username);
                 p.put("password",password);
 
                 return p;
