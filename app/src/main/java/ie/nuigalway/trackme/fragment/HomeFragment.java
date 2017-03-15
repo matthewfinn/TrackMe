@@ -258,17 +258,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
             case R.id.trackuser_button:
 
                 final EditText txtUrl = new EditText(getContext());
-                txtUrl.setHint("Enter Email Address Here");
+                txtUrl.setHint("Enter Username Here");
                 new AlertDialog.Builder(getContext())
                         .setTitle("Track User")
-                        .setMessage("Enter Email Address Of User You Would Like To Track")
+                        .setMessage("Enter Username Of User You Would Like To Track")
                         .setView(txtUrl)
                         .setPositiveButton("Track", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String email = txtUrl.getText().toString();
                                 if(email.isEmpty()){
 
-                                    Toast.makeText(getContext(), "Please Enter Email Address To Track", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getContext(), "Please Enter Username To Track", Toast.LENGTH_LONG).show();
                                 }else {
 
                                     Bundle bundle = new Bundle();

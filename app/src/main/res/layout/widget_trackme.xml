@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:padding="@dimen/widget_margin"
     android:background="#55000000">
+
     <ImageView
         android:id="@+id/trackMeImage"
         android:layout_width="0dp"
@@ -28,6 +29,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Start"/>
+        android:text="►"
+        android:textSize="40sp"/>
 
 </LinearLayout>

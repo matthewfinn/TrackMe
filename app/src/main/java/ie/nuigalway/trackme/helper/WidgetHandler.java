@@ -19,9 +19,11 @@ import ie.nuigalway.trackme.services.GPSService;
 
 public class WidgetHandler extends AppWidgetProvider {
     private static final String TAG = WidgetHandler.class.getSimpleName();
+    private static final String GPSTAG = GPSService.class.getSimpleName();
     private static final String MyOnClick1 = "myOnClickTag1";
     private static final String MyOnClick2 = "myOnClickTag2";
     private static final String MyOnClick3 = "myOnClickTag3";
+    AppWidgetManager ap;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -29,44 +31,48 @@ public class WidgetHandler extends AppWidgetProvider {
         SessionManager sm = new SessionManager(context);
         Intent in;
 
-        RemoteViews btn = new RemoteViews(context.getPackageName(),
-                R.layout.widget_trackme);
+        RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_trackme);
 
         Log.d(TAG,"Intent: "+intent.getAction());
 
         if (MyOnClick1.equals(intent.getAction())) {
+
             Log.d(TAG,"ONCLICK1");
             if(sm.isLoggedIn()){
                 in = new Intent (context, GPSService.class);
+
                 if(!sm.isGPSServiceRunning()){
-                    Log.d(TAG,"Should be false: " +String.valueOf(sm.isGPSServiceRunning()));
+
                     context.startService(in);
-                    Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
-                    btn.setTextViewText(R.id.actionButton, "Stop");
+                    Log.d(TAG, "Starting Service: " + GPSTAG);
                     Toast.makeText(context, "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
+                    rv.setTextViewText(R.id.actionButton, "||");
+                    AppWidgetManager.getInstance(context).updateAppWidget(
+                            new ComponentName(context, WidgetHandler.class), rv);
                 }
                 else if(sm.isGPSServiceRunning()){
-                    Log.d(TAG,"Should be true: " +String.valueOf(sm.isGPSServiceRunning()));
+
                     context.stopService(in);
-                    btn.setTextViewText(R.id.actionButton, "Start");
-                    Log.d(TAG, "Stopping Service: " + GPSService.class.getSimpleName());
+                    Log.d(TAG, "Stopping Service: " + GPSTAG);
                     Toast.makeText(context, "Stopping GPS Tracking Service", Toast.LENGTH_LONG).show();
+                    rv.setTextViewText(R.id.actionButton, "►");
+                    AppWidgetManager.getInstance(context).updateAppWidget(
+                            new ComponentName(context, WidgetHandler.class),rv);
                 }
+
+
             }
             else{
                 Toast.makeText(context, "Track Me Not Logged In. Please Log In", Toast.LENGTH_LONG).show();
             }
 
         } else if (MyOnClick2.equals(intent.getAction())) {
-            Toast.makeText(context, "Button2", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "Button2", Toast.LENGTH_LONG).show();
             Log.w("Widget", "Clicked button2");
         } else if (MyOnClick3.equals(intent.getAction())) {
-            Toast.makeText(context, "Button3", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "Button3", Toast.LENGTH_LONG).show();
             Log.w("Widget", "Clicked button3");
         }
-
-
-
     }
 
     @Override
@@ -74,6 +80,9 @@ public class WidgetHandler extends AppWidgetProvider {
 
         ComponentName thisWidget = new ComponentName(context, WidgetHandler.class);
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+
+        ap = appWidgetManager;
+
 
         for (int widgetId : allWidgetIds) {
 

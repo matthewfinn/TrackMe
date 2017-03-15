@@ -116,6 +116,7 @@ public class SessionManager {
     public void logOutUser(){
 
         ed.clear();
+        ed.putBoolean(KEY_L,false);
         ed.commit();
         Log.d(TAG , sp.getAll().values().toString());
     }
