@@ -87,7 +87,7 @@ public class SessionManager {
     }
 
     public boolean isGPSRunning(){
-        return sp.getBoolean(KEY_L, false);
+        return sp.getBoolean(KEY_G, false);
     }
 
     public void setGPSStatus(boolean b){
@@ -96,6 +96,26 @@ public class SessionManager {
         ed.commit();
 
         Log.d(TAG, "User login session modified. GPS Service Tracking Modified.");
+    }
+
+    public void setSOSContact(String con){
+
+
+    }
+
+    public String getSOSContact(){
+
+        return null;
+    }
+
+    public void setProfileType(String type){
+
+
+    }
+
+    public String getProfileType(){
+
+        return null;
     }
 
 

@@ -11,6 +11,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.activity.Splash;
 import ie.nuigalway.trackme.services.GPSService;
 
 /**
@@ -59,19 +60,10 @@ public class WidgetHandler extends AppWidgetProvider {
                     AppWidgetManager.getInstance(context).updateAppWidget(
                             new ComponentName(context, WidgetHandler.class),rv);
                 }
-
-
             }
             else{
                 Toast.makeText(context, "Track Me Not Logged In. Please Log In", Toast.LENGTH_LONG).show();
             }
-
-        } else if (MyOnClick2.equals(intent.getAction())) {
-            //Toast.makeText(context, "Button2", Toast.LENGTH_LONG).show();
-            Log.w("Widget", "Clicked button2");
-        } else if (MyOnClick3.equals(intent.getAction())) {
-            //Toast.makeText(context, "Button3", Toast.LENGTH_LONG).show();
-            Log.w("Widget", "Clicked button3");
         }
     }
 
@@ -81,6 +73,9 @@ public class WidgetHandler extends AppWidgetProvider {
         ComponentName thisWidget = new ComponentName(context, WidgetHandler.class);
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 
+        Intent intent = new Intent(context, Splash.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
         ap = appWidgetManager;
 
 
@@ -88,8 +83,8 @@ public class WidgetHandler extends AppWidgetProvider {
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_trackme);
             remoteViews.setOnClickPendingIntent(R.id.actionButton, getPendingSelfIntent(context, MyOnClick1));
-            remoteViews.setOnClickPendingIntent(R.id.trackMeTV, getPendingSelfIntent(context, MyOnClick2));
-            remoteViews.setOnClickPendingIntent(R.id.trackMeImage, getPendingSelfIntent(context, MyOnClick3));
+            //remoteViews.setOnClickPendingIntent(R.id.trackMeTV, getPendingSelfIntent(context, MyOnClick2));
+            remoteViews.setOnClickPendingIntent(R.id.trackMeImage, pendingIntent);
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
 
         }
