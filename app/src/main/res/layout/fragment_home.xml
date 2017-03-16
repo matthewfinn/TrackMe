@@ -25,4 +25,11 @@
         android:layout_gravity="left"
         android:text="Track Someone"/>
 
+    <Button
+        android:id="@+id/send_sms"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="SEND"/>
+
 </FrameLayout>

@@ -36,6 +36,7 @@ import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.CloudDBHandler;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
+import ie.nuigalway.trackme.helper.MessageHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 import ie.nuigalway.trackme.services.GPSService;
 
@@ -52,6 +53,7 @@ import ie.nuigalway.trackme.services.GPSService;
 public class HomeFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener{
 
     private static final int fl = 1;
+    private static final int ss = 2;
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
@@ -65,9 +67,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private GPSHelper gh;
     private CloudDBHandler cdb;
     private LocalDBHandler ldb;
+    private MessageHandler mh;
     private GoogleMap map;
-    private int aflCheck;
-    private Button trackMeButton, trackUserButton;
+    private int aflCheck, smsCheck;
+    private Button trackMeButton, trackUserButton, smsBtn;
     private SessionManager sm;
     private ProgressDialog pd;
     private Context ctx;
@@ -104,11 +107,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         sm = new SessionManager(getContext());
         ldb = new LocalDBHandler(getContext());
         cdb = new CloudDBHandler(getContext());
+        mh = new MessageHandler(getContext());
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
 
         trackUserButton = (Button) v.findViewById(R.id.trackuser_button);
         trackUserButton.setOnClickListener(this);
+
+        smsBtn = (Button) v.findViewById(R.id.send_sms);
+        smsBtn.setOnClickListener(this);
 
         aflCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -211,6 +218,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     Log.i(TAG, "Location permission denied by user"+aflCheck);
                 }
                 }
+            case ss: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    smsCheck = ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.SEND_SMS);
+                    Log.i(TAG, "Checking if SMS permission given. Status: "+smsCheck);
+
+                    mh.sendMessage();
+                }
+                else{
+                    Log.i(TAG, "SMS permission denied by user"+aflCheck);
+                }
+                
+            }
             }
         }
 
@@ -288,6 +311,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                         })
                         .show();
                 break;
+
+            case R.id.send_sms:
+
+                smsCheck = ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.SEND_SMS);
+
+                if(smsCheck!=PackageManager.PERMISSION_GRANTED){
+                    Log.i(TAG, "Requesting permission to access location");
+
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.SEND_SMS},
+                            fl);
+
+                }else{
+
+                    mh.sendMessage();
+                }
+                break;
+
+
         }
     }
 
