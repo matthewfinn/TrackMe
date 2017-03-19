@@ -30,6 +30,6 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="SEND"/>
+        android:text="FD"/>
 
 </FrameLayout>

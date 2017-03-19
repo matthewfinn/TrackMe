@@ -38,6 +38,7 @@ import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.MessageHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
+import ie.nuigalway.trackme.services.FallDetectionService;
 import ie.nuigalway.trackme.services.GPSService;
 
 //import com.google.android.gms.identity.intents.Address;
@@ -54,6 +55,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
     private static final int fl = 1;
     private static final int ss = 2;
+    private static final int fd = 3;
+
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private OnFragmentInteractionListener mListener;
@@ -69,7 +72,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private LocalDBHandler ldb;
     private MessageHandler mh;
     private GoogleMap map;
-    private int aflCheck, smsCheck;
+    private int aflCheck, smsCheck, vCheck;
     private Button trackMeButton, trackUserButton, smsBtn;
     private SessionManager sm;
     private ProgressDialog pd;
@@ -230,12 +233,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     mh.sendMessage();
                 }
                 else{
-                    Log.i(TAG, "SMS permission denied by user"+aflCheck);
+                    Log.i(TAG, "SMS permission denied by user"+smsCheck);
                 }
                 
             }
-            }
         }
+    }
 
     private void getMap() throws IOException{
 
@@ -314,20 +317,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
             case R.id.send_sms:
 
-                smsCheck = ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.SEND_SMS);
+                Intent intent = new Intent(getActivity(), FallDetectionService.class);
+                getActivity().startService(intent);
 
-                if(smsCheck!=PackageManager.PERMISSION_GRANTED){
-                    Log.i(TAG, "Requesting permission to access location");
+                Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
 
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.SEND_SMS},
-                            fl);
-
-                }else{
-
-                    mh.sendMessage();
-                }
                 break;
 
 

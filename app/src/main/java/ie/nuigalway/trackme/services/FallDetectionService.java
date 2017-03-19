@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -17,12 +18,8 @@ import static java.lang.Math.sqrt;
 public class FallDetectionService extends Service implements SensorEventListener {
 
     private static String TAG = FallDetectionService.class.getSimpleName();
-    private static String FA = "falling";
-    private static String ST = "standing";
-    private static String SI = "sitting";
-    private static String WA = "walking";
-    private static String NN = "none";
     private SensorManager sensorManager;
+    private Sensor sensor;
     private String previous, current;
     private static int bufferSize=80;
     static public double[] readings = new double[bufferSize];
@@ -35,61 +32,67 @@ public class FallDetectionService extends Service implements SensorEventListener
     public void onCreate()
     {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_UI);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Log.d(TAG, sensor.getName());
         initialise();
+    }
 
+    @Override public void onDestroy() {
+        Log.d("Running onDestroy", "Stop Sensors & Current Background Service");
+        sensorManager.unregisterListener(this);
+        super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.e(TAG, "onStartCommand");
+        Log.d(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
         return START_STICKY;
     }
 
     private void initialise(){
 
-        current = NN;
-        previous= NN;
-        for(int i=0;i<bufferSize;i++){
-            readings[i]=0;
-        }
-    }
-
-    private void getPosture(double[] w, double y){
-
-        int z = zeroCrossingRate(w);
-
-        if(z==0){
-            if(Math.abs(y)<thresh2){
-                current=ST;
-            }else{
-                current=SI;
-            }
-        }else{
-            if(z>thresh3){
-                current=WA;
-            }else{
-                current=NN;
-            }
-        }
-    }
-
-    private int zeroCrossingRate(double[] w){
-
-        int count=0;
-        for(int i=1;i<=bufferSize-1;i++){
-
-            if((w[i]-thresh1)<sigma && (w[i-1]-thresh1)>sigma){
-                count=count+1;
-            }
-
-        }
-        return count;
 
     }
+
+//    private void getPosture(double[] w, double y){
+//
+//        int z = zeroCrossingRate(w);
+//
+//
+//        if(z==0){
+//            if(Math.abs(y)<thresh2){
+//                current=ST;
+//            }else{
+//                current=SI;
+//            }
+//        }else{
+//            if(z>thresh3){
+//                current=WA;
+//            }else{
+//                current=NN;
+//            }
+//        }
+//
+//        Log.d(TAG,"Posture: "+current);
+//    }
+
+//    private int zeroCrossingRate(double[] w){
+//
+//        int count=0;
+//        for(int i=1;i<=bufferSize-1;i++){
+//
+//            if((w[i]-thresh1)<sigma && (w[i-1]-thresh1)>sigma){
+//                count=count+1;
+//            }
+//
+//        }
+//        return count;
+//
+//    }
 
     @Nullable
     @Override
@@ -103,23 +106,27 @@ public class FallDetectionService extends Service implements SensorEventListener
 
         if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
 
-            rx = event.values[0]; ry = event.values[1]; rx = event.values[2];
-            computeReadings(rx,ry,rz);
-            getPosture(readings,ry);
-            detectFall(current, previous);
+            rx = event.values[0]; ry = event.values[1]; rz = event.values[2];
+            double value = computeReadings(rx,ry,rz);
+
+            Log.d("Sensor", "Value: " + value);
+
+            if ((value > 25) || (value < 1))  {
+                //onActivateTimerActivity();
+                viber(5000);
+                onDestroy();
+            }
         }
     }
 
-    private void computeReadings(double x, double y, double z){
+    private void viber(int m){
+        Vibrator oVibrate = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+        if (oVibrate.hasVibrator()) { oVibrate.vibrate(m); }
+    }
 
-        calc = sqrt((rx*rx)+(ry*ry)+(rz*rz));
+    private double computeReadings(double x, double y, double z){
 
-        for(int i=0;i<=bufferSize-2;i++){
-            readings[i]=readings[i+1];
-        }
-        readings[bufferSize-1]=calc;
-
-
+        return sqrt((x*x)+(y*y)+(z*z));
     }
 
 
@@ -127,23 +134,4 @@ public class FallDetectionService extends Service implements SensorEventListener
 
     }
 
-    private void detectFall(String c, String p){
-
-        if(!p.equalsIgnoreCase(c)){
-            if(c.equalsIgnoreCase(FA)){
-              //  m1_fall.start();
-            }
-            if(c.equalsIgnoreCase(SI)){
-              //  m2_sit.start();
-            }
-            if(c.equalsIgnoreCase(ST)){
-               // m3_stand.start();
-            }
-            if(c.equalsIgnoreCase(WA)){
-               // m4_walk.start();
-            }
-        }
-
-
-    }
 }
