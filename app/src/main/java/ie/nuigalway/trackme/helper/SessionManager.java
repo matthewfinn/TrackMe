@@ -26,6 +26,7 @@ public class SessionManager {
     private static final String PREF = "TrackMePreferences";
     private static final String KEY_L = "LoggedIn";
     private static final String KEY_G = "GPSRunning";
+    private static final String KEY_F = "FDRunning";
     int MODE = 0; //private preferences mode used to set preference permissions
 
     SharedPreferences sp;

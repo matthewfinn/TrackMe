@@ -48,6 +48,7 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
     private static final String IDENTIFIER = "Location";
     private static final String KEY = "locData";
 
+    private static final String UN = "username";
     private static final String LAT = "latitude";
     private static final String LON = "longitude";
     private static final String TS = "timestamp";
@@ -191,7 +192,7 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
                 Log.d(TAG, currentLocation.toString());
 
                 try {
-                    locationAddress = gh.getAddressString(currentLocation) + " @ " + loc.get(TS);
+                    locationAddress =loc.get(UN)+": "+gh.getAddressString(currentLocation) + " @ " + loc.get(TS);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

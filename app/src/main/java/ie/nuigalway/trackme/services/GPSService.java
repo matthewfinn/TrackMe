@@ -31,7 +31,6 @@ public class GPSService extends Service {
 
     private static final String ID = "uid";
     private static final String EMAIL = "email";
-
     private static final String LAT = "latData";
     private static final String LNG = "lngData";
     private static final String CDT = "timeData";
@@ -48,6 +47,7 @@ public class GPSService extends Service {
     private String address;
     private Context ctx;
     private SharedPreferences sp;
+    private LatLng starterLoc;
 
     private class LocationListener implements android.location.LocationListener
     {
@@ -64,13 +64,18 @@ public class GPSService extends Service {
         @Override
         public void onLocationChanged(Location location)
         {
+            //Define date format
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+            String cdt = sdf.format(new Date());
+
             //get latitude & longitude values from location object;
             double lat = location.getLatitude();
             double lng = location.getLongitude();
 
-            //Define date format
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
-            String cdt = sdf.format(new Date());
+            if(starterLoc==null){
+
+                starterLoc = new LatLng(lat,lng);
+            }
 
             //Create LatLng Object (To Be Used to Create Google Maps Marker)
             LatLng lCurr = new LatLng(lat,lng);

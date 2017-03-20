@@ -119,6 +119,7 @@ public class CloudDBHandler {
                         String lon = user.getString(LON);
                         String ts = user.getString(TS);
 
+                        location.put(UN,username);
                         location.put(LAT,lat);
                         location.put(LON, lon);
                         location.put(TS,ts);

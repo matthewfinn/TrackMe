@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="ie.nuigalway.trackme.fragment.RegisterFragment"
     android:name="fragments.RegisterFragment"
-    android:id="@+id/fragment_register">>
+    android:id="@+id/fragment_register">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

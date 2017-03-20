@@ -97,12 +97,15 @@ public class GPSHelper implements LocationListener{
 
         if (wifi.isConnected()) {
             status = true;
-            //Log.i(TAG, "Wifi Connected");
-        } else //Log.i(TAG,"Mobile Network(LTE/3G/4g) Connected");
-//Log.w(TAG,"No Internet Connection Available");
+        }else{
             status = mobile.isConnected();
+        }
 
         return status;
+    }
+
+    public String getShortAddressString(LatLng loc) throws IOException{
+        return null;
     }
 
     @NonNull
