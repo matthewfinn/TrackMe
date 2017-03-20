@@ -3,33 +3,18 @@ package ie.nuigalway.trackme.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.preference.PreferenceFragment;
 
 import ie.nuigalway.trackme.R;
+import ie.nuigalway.trackme.helper.SessionManager;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PreferencesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PreferencesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PreferencesFragment extends PreferenceFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-   private String mParam1;
-    private String mParam2;
-
+    private SessionManager sm;
     private OnFragmentInteractionListener mListener;
+    private Context ctx;
 
     public PreferencesFragment() {
         // Required empty public constructor
@@ -47,8 +32,7 @@ public class PreferencesFragment extends PreferenceFragment {
     public static PreferencesFragment newInstance(String param1, String param2) {
         PreferencesFragment fragment = new PreferencesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,16 +40,14 @@ public class PreferencesFragment extends PreferenceFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        //sm = new SessionManager();
         return inflater.inflate(R.layout.fragment_preferences, container, false);
     }
 
@@ -79,6 +61,8 @@ public class PreferencesFragment extends PreferenceFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        ctx = getActivity();
+        sm = new SessionManager(ctx);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {

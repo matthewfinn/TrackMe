@@ -10,14 +10,7 @@
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_profile" />
-        <item
-            android:id="@+id/nav_gps"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_gps" />
-        <item
-            android:id="@+id/nav_fd"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_fd" />
+
     </group>
 
     <item android:title="Communicate">

@@ -22,8 +22,7 @@ public class WidgetHandler extends AppWidgetProvider {
     private static final String TAG = WidgetHandler.class.getSimpleName();
     private static final String GPSTAG = GPSService.class.getSimpleName();
     private static final String MyOnClick1 = "myOnClickTag1";
-    private static final String MyOnClick2 = "myOnClickTag2";
-    private static final String MyOnClick3 = "myOnClickTag3";
+
     AppWidgetManager ap;
 
     @Override
@@ -83,7 +82,6 @@ public class WidgetHandler extends AppWidgetProvider {
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_trackme);
             remoteViews.setOnClickPendingIntent(R.id.actionButton, getPendingSelfIntent(context, MyOnClick1));
-            //remoteViews.setOnClickPendingIntent(R.id.trackMeTV, getPendingSelfIntent(context, MyOnClick2));
             remoteViews.setOnClickPendingIntent(R.id.trackMeImage, pendingIntent);
             appWidgetManager.updateAppWidget(widgetId, remoteViews);
 

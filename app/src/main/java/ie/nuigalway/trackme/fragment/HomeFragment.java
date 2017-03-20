@@ -1,7 +1,6 @@
 package ie.nuigalway.trackme.fragment;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,16 +40,6 @@ import ie.nuigalway.trackme.helper.SessionManager;
 import ie.nuigalway.trackme.services.FallDetectionService;
 import ie.nuigalway.trackme.services.GPSService;
 
-//import com.google.android.gms.identity.intents.Address;
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HomeFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HomeFragment newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener{
 
     private static final int fl = 1;
@@ -61,7 +50,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
     private OnFragmentInteractionListener mListener;
     private static final String IDENTIFIER = "Location";
-    private static final String KEY = "locData";
+    //private static final String KEY = "locData";
 
     private static final String LAT = "latData";
     private static final String LNG = "lngData";
@@ -75,7 +64,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private int aflCheck, smsCheck, vCheck;
     private Button trackMeButton, trackUserButton, smsBtn;
     private SessionManager sm;
-    private ProgressDialog pd;
+   // private ProgressDialog pd;
     private Context ctx;
 
 
@@ -107,10 +96,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
         View v = inflater.inflate(R.layout.fragment_home, null, false);
 
-        sm = new SessionManager(getContext());
-        ldb = new LocalDBHandler(getContext());
-        cdb = new CloudDBHandler(getContext());
-        mh = new MessageHandler(getContext());
+        ctx = getContext();
+
+        sm = new SessionManager(ctx);
+        ldb = new LocalDBHandler(ctx);
+        cdb = new CloudDBHandler(ctx);
+        mh = new MessageHandler(ctx);
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
 
@@ -243,7 +234,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private void getMap() throws IOException{
 
         String address;
-        gh = new GPSHelper(getContext());
+        gh = new GPSHelper(ctx);
         if(!gh.checkInternetServiceAvailable()) {
 
             new AlertDialog.Builder(getActivity()).
@@ -270,22 +261,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                 if(!sm.isGPSServiceRunning()) {
                     Log.d(TAG,"Should be false: " +String.valueOf(sm.isGPSServiceRunning()));
                     Log.i(TAG,"Button Click :"+sm.isGPSServiceRunning());
-                    Toast.makeText(getContext(), "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
                     Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
                     Intent intent = new Intent(getActivity(), GPSService.class);
                     getActivity().startService(intent);
                 }else if(sm.isGPSServiceRunning()){
                     Log.d(TAG,"Should be true: " +String.valueOf(sm.isGPSServiceRunning()));
-                    Toast.makeText(getContext(), "Tracking Already Started", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ctx, "Tracking Already Started", Toast.LENGTH_LONG).show();
                 }
                 break;
 
 
             case R.id.trackuser_button:
 
-                final EditText txtUrl = new EditText(getContext());
+                final EditText txtUrl = new EditText(ctx);
                 txtUrl.setHint("Enter Username Here");
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(ctx)
                         .setTitle("Track User")
                         .setMessage("Enter Username Of User You Would Like To Track")
                         .setView(txtUrl)
@@ -294,7 +285,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                                 String email = txtUrl.getText().toString();
                                 if(email.isEmpty()){
 
-                                    Toast.makeText(getContext(), "Please Enter Username To Track", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ctx, "Please Enter Username To Track", Toast.LENGTH_LONG).show();
                                 }else {
 
                                     Bundle bundle = new Bundle();

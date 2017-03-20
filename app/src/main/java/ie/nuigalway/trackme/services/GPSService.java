@@ -20,6 +20,7 @@ import java.util.Date;
 import ie.nuigalway.trackme.helper.CloudDBHandler;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
+import ie.nuigalway.trackme.helper.MessageHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
 public class GPSService extends Service {
@@ -42,6 +43,7 @@ public class GPSService extends Service {
     private GPSHelper gh;
     private LocalDBHandler ldb;
     private CloudDBHandler cdb;
+    private MessageHandler mh;
     private SessionManager sm;
     private LocalBroadcastManager broadcaster;
     private String address;
@@ -72,13 +74,16 @@ public class GPSService extends Service {
             double lat = location.getLatitude();
             double lng = location.getLongitude();
 
-            if(starterLoc==null){
-
-                starterLoc = new LatLng(lat,lng);
-            }
-
             //Create LatLng Object (To Be Used to Create Google Maps Marker)
             LatLng lCurr = new LatLng(lat,lng);
+
+
+            if(starterLoc==null){
+                starterLoc = new LatLng(lat,lng);
+                checkBoundary(starterLoc, lCurr);
+            }else{
+                checkBoundary(starterLoc, lCurr);
+            }
 
             //Check if internet service is available and get address string either using Geocoder
             //Or if internet is not available getAddressString(LatLng obj) will return co-ordinates
@@ -137,6 +142,16 @@ public class GPSService extends Service {
         }
     }
 
+    private boolean checkBoundary(LatLng start, LatLng curr){
+
+        double lat_s = start.latitude;
+        double lng_s = start.longitude;
+        double lat_c = curr.latitude;
+        double lng_c = curr.longitude;
+
+        return false;
+    }
+
     LocationListener[] mLocationListeners = new LocationListener[] {
             new LocationListener(LocationManager.GPS_PROVIDER),
             new LocationListener(LocationManager.NETWORK_PROVIDER)
@@ -154,6 +169,13 @@ public class GPSService extends Service {
         //Initialise GPSHelper class;
         gh = new GPSHelper(GPSService.this);
 
+        sm = new SessionManager(getApplicationContext());
+        sm.setGPSServiceRunning(true);
+
+        ldb = new LocalDBHandler(getApplicationContext());
+        cdb = new CloudDBHandler(getApplicationContext());
+        mh = new MessageHandler(getApplicationContext());
+
         //Initialise LocationManager
         initializeLocationManager();
 
@@ -161,7 +183,11 @@ public class GPSService extends Service {
         broadcaster = LocalBroadcastManager.getInstance(this);
 
         //Initialise Shared Preferences
-        //sp = ctx.getSharedPreferences(PREF,MODE);
+        ctx = getApplicationContext();
+        sp = ctx.getSharedPreferences(PREF,MODE);
+
+        //Check it's working.... Use sp to get update freq and distance boundary.
+        Log.d(TAG,"EMAIL = "+sp.getString(EMAIL,null));
 
         try {
             //Request location updates from LocationManager
@@ -213,17 +239,6 @@ public class GPSService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        // Shared preferences got. to be used to get user preference for location tracking
-        // i.e. "sp.getString("firstname",null)" gets the 'value' stored for 'key' firstname
-        this.ctx = getApplicationContext();
-
-        sm = new SessionManager(getApplicationContext());
-        sm.setGPSServiceRunning(true);
-
-        ldb = new LocalDBHandler(getApplicationContext());
-        cdb = new CloudDBHandler(getApplicationContext());
-
-
         Log.i(TAG, "onStartCommand ");
 
         super.onStartCommand(intent, flags, startId);

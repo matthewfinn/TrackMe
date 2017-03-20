@@ -20,20 +20,16 @@ import java.util.List;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.fragment.ContactsFragment;
-import ie.nuigalway.trackme.fragment.FDPreferencesFragment;
-import ie.nuigalway.trackme.fragment.GPSPreferencesFragment;
 import ie.nuigalway.trackme.fragment.HomeFragment;
-import ie.nuigalway.trackme.fragment.LoginFragment;
 import ie.nuigalway.trackme.fragment.PreferencesFragment;
 import ie.nuigalway.trackme.fragment.ProfileFragment;
-import ie.nuigalway.trackme.fragment.RegisterFragment;
 import ie.nuigalway.trackme.helper.SessionManager;
 import ie.nuigalway.trackme.services.GPSService;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener, FDPreferencesFragment.OnFragmentInteractionListener,
+        implements NavigationView.OnNavigationItemSelectedListener,
+        HomeFragment.OnFragmentInteractionListener,
+        ProfileFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener,
         PreferencesFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -116,10 +112,6 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = HomeFragment.class;
         } else if (id == R.id.nav_profile) {
             fragmentClass = ProfileFragment.class;
-        } else if (id == R.id.nav_gps) {
-            fragmentClass = GPSPreferencesFragment.class;
-        } else if (id == R.id.nav_fd) {
-            fragmentClass = FDPreferencesFragment.class;
         } else if (id == R.id.nav_prefs) {
             fragmentClass = PreferenceFragment.class;
         } else if (id == R.id.nav_logout) {
