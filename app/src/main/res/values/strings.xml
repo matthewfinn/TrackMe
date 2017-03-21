@@ -14,10 +14,9 @@
 
 
     <string-array name="profile_types">
-        <item>Select Profile Type</item>
+        <item>Teenager</item>
         <item>Adult</item>
-        <item>Child/Teenager</item>
-        <item>Retiree/Elderly</item>
+        <item>Elderly</item>
     </string-array>
 
     <string name="menu_trackMe">Home</string>

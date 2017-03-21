@@ -71,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dip"
                 android:drawSelectorOnTop="true"
+                android:prompt="Profile Type"
                 android:entries="@array/profile_types"/>
 
             <Button android:id="@+id/reg_btn"

@@ -33,16 +33,22 @@ import ie.nuigalway.trackme.application.App;
 import ie.nuigalway.trackme.application.AppConfig;
 import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
+import ie.nuigalway.trackme.helper.SessionManager;
 
 
 public class RegisterFragment extends Fragment implements View.OnClickListener{
 
 
     private static final String TAG = RegisterFragment.class.getSimpleName();
+    private static final String TN = "teenager";
+    private static final String AD = "adult";
+    private static final String EL = "elderly";
+    private static final String DEF = "default";
     private EditText fName,surname,email,username, password, phno;
     private Button register_button, login_link;
     private Spinner profile_type;
     private LocalDBHandler db;
+    private SessionManager sm;
     private ProgressDialog pd;
     private GPSHelper gh;
 
@@ -78,6 +84,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
         db = new LocalDBHandler(getContext());
         gh = new GPSHelper(getContext());
+        sm = new SessionManager(getContext());
 
         if(!gh.checkInternetServiceAvailable()) {
 
@@ -114,14 +121,24 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         String em = email.getText().toString().trim();
         String un = username.getText().toString().trim();
         String pw = password.getText().toString().trim();
-        String pt = profile_type.getSelectedItem().toString().trim();
+        String pt = profile_type.getSelectedItem().toString().trim().toLowerCase();
 
         Log.d(TAG,"REGISTER PROFILE TYPE: "+pt);
 
-//        if(pt.isEmpty()){
-//
-//            pt = "Not Set";
-//        }
+        if(pt.equals(TN)){
+
+            sm.setProfileType(TN);
+
+        }else if(pt.equals(AD)){
+
+            sm.setProfileType(AD);
+        }else if(pt.equals(EL)){
+
+            sm.setProfileType(EL);
+        }else if(pt.equals(DEF)){
+
+            sm.setProfileType(DEF);
+        }
 
         // Check for empty data in the form
         if (!fn.isEmpty() && !sn.isEmpty() && !ph.isEmpty() && !em.isEmpty() &&!em.isEmpty() && !pw.isEmpty()) {

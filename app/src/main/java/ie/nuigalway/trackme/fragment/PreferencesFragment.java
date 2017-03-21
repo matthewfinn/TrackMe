@@ -12,9 +12,14 @@ import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.SessionManager;
 
 public class PreferencesFragment extends PreferenceFragment {
+    private static final String TAG = PreferencesFragment.class.getSimpleName();
+    private static final String TN = "teenager";
+    private static final String AD = "adult";
+    private static final String EL = "elderly";
     private SessionManager sm;
     private OnFragmentInteractionListener mListener;
     private Context ctx;
+
 
     public PreferencesFragment() {
         // Required empty public constructor
@@ -41,13 +46,28 @@ public class PreferencesFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+        //Depending on profile type got from sharedPreferences (Generated during registration)
+        //Choose int value accordingly here ....
+
+        //if
+        if(sm.getProfileType().equals("hi")){
+
+        }else{
+
+
+        }
+        int prefs = R.xml.preference_default;
+
+        addPreferencesFromResource(prefs);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //sm = new SessionManager();
+
         return inflater.inflate(R.layout.fragment_preferences, container, false);
     }
 
