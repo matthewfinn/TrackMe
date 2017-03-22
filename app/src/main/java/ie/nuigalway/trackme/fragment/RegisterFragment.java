@@ -44,7 +44,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private static final String AD = "adult";
     private static final String EL = "elderly";
     private static final String DEF = "default";
-    private EditText fName,surname,email,username, password, phno;
+    private EditText fName,surname,email,username, password, confirmpw, phno;
     private Button register_button, login_link;
     private Spinner profile_type;
     private LocalDBHandler db;
@@ -72,6 +72,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         email = (EditText) view.findViewById(R.id.edit_email);
         username = (EditText) view.findViewById(R.id.edit_username);
         password = (EditText) view.findViewById(R.id.edit_password);
+        confirmpw = (EditText) view.findViewById(R.id.confirm_password);
         profile_type = (Spinner) view.findViewById(R.id.edit_profile_type_spinner);
 
         register_button = (Button) view.findViewById(R.id.reg_btn);
@@ -121,31 +122,46 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
         String em = email.getText().toString().trim();
         String un = username.getText().toString().trim();
         String pw = password.getText().toString().trim();
+        String cpw = confirmpw.getText().toString().trim();
         String pt = profile_type.getSelectedItem().toString().trim().toLowerCase();
 
-        Log.d(TAG,"REGISTER PROFILE TYPE: "+pt);
-
         if(pt.equals(TN)){
-
             sm.setProfileType(TN);
+            Log.d(TAG,sm.getProfileType());
 
         }else if(pt.equals(AD)){
 
             sm.setProfileType(AD);
+            Log.d(TAG,sm.getProfileType());
+
         }else if(pt.equals(EL)){
 
             sm.setProfileType(EL);
-        }else if(pt.equals(DEF)){
+            Log.d(TAG,sm.getProfileType());
+
+        }else{
 
             sm.setProfileType(DEF);
+            Log.d(TAG,sm.getProfileType());
         }
 
+
+
         // Check for empty data in the form
-        if (!fn.isEmpty() && !sn.isEmpty() && !ph.isEmpty() && !em.isEmpty() &&!em.isEmpty() && !pw.isEmpty()) {
-            registerUser(fn,sn, ph, em, un, pw, pt);
+        if (!fn.isEmpty() && !sn.isEmpty() && !ph.isEmpty() && !em.isEmpty() &&!pt.isEmpty() && !pw.isEmpty()) {
+
+            if(pw.equals(cpw)) {
+                registerUser(fn, sn, ph, em, un, pw, pt);
+            }else{
+                Toast.makeText(getContext(),
+                        "Password Confirmation Does Not Match. Try Again! ", Toast.LENGTH_LONG)
+                        .show();
+
+            }
+
         } else {
             Toast.makeText(getContext(),
-                    "Not all information..", Toast.LENGTH_LONG)
+                    "Not All Information Entered. Please Enter All Profile Information & Try Again ", Toast.LENGTH_LONG)
                     .show();
         }
     }
@@ -154,13 +170,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
         String req = "req_register";
 
-        pd.setMessage("Registering Information on TrackMe Server");
-
-        if(!pd.isShowing()){
-            pd.show();
-        }
-
-        StringRequest r = new StringRequest(Request.Method.POST, AppConfig.REGISTRATION_URL, new Response.Listener<String>() {
+        final StringRequest r = new StringRequest(Request.Method.POST, AppConfig.REGISTRATION_URL, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String res) {
@@ -172,10 +182,9 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                 }
 
                 try {
-
                     JSONObject j = new JSONObject(res);
                     boolean error = j.getBoolean("error");
-                    System.out.print(j.toString());
+                    Log.d(TAG,j.toString());
 
                     if (!error) {
                         String uid = j.getString("uid");
@@ -197,11 +206,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
                     } else {
                         String err = j.getString("error_msg");
-                        Toast.makeText(getContext(), "On Response: "+err, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), err, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException jse) {
 
                     jse.printStackTrace();
+                    Log.d(TAG, res.toString());
                     Toast.makeText(getContext(), "On Response Error" + jse.getMessage(), Toast.LENGTH_LONG).show();
                 }
 

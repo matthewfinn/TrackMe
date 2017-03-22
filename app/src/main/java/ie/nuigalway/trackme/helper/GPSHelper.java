@@ -105,7 +105,24 @@ public class GPSHelper implements LocationListener{
     }
 
     public String getShortAddressString(LatLng loc) throws IOException{
-        return null;
+        String add = loc.toString();
+        if(checkInternetServiceAvailable()==true){
+            Geocoder geocoder = new Geocoder(c, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocation(loc.latitude, loc.longitude, 1);
+                StringBuilder sb = new StringBuilder();
+                if (!addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+
+                    add = address.getAddressLine(0);
+                }
+            }catch (IOException e){
+
+                Toast.makeText(c, "Could not connect to Geocoder to get address string,\n Connection timed out" , Toast.LENGTH_LONG).show();
+            }
+        }
+
+        return add;
     }
 
     @NonNull
@@ -120,11 +137,13 @@ public class GPSHelper implements LocationListener{
                StringBuilder sb = new StringBuilder();
                if (!addresses.isEmpty()) {
                    Address address = addresses.get(0);
-                   for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                       sb.append(address.getAddressLine(i)).append(", ");
+                   for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                       sb.append(address.getAddressLine(i)).append(",\n");
+                   }
                    sb.append(address.getCountryName());
 
-                   add = sb.toString();}
+                   add = sb.toString();
+               }
            }catch (IOException e){
 
                Toast.makeText(c, "Could not connect to Geocoder to get address string,\n Connection timed out" , Toast.LENGTH_LONG).show();

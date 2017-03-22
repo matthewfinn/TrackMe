@@ -332,7 +332,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
             LatLng currPos = new LatLng(lat,lon);
             try {
-                map.addMarker(new MarkerOptions().position(currPos).title(gh.getAddressString(currPos)+" @ "+cdt
+                map.addMarker(new MarkerOptions().position(currPos).title(gh.getShortAddressString(currPos)+" @ "+cdt
                         ));
             } catch (IOException e) {
                 e.printStackTrace();

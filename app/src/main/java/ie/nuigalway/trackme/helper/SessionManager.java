@@ -111,12 +111,14 @@ public class SessionManager {
 
     public void setProfileType(String type){
 
+        ed.putString(TYPE, type);
+        ed.commit();
 
     }
 
     public String getProfileType(){
 
-        return null;
+        return sp.getString(TYPE, null);
     }
 
 
