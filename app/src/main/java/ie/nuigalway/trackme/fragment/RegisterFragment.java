@@ -205,14 +205,16 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
                         switchFragmentToLogin();
 
                     } else {
+
                         String err = j.getString("error_msg");
                         Toast.makeText(getContext(), err, Toast.LENGTH_LONG).show();
+
                     }
                 } catch (JSONException jse) {
 
                     jse.printStackTrace();
                     Log.d(TAG, res.toString());
-                    Toast.makeText(getContext(), "On Response Error" + jse.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "On Response Error: " + jse.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
             }

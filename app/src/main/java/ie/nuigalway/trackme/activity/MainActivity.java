@@ -1,8 +1,15 @@
 package ie.nuigalway.trackme.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,9 +19,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 import java.util.List;
 
@@ -24,6 +34,7 @@ import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.fragment.PreferencesFragment;
 import ie.nuigalway.trackme.fragment.ProfileFragment;
 import ie.nuigalway.trackme.helper.SessionManager;
+import ie.nuigalway.trackme.services.FallDetectionService;
 import ie.nuigalway.trackme.services.GPSService;
 
 public class MainActivity extends AppCompatActivity
@@ -36,18 +47,61 @@ public class MainActivity extends AppCompatActivity
     private Fragment fragment;
     private Class fragmentClass;
     Toolbar toolbar;
-    SessionManager sm;
-
+    private SessionManager sm;
+    private static Context ctx;
+    private NotificationCompat.Builder notif;
+    int nid = 001;
+    private  NotificationManager nm;
+    private PowerManager pm;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        sm = new SessionManager(getApplicationContext());
+    public void onResume() {
+        super.onResume();
+        registerReceiver(br, new IntentFilter(FallDetectionService.CDT));
+        Log.d(TAG, "onResume Receiver Registered");
 
+
+    }
+
+    @Override
+    public void onPause() {
+
+        super.onPause();
+//        unregisterReceiver(br);
+//        Log.d(TAG, "onPause Receiver Unregistered");
+
+    }
+
+    @Override
+    public void onDestroy(){
+
+        super.onDestroy();
+        unregisterReceiver(br);
+        Log.d(TAG, "onPause Receiver Unregistered");
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        registerReceiver(br, new IntentFilter(FallDetectionService.CDT));
+        Log.d(TAG, "onCreate Receiver Registered");
+        sm = new SessionManager(getApplicationContext());
+        ctx = getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN |
+                        WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         fragment = null;
         fragmentClass = null;
@@ -117,7 +171,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_logout) {
             b = false;
 
-            if(sm.isGPSRunning()){
+            if(sm.isGPSServiceRunning()){
                 Intent intent = new Intent(this, GPSService.class);
                 stopService(intent);
             }
@@ -156,6 +210,63 @@ public class MainActivity extends AppCompatActivity
         if (fragments != null) {
             for (Fragment fragment : fragments) {
                 fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+        }
+    }
+
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.d(TAG, "onReceive Intent Registered");
+
+            Intent inten = new Intent(getApplicationContext(), FallDetectionService.class);
+            inten.setAction("STOP");
+            PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, inten, 0);
+            Log.d(TAG, "onReceive Intent To Stop Service");
+            if(notif==null){
+
+                nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+                notif = (NotificationCompat.Builder) new NotificationCompat.Builder(MainActivity.this).
+                        setSmallIcon(R.drawable.track_me_logo).
+                        setContentTitle("TrackMe Fall Detetced").
+                        setContentText("").
+                        setDefaults(Notification.DEFAULT_VIBRATE).
+                        setVisibility(Notification.VISIBILITY_PUBLIC).
+                        setPriority(Notification.PRIORITY_MAX).
+                        addAction(R.drawable.quantum_ic_stop_white_24, "Stop", pendingIntent);
+
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+                wl.acquire(30000);
+                nm.notify(nid, notif.build());
+                Log.d(TAG, "onReceive Notification built");
+                updateGUI(intent);
+            }else {
+                Log.d(TAG, "onReceive Notification should be built already & showing");
+                updateGUI(intent);
+            }
+        }
+    };
+
+
+    private void updateGUI(Intent intent) {
+        Log.d(TAG, "onReceive updateGUI Registered");
+
+
+        if(intent.getBooleanExtra("close",false)){
+            nm.cancel(nid);
+
+        }
+        if (intent.getExtras() != null) {
+            long millisUntilFinished = intent.getLongExtra("countdown", 0);
+            Log.d(TAG, "Receiving Time: "+ millisUntilFinished);
+            notif.setContentText("Timer: "+String.valueOf(millisUntilFinished)+" - Before SMS is Sent");
+            nm.notify(nid, notif.build());
+
+            if(millisUntilFinished == 1){
+                nm.cancel(nid);
             }
         }
     }

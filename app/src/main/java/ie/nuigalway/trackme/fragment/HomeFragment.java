@@ -61,11 +61,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private LocalDBHandler ldb;
     private MessageHandler mh;
     private GoogleMap map;
-    private int aflCheck, smsCheck, vCheck;
+    private int aflCheck, smsCheck;
     private Button trackMeButton, trackUserButton, smsBtn;
     private SessionManager sm;
    // private ProgressDialog pd;
     private Context ctx;
+
 
 
     public HomeFragment() {
@@ -221,7 +222,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                             Manifest.permission.SEND_SMS);
                     Log.i(TAG, "Checking if SMS permission given. Status: "+smsCheck);
 
-                    mh.sendMessage();
+                    //mh.sendMessage();
                 }
                 else{
                     Log.i(TAG, "SMS permission denied by user"+smsCheck);

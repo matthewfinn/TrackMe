@@ -6,33 +6,41 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.io.IOException;
+
+import ie.nuigalway.trackme.activity.MainActivity;
+import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.MessageHandler;
+import ie.nuigalway.trackme.helper.SessionManager;
 
 import static java.lang.Math.sqrt;
 
 public class FallDetectionService extends Service implements SensorEventListener {
 
     private static String TAG = FallDetectionService.class.getSimpleName();
+    public static final String CDT = "your_package_name.countdown_br";
+    Intent bi = new Intent(CDT);
     private SensorManager sensorManager;
     private Sensor sensor;
-    private String previous, current;
-    private static int bufferSize=80;
-    static public double[] readings = new double[bufferSize];
-    private double calc, rx, ry, rz, sigma=0.5, thresh1=10, thresh2=5, thresh3=2;
-
-
+    private double  rx, ry, rz;
+    private CountDownTimer cdt;
+    private GPSHelper gh;
     private MessageHandler mh;
+    private SessionManager sh;
 
     @Override
     public void onCreate()
     {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mh = new MessageHandler(getApplicationContext());
+        gh = new GPSHelper(getApplicationContext());
+        sh = new SessionManager(getApplicationContext());
         Log.d(TAG, sensor.getName());
         initialise();
     }
@@ -44,55 +52,27 @@ public class FallDetectionService extends Service implements SensorEventListener
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
-        Log.d(TAG, "onStartCommand");
-        super.onStartCommand(intent, flags, startId);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_NORMAL);
-        return START_STICKY;
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if(intent.getAction()!=null&&intent.getAction().equals("STOP")) {
+            stopSelf();
+            bi.putExtra("close",true);
+            Log.d(TAG,"Stopping Service");
+            cdt.cancel();
+            return START_NOT_STICKY;
+
+        }else{
+            Log.d(TAG, "onStartCommand");
+            super.onStartCommand(intent, flags, startId);
+            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+            return START_NOT_STICKY;
+        }
     }
 
     private void initialise(){
 
-
     }
-
-//    private void getPosture(double[] w, double y){
-//
-//        int z = zeroCrossingRate(w);
-//
-//
-//        if(z==0){
-//            if(Math.abs(y)<thresh2){
-//                current=ST;
-//            }else{
-//                current=SI;
-//            }
-//        }else{
-//            if(z>thresh3){
-//                current=WA;
-//            }else{
-//                current=NN;
-//            }
-//        }
-//
-//        Log.d(TAG,"Posture: "+current);
-//    }
-
-//    private int zeroCrossingRate(double[] w){
-//
-//        int count=0;
-//        for(int i=1;i<=bufferSize-1;i++){
-//
-//            if((w[i]-thresh1)<sigma && (w[i-1]-thresh1)>sigma){
-//                count=count+1;
-//            }
-//
-//        }
-//        return count;
-//
-//    }
 
     @Nullable
     @Override
@@ -109,20 +89,61 @@ public class FallDetectionService extends Service implements SensorEventListener
             rx = event.values[0]; ry = event.values[1]; rz = event.values[2];
             double value = computeReadings(rx,ry,rz);
 
-            Log.d("Sensor", "Value: " + value);
+            //Log.d("Sensor Value: ", String.valueOf(value));
 
             if ((value > 25) || (value < 1))  {
-                //onActivateTimerActivity();
-                viber(5000);
+
+                Log.d(TAG,"Possible Fall Detected. Timer Started");
+
+
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
+                startActivity(i);
+                Log.d(TAG, "Attempting to start Intent: "+i.toString());
+
+                cdt = new CountDownTimer(5000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+
+                        long mil = millisUntilFinished/1000;
+                        //Log.i(TAG, "Countdown seconds remaining: " + mil);
+                        bi.putExtra("countdown", mil);
+                        sendBroadcast(bi);
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                        Log.i(TAG, "Timer finished");
+
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("Hi, "+sh.getUsername()+" here!\n");
+                        sb.append("TrackMe has just detected a possible fall.");
+                        sb.append("I may be in trouble.\n");
+                        sb.append("My current location is approximately: \n");
+                        try {
+                            sb.append(gh.getAddressString(gh.getCurrentStaticLocation()));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        sb.append("If you could check in on me that'd be great \n");
+                        sb.append("Thanks, "+ sh.getUsername());
+                        Log.d(TAG, sb.toString());
+                        mh.sendMessage(sb.toString());
+                    }
+                };
+
+                cdt.start();
+
                 onDestroy();
             }
         }
     }
 
-    private void viber(int m){
-        Vibrator oVibrate = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-        if (oVibrate.hasVibrator()) { oVibrate.vibrate(m); }
-    }
+//    private void viber(int m){
+//        Vibrator oVibrate = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+//        if (oVibrate.hasVibrator()) { oVibrate.vibrate(m); }
+//    }
 
     private double computeReadings(double x, double y, double z){
 
