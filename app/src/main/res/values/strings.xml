@@ -12,6 +12,9 @@
     <string name="hint_profile_type">Select Profile Type</string>
     <string name="hint_dob">DOB</string>
     <string name="hint_phno">Phone Number</string>
+    <string name="hint_mins">Minutes</string>
+
+
 
     <string-array name="profile_types">
         <item>Teenager</item>
@@ -36,6 +39,9 @@
 
     <string name="pref_fd">Enable Fall Detection</string>
     <string name="PREF_FD">runFD</string>
+
+    <string name="pref_locup">GPS Location Update Interval</string>
+    <string name="PREF_LOCUP">locUP</string>
 
     <!-- Strings related to Settings -->
 

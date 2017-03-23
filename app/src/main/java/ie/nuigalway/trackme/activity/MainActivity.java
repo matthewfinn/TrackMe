@@ -7,9 +7,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -30,7 +32,6 @@ import java.util.List;
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.fragment.ContactsFragment;
 import ie.nuigalway.trackme.fragment.HomeFragment;
-import ie.nuigalway.trackme.fragment.PreferencesFragment;
 import ie.nuigalway.trackme.fragment.ProfileFragment;
 import ie.nuigalway.trackme.helper.SessionManager;
 import ie.nuigalway.trackme.services.FallDetectionService;
@@ -39,8 +40,8 @@ import ie.nuigalway.trackme.services.GPSService;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener,
-        PreferencesFragment.OnFragmentInteractionListener {
+        ProfileFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener
+         {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment fragment;
@@ -60,16 +61,16 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(br, new IntentFilter(FallDetectionService.CDT));
         Log.d(TAG, "onResume Receiver Registered");
 
+        Log.d(TAG, PreferenceManager.getDefaultSharedPreferences(ctx).getAll().toString());
 
+        SharedPreferences sp = ctx.getSharedPreferences("TrackMePreferences",0);
+        Log.d(TAG, sp.getAll().toString());
     }
 
     @Override
     public void onPause() {
-
         super.onPause();
-//        unregisterReceiver(br);
-//        Log.d(TAG, "onPause Receiver Unregistered");
-
+        Log.d(TAG, "onPause");
     }
 
     @Override
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
         super.onDestroy();
         unregisterReceiver(br);
-        Log.d(TAG, "onPause Receiver Unregistered");
+        Log.d(TAG, "onDestroy Receiver Unregistered");
     }
 
     @Override

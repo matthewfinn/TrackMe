@@ -32,6 +32,7 @@ public class SessionManager {
     private static final String KEY_F = "FDRunning";
 
     private static final String PREF_FD = "runFD";
+    private static final String PREF_LOCUP = "locUP";
 
 
     int MODE = 0; //private preferences mode used to set preference permissions
