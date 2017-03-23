@@ -26,14 +26,14 @@ public class SessionManager {
     public static final String TYPE = "type";
     public static final String SOSCTC = "soscontact";
 
-
-
-
-
     public static final String TRACKME_SERVICE = "trackme_service";
     private static final String PREF = "TrackMePreferences";
     private static final String KEY_L = "LoggedIn";
     private static final String KEY_F = "FDRunning";
+
+    private static final String PREF_FD = "runFD";
+
+
     int MODE = 0; //private preferences mode used to set preference permissions
 
     SharedPreferences sp;
@@ -49,13 +49,14 @@ public class SessionManager {
     }
 
     //Start Login Session
-    public void startLoginSession(boolean isLoggedIn, String fn, String sn, String em, String un, String ph) {
+    public void startLoginSession(boolean isLoggedIn, String fn, String sn, String em, String un, String ph, String ty) {
         ed.putBoolean(KEY_L, isLoggedIn);
         ed.putString(FNAME, fn);
         ed.putString(SURNAME, sn);
         ed.putString(EMAIL, em);
         ed.putString(USERNAME, un);
         ed.putString(PHONE, ph);
+        ed.putString(TYPE,ty);
         // commit changes
         ed.commit();
         Log.d(TAG, "User login session modified. Session started for user.");

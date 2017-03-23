@@ -34,6 +34,9 @@
     <string name="title_login">Login</string>
     <string name="title_register">Register</string>
 
+    <string name="pref_fd">Enable Fall Detection</string>
+    <string name="PREF_FD">runFD</string>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -167,7 +166,11 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_profile) {
             fragmentClass = ProfileFragment.class;
         } else if (id == R.id.nav_prefs) {
-            fragmentClass = PreferenceFragment.class;
+            Intent i = new Intent(this, MyPreferenceActivity.class);
+            finish();
+            this.startActivity(i);
+            b=false;
+
         } else if (id == R.id.nav_logout) {
             b = false;
 
