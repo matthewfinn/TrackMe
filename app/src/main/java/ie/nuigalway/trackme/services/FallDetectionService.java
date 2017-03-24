@@ -122,7 +122,7 @@ public class FallDetectionService extends Service implements SensorEventListener
                         sb.append("I may be in trouble.\n");
                         sb.append("My current location is approximately: \n");
                         try {
-                            sb.append(gh.getAddressString(gh.getCurrentStaticLocation()));
+                            sb.append(gh.getAddressString(gh.getCurrentStaticLocation())+"\n"s);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

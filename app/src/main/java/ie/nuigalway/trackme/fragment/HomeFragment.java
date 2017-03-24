@@ -45,6 +45,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private static final int fl = 1;
     private static final int ss = 2;
     private static final int fd = 3;
+    private static final int sms = 4;
+
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -115,6 +117,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         aflCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION);
 
+
         Log.i(TAG, "Permission already given to access location using device");
 
         if (aflCheck != PackageManager.PERMISSION_GRANTED) {
@@ -124,6 +127,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     fl);
         }
+
+
 
         SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         smf.getMapAsync(this);
@@ -213,7 +218,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     Log.i(TAG, "Location permission denied by user"+aflCheck);
                 }
                 }
-            case ss: {
+            case sms: {
 
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -222,7 +227,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                             Manifest.permission.SEND_SMS);
                     Log.i(TAG, "Checking if SMS permission given. Status: "+smsCheck);
 
-                    //mh.sendMessage();
+                    Intent intent = new Intent(getActivity(), FallDetectionService.class);
+                    getActivity().startService(intent);
+
+                    Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
                 }
                 else{
                     Log.i(TAG, "SMS permission denied by user"+smsCheck);
@@ -309,11 +317,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
             case R.id.send_sms:
 
-                Intent intent = new Intent(getActivity(), FallDetectionService.class);
-                getActivity().startService(intent);
+                smsCheck = ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.SEND_SMS);
+                if (smsCheck != PackageManager.PERMISSION_GRANTED) {
+                    Log.i(TAG, "Requesting permission to sendSMS");
 
-                Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.SEND_SMS},
+                            sms);
 
+                }else {
+
+                    Intent intent = new Intent(getActivity(), FallDetectionService.class);
+                    getActivity().startService(intent);
+
+                    Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
+                }
                 break;
 
 
