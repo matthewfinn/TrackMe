@@ -30,6 +30,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.CloudDBHandler;
@@ -46,6 +50,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private static final int ss = 2;
     private static final int fd = 3;
     private static final int sms = 4;
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 5;
+
 
 
     private static final String TAG = HomeFragment.class.getSimpleName();
@@ -114,20 +120,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         smsBtn = (Button) v.findViewById(R.id.send_sms);
         smsBtn.setOnClickListener(this);
 
-        aflCheck = ContextCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION);
+        checkPermissions();
 
-
-        Log.i(TAG, "Permission already given to access location using device");
-
-        if (aflCheck != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Requesting permission to access location");
-
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    fl);
-        }
-
+//        aflCheck = ContextCompat.checkSelfPermission(getActivity(),
+//                Manifest.permission.ACCESS_FINE_LOCATION);
+//
+//
+//        Log.i(TAG, "Permission already given to access location using device");
+//
+//        if (aflCheck != PackageManager.PERMISSION_GRANTED) {
+//            Log.i(TAG, "Requesting permission to access location");
+//
+//            ActivityCompat.requestPermissions(getActivity(),
+//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+//                    fl);
+//        }
+//
 
 
         SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -198,46 +206,129 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
         switch (requestCode) {
 
-            case fl: {
+//            case fl: {
+//
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                    aflCheck = ContextCompat.checkSelfPermission(getActivity(),
+//                            Manifest.permission.ACCESS_FINE_LOCATION);
+//                    Log.i(TAG, "Checking if location permission given. Status: "+aflCheck);
+//
+//                    try{
+//                        getMap();
+//                    }catch(IOException e){
+//
+//                        e.printStackTrace();
+//                    }
+//                }
+//                else{
+//                    Log.i(TAG, "Location permission denied by user"+aflCheck);
+//                }
+//                }
+//            case sms: {
+//
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                    smsCheck = ContextCompat.checkSelfPermission(getActivity(),
+//                            Manifest.permission.SEND_SMS);
+//                    Log.i(TAG, "Checking if SMS permission given. Status: "+smsCheck);
+//
+//                    Intent intent = new Intent(getActivity(), FallDetectionService.class);
+//                    getActivity().startService(intent);
+//
+//                    Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
+//                }
+//                else{
+//                    Log.i(TAG, "SMS permission denied by user"+smsCheck);
+//                }
+//
+//            }
+            case REQUEST_ID_MULTIPLE_PERMISSIONS: {
 
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Map<String, Integer> perms = new HashMap<>();
+                // Initialize the map with both permissions
+                perms.put(Manifest.permission.SEND_SMS, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                // Fill with actual results from user
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < permissions.length; i++)
+                        perms.put(permissions[i], grantResults[i]);
 
-                    aflCheck = ContextCompat.checkSelfPermission(getActivity(),
-                            Manifest.permission.ACCESS_FINE_LOCATION);
-                    Log.i(TAG, "Checking if location permission given. Status: "+aflCheck);
+                    if (perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
+                            && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        Log.d(TAG, "sms & location services permission granted");
 
-                    try{
-                        getMap();
-                    }catch(IOException e){
+                        try{
+                            getMap();
+                        }catch(IOException e){
 
-                        e.printStackTrace();
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        Log.d(TAG, "Some permissions are not granted ask again ");
+
+
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.SEND_SMS) ||
+                                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                            showDialogOK("SMS and Location Services Permission required for this app",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (which) {
+                                                case DialogInterface.BUTTON_POSITIVE:
+                                                    checkPermissions();
+                                                    break;
+                                                case DialogInterface.BUTTON_NEGATIVE:
+                                                    break;
+                                            }
+                                        }
+                                    });
+                        }
+
+                        else {
+                            Toast.makeText(getActivity(), "Go to settings and enable permissions", Toast.LENGTH_LONG)
+                                    .show();
+                        }
                     }
                 }
-                else{
-                    Log.i(TAG, "Location permission denied by user"+aflCheck);
-                }
-                }
-            case sms: {
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    smsCheck = ContextCompat.checkSelfPermission(getActivity(),
-                            Manifest.permission.SEND_SMS);
-                    Log.i(TAG, "Checking if SMS permission given. Status: "+smsCheck);
-
-                    Intent intent = new Intent(getActivity(), FallDetectionService.class);
-                    getActivity().startService(intent);
-
-                    Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
-                }
-                else{
-                    Log.i(TAG, "SMS permission denied by user"+smsCheck);
-                }
-                
             }
         }
+    }
+
+    private boolean checkPermissions(){
+
+        aflCheck = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        smsCheck = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.SEND_SMS);
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+        if (aflCheck != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (smsCheck != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            ActivityCompat.requestPermissions(getActivity(), listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
+
+
+    }
+
+    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", okListener)
+                .create()
+                .show();
     }
 
     private void getMap() throws IOException{
@@ -317,22 +408,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
             case R.id.send_sms:
 
-                smsCheck = ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.SEND_SMS);
-                if (smsCheck != PackageManager.PERMISSION_GRANTED) {
-                    Log.i(TAG, "Requesting permission to sendSMS");
-
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.SEND_SMS},
-                            sms);
-
-                }else {
+//                smsCheck = ContextCompat.checkSelfPermission(getActivity(),
+//                        Manifest.permission.SEND_SMS);
+//                if (smsCheck != PackageManager.PERMISSION_GRANTED) {
+//                    Log.i(TAG, "Requesting permission to sendSMS");
+//
+//                    ActivityCompat.requestPermissions(getActivity(),
+//                            new String[]{Manifest.permission.SEND_SMS},
+//                            sms);
+//
+//                }else {
 
                     Intent intent = new Intent(getActivity(), FallDetectionService.class);
                     getActivity().startService(intent);
 
                     Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
-                }
+     //           }
                 break;
 
 
