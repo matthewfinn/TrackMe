@@ -8,18 +8,19 @@ package ie.nuigalway.trackme.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.database.Cursor;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 
 public class LocalDBHandler extends SQLiteOpenHelper{
 
     private static final String TAG = LocalDBHandler.class.getSimpleName();
-    private static final int VERSION = 9;
+    private static final int VERSION = 13;
     private static final String DB_NAME = "trackMe_db";
     private static final String TABLE_USER_DETAILS = "user";
     private static final String TABLE_USER_LOCATION = "location";
@@ -40,6 +41,8 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     private static final String LAT = "latitude";
     private static final String LNG = "longitude";
     private static final String TS = "timestamp";
+    private static final String TSM = "timestampmilli";
+
 
     public LocalDBHandler(Context ctx){
 
@@ -48,8 +51,6 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     }
     @Override
     public void onCreate(SQLiteDatabase db){
-
-
 
         //Creating User Table
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER_DETAILS + "("
@@ -60,16 +61,36 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         db.execSQL(CREATE_USER_TABLE);
         Log.d(TAG, "User Details Database Table created.");
 
-        /*
-        * Placeholder to create user location table
-        * */
-
         String CREATE_LOCATION_TABLE = "CREATE TABLE " + TABLE_USER_LOCATION + "("
                 +  UID + " TEXT," + USERNAME + " TEXT," + LAT + " TEXT," + LNG
-                + " TEXT," + TS + " TEXT"+")";
+                + " TEXT," + TS + " TEXT,"+ TSM + " TEXT"+")";
 
         db.execSQL(CREATE_LOCATION_TABLE);
         Log.d(TAG, "User Location Database Table created.");
+
+    }
+
+
+    public void createTrigger(){
+        String TRIGGER = "CREATE TRIGGER IF NOT EXISTS trigger INSERT ON " +
+                TABLE_USER_LOCATION+ " WHEN (SELECT COUNT(*) FROM "+TABLE_USER_LOCATION+") >50 " +
+                "BEGIN " +
+                "DELETE FROM "+TABLE_USER_LOCATION+" WHERE "+TSM+" IN " +
+                "(SELECT "+TSM+" FROM "+TABLE_USER_LOCATION+" " +
+                "ORDER BY "+TSM+" limit (select count(*) -50 from "+TABLE_USER_LOCATION+")); " +
+                "END;";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(TRIGGER);
+
+        String SQLQuery = "SELECT COUNT(" + USERNAME + ") FROM " + TABLE_USER_LOCATION + ";";
+        Cursor cursor = db.rawQuery(SQLQuery, null);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        db.close();
+        Log.d(TAG,"Trigger. "+TABLE_USER_LOCATION+"Table Size ="+count);
+
 
     }
 
@@ -149,12 +170,12 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         vals.put(LAT, lt);
         vals.put(LNG, ln);
         vals.put(TS, t);
+        vals.put(TSM, Calendar.getInstance().getTimeInMillis());
 
         long ins = db.insert(TABLE_USER_LOCATION, null, vals);
         db.close(); // Closing database connection
         Log.d(TAG, "User location into db table " +TABLE_USER_LOCATION+ "  " + ins);
-        Log.d(TAG, vals.toString());
-
+        createTrigger();
 
     }
 
