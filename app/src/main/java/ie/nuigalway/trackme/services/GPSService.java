@@ -37,7 +37,7 @@ public class GPSService extends Service {
     private static final String CDT = "timeData";
     private static final String PREF = "TrackMePreferences";
     int MODE = 0; //private preferences mode used to set preference permissions
-    private static final int L_INT = 60000; //
+    private static final int L_INT = 60000;
     private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
     private GPSHelper gh;
@@ -142,14 +142,31 @@ public class GPSService extends Service {
         }
     }
 
-    private boolean checkBoundary(LatLng start, LatLng curr){
+    private void checkBoundary(LatLng start, LatLng curr){
 
         double lat_s = start.latitude;
         double lng_s = start.longitude;
         double lat_c = curr.latitude;
         double lng_c = curr.longitude;
 
-        return false;
+        Location loc1 = new Location("");
+        loc1.setLatitude(lat_s);
+        loc1.setLongitude(lng_s);
+
+        Location loc2 = new Location("");
+        loc2.setLatitude(lat_c);
+        loc2.setLongitude(lng_c);
+
+        float distanceInMeters = loc1.distanceTo(loc2);
+
+
+        if(distanceInMeters>sm.getBoundary()){
+            Log.d(TAG, "Outside Boundary: true");
+            //Send message
+        }else {
+            Log.d(TAG, "Outside Boundary: false");
+
+        }
     }
 
     LocationListener[] mLocationListeners = new LocationListener[] {

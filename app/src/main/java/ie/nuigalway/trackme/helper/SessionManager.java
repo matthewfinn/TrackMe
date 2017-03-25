@@ -34,6 +34,8 @@ public class SessionManager {
     private static final String PREF_FD = "runFD";
     private static final String PREF_LOCUP = "locUP";
 
+    private static final String PREF_BOUND = "boundary";
+
 
     int MODE = 0; //private preferences mode used to set preference permissions
 
@@ -119,6 +121,14 @@ public class SessionManager {
         ed.commit();
     }
 
+    public boolean getFD(){
+        return sp.getBoolean(PREF_FD, false);
+    }
+    public void setFD(boolean fd){
+        ed.putBoolean(TYPE, fd);
+        ed.commit();
+    }
+
     public String getUsername(){
         return sp.getString(USERNAME, null);
     }
@@ -127,7 +137,14 @@ public class SessionManager {
         ed.commit();
     }
 
+    public float getBoundary(){
+        return sp.getFloat(PREF_BOUND, 1);
+    }
 
+    public void setBoundary(float b){
+        ed.putFloat(PREF_BOUND, b);
+        ed.commit();
+    }
 
     public HashMap<String,String> getUserDetails(){
 
@@ -138,6 +155,8 @@ public class SessionManager {
         details.put(EMAIL, sp.getString(EMAIL, null));
         details.put(USERNAME, sp.getString(USERNAME, null));
         details.put(PHONE, sp.getString(PHONE, null));
+        details.put(TYPE, sp.getString(TYPE, null));
+
 
         // return user details for session
         return details;

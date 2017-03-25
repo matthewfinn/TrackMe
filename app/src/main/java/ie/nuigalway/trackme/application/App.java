@@ -43,14 +43,14 @@ public class App extends Application {
         getRQ().add(req);
     }
 
-    public <T> void addToTQ(Request<T> req) {
-        req.setTag(TAG);
-        getRQ().add(req);
-    }
-
-    public void cancelPendingRequests(Object tag) {
-        if (rq != null) {
-            rq.cancelAll(tag);
-        }
-    }
+//    public <T> void addToTQ(Request<T> req) {
+//        req.setTag(TAG);
+//        getRQ().add(req);
+//    }
+//
+//    public void cancelPendingRequests(Object tag) {
+//        if (rq != null) {
+//            rq.cancelAll(tag);
+//        }
+//    }
 }

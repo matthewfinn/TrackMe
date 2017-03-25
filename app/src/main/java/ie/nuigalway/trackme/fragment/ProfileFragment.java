@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
+import ie.nuigalway.trackme.helper.SessionManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,12 +26,12 @@ public class ProfileFragment extends Fragment {
 
     LocalDBHandler db;
     HashMap<String, String> userDetails;
+    private SessionManager sm;
 
 
     private OnFragmentInteractionListener mListener;
 
     public ProfileFragment() {
-        // Required empty public constructor
     }
 
     /**
@@ -52,6 +53,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sm = new SessionManager(getActivity());
+        userDetails = sm.getUserDetails();
+
 
     }
 

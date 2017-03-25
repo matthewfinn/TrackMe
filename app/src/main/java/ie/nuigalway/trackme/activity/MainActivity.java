@@ -87,6 +87,10 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(br, new IntentFilter(FallDetectionService.CDT));
         Log.d(TAG, "onCreate Receiver Registered");
         sm = new SessionManager(getApplicationContext());
+        if(sm.getFD()){
+            startFallDetection();
+        }
+
         ctx = getApplicationContext();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -274,6 +278,13 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-}
+             private void startFallDetection() {
+                 Intent intent = new Intent(this, FallDetectionService.class);
+                 startService(intent);
+
+                 Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
+             }
+
+         }
 
 

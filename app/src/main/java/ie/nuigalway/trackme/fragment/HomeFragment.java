@@ -41,7 +41,6 @@ import ie.nuigalway.trackme.helper.GPSHelper;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.MessageHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
-import ie.nuigalway.trackme.services.FallDetectionService;
 import ie.nuigalway.trackme.services.GPSService;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener{
@@ -111,14 +110,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         ldb = new LocalDBHandler(ctx);
         cdb = new CloudDBHandler(ctx);
         mh = new MessageHandler(ctx);
+
+//        if(sm.getFD()){
+//            startFallDetection();
+//        }
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
 
         trackUserButton = (Button) v.findViewById(R.id.trackuser_button);
         trackUserButton.setOnClickListener(this);
 
-        smsBtn = (Button) v.findViewById(R.id.send_sms);
-        smsBtn.setOnClickListener(this);
 
         checkPermissions();
 
@@ -359,15 +360,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
             case R.id.trackme_button:
 
                 if(!sm.isGPSServiceRunning()) {
-                    Log.d(TAG,"Should be false: " +String.valueOf(sm.isGPSServiceRunning()));
-                    Log.i(TAG,"Button Click :"+sm.isGPSServiceRunning());
-                    Toast.makeText(ctx, "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
+
                     Intent intent = new Intent(getActivity(), GPSService.class);
                     getActivity().startService(intent);
+                    Toast.makeText(ctx, "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
+
                 }else if(sm.isGPSServiceRunning()){
-                    Log.d(TAG,"Should be true: " +String.valueOf(sm.isGPSServiceRunning()));
-                    Toast.makeText(ctx, "Tracking Already Started", Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(getActivity(), GPSService.class);
+                    getActivity().stopService(intent);
+                    Toast.makeText(ctx, "Stopping GPS Tracking Service ", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
                 }
                 break;
 
@@ -404,26 +408,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                             }
                         })
                         .show();
-                break;
-
-            case R.id.send_sms:
-
-//                smsCheck = ContextCompat.checkSelfPermission(getActivity(),
-//                        Manifest.permission.SEND_SMS);
-//                if (smsCheck != PackageManager.PERMISSION_GRANTED) {
-//                    Log.i(TAG, "Requesting permission to sendSMS");
-//
-//                    ActivityCompat.requestPermissions(getActivity(),
-//                            new String[]{Manifest.permission.SEND_SMS},
-//                            sms);
-//
-//                }else {
-
-                    Intent intent = new Intent(getActivity(), FallDetectionService.class);
-                    getActivity().startService(intent);
-
-                    Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
-     //           }
                 break;
 
 

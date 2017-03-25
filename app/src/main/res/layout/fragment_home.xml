@@ -9,27 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         class="com.google.android.gms.maps.SupportMapFragment" />
-
-    <!-- This works so similar functionality can be used-->
     <Button
         android:id="@+id/trackme_button"
-        android:layout_width="100dp"
+        android:layout_width="146dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/app_name"/>
+        android:layout_gravity="right"
+        android:text="@string/app_name"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:elevation="24dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
     <Button
         android:id="@+id/trackuser_button"
-        android:layout_width="100dp"
+        android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="Track Someone"/>
-
-    <Button
-        android:id="@+id/send_sms"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="FD"/>
+        android:text="Track Someone"
+        android:elevation="24dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button" />
 
 </FrameLayout>
