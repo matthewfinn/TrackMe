@@ -2,8 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
         <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Login" />
+        <item
+            android:id="@+id/nav_register"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Register" />
+        <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Help" />
+            android:title="About" />
 
 </menu>

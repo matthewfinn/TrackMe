@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.CloudDBHandler;
-import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.GPSHandler;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
@@ -54,7 +54,7 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
     private static final String TS = "timestamp";
     private LatLng currentLocation;
     private String locationAddress;
-    private GPSHelper gh;
+    private GPSHandler gh;
     private boolean gotLoc=false;
     private CloudDBHandler cdb;
     private LocalDBHandler ldb;
@@ -93,7 +93,7 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
         sm = new SessionManager(getContext());
         ldb = new LocalDBHandler(getContext());
         cdb = new CloudDBHandler(getContext());
-        gh = new GPSHelper(getContext());
+        gh = new GPSHandler(getContext());
 
         SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         smf.getMapAsync(this);
@@ -192,7 +192,7 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
                 Log.d(TAG, currentLocation.toString());
 
                 try {
-                    locationAddress =loc.get(UN)+": "+gh.getAddressString(currentLocation) + " @ " + loc.get(TS);
+                    locationAddress =loc.get(UN)+": "+gh.getShortAddressString(currentLocation) + " @ " + loc.get(TS);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

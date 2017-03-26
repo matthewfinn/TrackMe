@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class GPSHelper implements LocationListener{
+public class GPSHandler implements LocationListener{
 
-    private static String TAG = GPSHelper.class.getSimpleName();
+    private static String TAG = GPSHandler.class.getSimpleName();
     private Context c;
     private LocationManager lm; // Declaring a Location Manager
     private Location loc;
@@ -34,7 +34,7 @@ public class GPSHelper implements LocationListener{
     private LatLng currentLocation;
     private boolean gpsEnabled, netEnabled;
 
-    public GPSHelper(Context ctx){
+    public GPSHandler(Context ctx){
         this.c = ctx;
     }
 

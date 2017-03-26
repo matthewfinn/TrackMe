@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ie.nuigalway.trackme.fragment.HelpFragment">
+    tools:context="ie.nuigalway.trackme.fragment.AboutFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

@@ -15,7 +15,7 @@ public class MessageHandler {
     private static String TAG = MessageHandler.class.getSimpleName();
     private SmsManager sms;
     Context ctx;
-    private GPSHelper gh;
+    private GPSHandler gh;
 
     public MessageHandler(Context c){
 

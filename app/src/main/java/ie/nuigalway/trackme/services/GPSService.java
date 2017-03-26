@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ie.nuigalway.trackme.helper.CloudDBHandler;
-import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.GPSHandler;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.MessageHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
@@ -40,7 +40,7 @@ public class GPSService extends Service {
     private static final int L_INT = 60000;
     private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
-    private GPSHelper gh;
+    private GPSHandler gh;
     private LocalDBHandler ldb;
     private CloudDBHandler cdb;
     private MessageHandler mh;
@@ -88,6 +88,9 @@ public class GPSService extends Service {
             //Check if internet service is available and get address string either using Geocoder
             //Or if internet is not available getAddressString(LatLng obj) will return co-ordinates
             if(gh.checkInternetServiceAvailable()){
+                //call addLatestLocation method on cloud database Handling class with values passed in
+                cdb.addLatestLocation(String.valueOf(lat),String.valueOf(lng), cdt);
+
                 try {
                     address = gh.getAddressString(lCurr);
                 } catch (IOException e) {
@@ -102,8 +105,6 @@ public class GPSService extends Service {
 
             //call updateLocation method on localDatabase Handling class with values passed in
             ldb.updateLocation(String.valueOf(lat),String.valueOf(lng), cdt);
-
-            cdb.addLatestLocation(String.valueOf(lat),String.valueOf(lng), cdt);
 
             Log.d(TAG,String.valueOf(lat)+String.valueOf(lng)+cdt);
 
@@ -144,25 +145,34 @@ public class GPSService extends Service {
 
     private void checkBoundary(LatLng start, LatLng curr){
 
-        double lat_s = start.latitude;
-        double lng_s = start.longitude;
-        double lat_c = curr.latitude;
-        double lng_c = curr.longitude;
+        double lat_s = start.latitude;double lng_s = start.longitude;
+        double lat_c = curr.latitude;double lng_c = curr.longitude;
 
         Location loc1 = new Location("");
-        loc1.setLatitude(lat_s);
-        loc1.setLongitude(lng_s);
+        loc1.setLatitude(lat_s);loc1.setLongitude(lng_s);
 
         Location loc2 = new Location("");
-        loc2.setLatitude(lat_c);
-        loc2.setLongitude(lng_c);
-
+        loc2.setLatitude(lat_c);loc2.setLongitude(lng_c);
         float distanceInMeters = loc1.distanceTo(loc2);
 
 
         if(distanceInMeters>sm.getBoundary()){
-            Log.d(TAG, "Outside Boundary: true");
-            //Send message
+            StringBuilder sb = new StringBuilder();
+            sb.append("Hi, "+sm.getUsername()+" here!\n");
+            sb.append("TrackMe has just detected that I have travelled outside my boundary.");
+            sb.append("I may be in trouble.\n");
+            sb.append("My current location is approximately: \n");
+            try {
+                sb.append(gh.getAddressString(gh.getCurrentStaticLocation())+"\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            sb.append("If you could check in on me that'd be great \n");
+            sb.append("Thanks, "+ sm.getUsername());
+            Log.d(TAG, sb.toString());
+            mh.sendMessage(sb.toString());
+            Log.d(TAG, "Outside Boundary: true, Sending message to emergency contact");
+
         }else {
             Log.d(TAG, "Outside Boundary: false");
 
@@ -183,8 +193,8 @@ public class GPSService extends Service {
     public void onCreate()
     {
         Log.i(TAG, "onCreate");
-        //Initialise GPSHelper class;
-        gh = new GPSHelper(GPSService.this);
+        //Initialise GPSHandler class;
+        gh = new GPSHandler(GPSService.this);
 
         sm = new SessionManager(getApplicationContext());
         sm.setGPSServiceRunning(true);
@@ -202,9 +212,6 @@ public class GPSService extends Service {
         //Initialise Shared Preferences
         ctx = getApplicationContext();
         sp = ctx.getSharedPreferences(PREF,MODE);
-
-        //Check it's working.... Use sp to get update freq and distance boundary.
-        Log.d(TAG,"EMAIL = "+sp.getString(EMAIL,null));
 
         try {
             //Request location updates from LocationManager

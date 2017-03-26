@@ -8,7 +8,6 @@
 
     <ScrollView
 
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -27,6 +26,7 @@
                 android:layout_marginTop="20dip"
                 android:layout_marginBottom="20dip"
                 android:text="@string/title_login"
+                android:textStyle="bold"
                 android:gravity="center"
                 android:textSize="20dip"
                 android:textColor="#000000"/>
@@ -47,17 +47,30 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:hint="@string/hint_password" />
-            <Button
+            <!--Button
                 android:id="@+id/login_button"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/button_login"/>
+                android:text="@string/button_login"/-->
+
+            <Button
+                android:id="@+id/login_button"
+                android:layout_width="146dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:elevation="24dp"
+                android:text="@string/button_login"
+                android:textAppearance="@style/TextAppearance.AppCompat.Button" />
+
+
             <TextView
                 android:id="@+id/login_reglink"
                 android:clickable="true"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/activity_vertical_margin"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/button_register_link"
                 />

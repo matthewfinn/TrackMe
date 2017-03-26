@@ -7,11 +7,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     private NotificationCompat.Builder notif;
     int nid = 001;
     private  NotificationManager nm;
-    private PowerManager pm;
+    //private PowerManager pm;
 
 
     @Override
@@ -60,11 +58,6 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         registerReceiver(br, new IntentFilter(FallDetectionService.CDT));
         Log.d(TAG, "onResume Receiver Registered");
-
-        Log.d(TAG, PreferenceManager.getDefaultSharedPreferences(ctx).getAll().toString());
-
-        SharedPreferences sp = ctx.getSharedPreferences("TrackMePreferences",0);
-        Log.d(TAG, sp.getAll().toString());
     }
 
     @Override

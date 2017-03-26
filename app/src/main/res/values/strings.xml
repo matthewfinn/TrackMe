@@ -17,6 +17,7 @@
 
 
     <string-array name="profile_types">
+        <item>Default</item>
         <item>Teenager</item>
         <item>Adult</item>
         <item>Elderly</item>
@@ -32,7 +33,7 @@
     <string name="button_register">Register</string>
     <string name="button_login">Login</string>
     <string name="button_login_link">Already Registered? Click Here</string>
-    <string name="button_register_link">Not Registered? Register Here</string>
+    <string name="button_register_link">Not Registered? Click Here</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_login">Login</string>
     <string name="title_register">Register</string>
@@ -40,8 +41,9 @@
     <string name="pref_fd">Enable Fall Detection</string>
     <string name="PREF_FD">runFD</string>
 
-    <string name="pref_locup">GPS Location Update Interval</string>
+    <string name="pref_locup">Location Update Interval</string>
     <string name="PREF_LOCUP">locUP</string>
+    <string name="gps_interval">Edit GPS Location Update Interval (Minutes)</string>
 
     <!-- Strings related to Settings -->
 

@@ -33,7 +33,7 @@ import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.activity.MainActivity;
 import ie.nuigalway.trackme.application.App;
 import ie.nuigalway.trackme.application.AppConfig;
-import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.GPSHandler;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
@@ -46,7 +46,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private TextView login_reglink;
     private SessionManager sm;
     private LocalDBHandler db;
-    private GPSHelper gh;
+    private GPSHandler gh;
     private ProgressDialog pd;
     private String un, pw;
 
@@ -82,7 +82,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
         db = new LocalDBHandler(getContext());
         sm = new SessionManager(getContext());
-        gh = new GPSHelper(getContext());
+        gh = new GPSHandler(getContext());
 
         if(!gh.checkInternetServiceAvailable()) {
 

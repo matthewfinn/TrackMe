@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,7 +32,7 @@ import java.util.Map;
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.application.App;
 import ie.nuigalway.trackme.application.AppConfig;
-import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.GPSHandler;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
@@ -45,12 +46,13 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
     private static final String EL = "elderly";
     private static final String DEF = "default";
     private EditText fName,surname,email,username, password, confirmpw, phno;
-    private Button register_button, login_link;
+    private Button register_button;
+    private TextView login_link;
     private Spinner profile_type;
     private LocalDBHandler db;
     private SessionManager sm;
     private ProgressDialog pd;
-    private GPSHelper gh;
+    private GPSHandler gh;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,14 +79,15 @@ public class RegisterFragment extends Fragment implements View.OnClickListener{
 
         register_button = (Button) view.findViewById(R.id.reg_btn);
         register_button.setOnClickListener(this);
-        login_link = (Button) view.findViewById(R.id.lgn_lnk);
+        login_link = (TextView) view.findViewById(R.id.lgn_lnk);
         login_link.setOnClickListener(this);
+
 
         pd = new ProgressDialog(getContext());
         pd.setCancelable(false);
 
         db = new LocalDBHandler(getContext());
-        gh = new GPSHelper(getContext());
+        gh = new GPSHandler(getContext());
         sm = new SessionManager(getContext());
 
         if(!gh.checkInternetServiceAvailable()) {

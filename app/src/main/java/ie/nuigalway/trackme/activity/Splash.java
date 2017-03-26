@@ -62,9 +62,6 @@ public class Splash extends AppCompatActivity implements GoogleApiClient.Connect
             lr.setInterval(15);
             lr.setFastestInterval(15);
 
-            //CHECK THIS
-            //Decided not to set priority. It just sets as default best (I THINK)
-            //lr.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
             LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                     .addLocationRequest(lr);

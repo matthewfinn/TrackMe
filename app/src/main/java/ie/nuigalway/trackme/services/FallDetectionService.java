@@ -14,7 +14,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import ie.nuigalway.trackme.activity.MainActivity;
-import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.GPSHandler;
 import ie.nuigalway.trackme.helper.MessageHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
@@ -29,7 +29,7 @@ public class FallDetectionService extends Service implements SensorEventListener
     private Sensor sensor;
     private double  rx, ry, rz;
     private CountDownTimer cdt;
-    private GPSHelper gh;
+    private GPSHandler gh;
     private MessageHandler mh;
     private SessionManager sh;
 
@@ -39,7 +39,7 @@ public class FallDetectionService extends Service implements SensorEventListener
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mh = new MessageHandler(getApplicationContext());
-        gh = new GPSHelper(getApplicationContext());
+        gh = new GPSHandler(getApplicationContext());
         sh = new SessionManager(getApplicationContext());
         Log.d(TAG, sensor.getName());
         initialise();
@@ -88,8 +88,7 @@ public class FallDetectionService extends Service implements SensorEventListener
 
             rx = event.values[0]; ry = event.values[1]; rz = event.values[2];
             double value = computeReadings(rx,ry,rz);
-
-            //Log.d("Sensor Value: ", String.valueOf(value));
+            Log.d("Sensor Value: ", String.valueOf(value));
 
             if ((value > 25) || (value < 1))  {
 
@@ -106,7 +105,6 @@ public class FallDetectionService extends Service implements SensorEventListener
                     public void onTick(long millisUntilFinished) {
 
                         long mil = millisUntilFinished/1000;
-                        //Log.i(TAG, "Countdown seconds remaining: " + mil);
                         bi.putExtra("countdown", mil);
                         sendBroadcast(bi);
                     }
@@ -140,16 +138,10 @@ public class FallDetectionService extends Service implements SensorEventListener
         }
     }
 
-//    private void viber(int m){
-//        Vibrator oVibrate = (Vibrator)getSystemService(VIBRATOR_SERVICE);
-//        if (oVibrate.hasVibrator()) { oVibrate.vibrate(m); }
-//    }
-
     private double computeReadings(double x, double y, double z){
 
         return sqrt((x*x)+(y*y)+(z*z));
     }
-
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 

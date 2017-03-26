@@ -37,7 +37,7 @@ import java.util.Map;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.CloudDBHandler;
-import ie.nuigalway.trackme.helper.GPSHelper;
+import ie.nuigalway.trackme.helper.GPSHandler;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.MessageHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
@@ -45,13 +45,7 @@ import ie.nuigalway.trackme.services.GPSService;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, View.OnClickListener{
 
-    private static final int fl = 1;
-    private static final int ss = 2;
-    private static final int fd = 3;
-    private static final int sms = 4;
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 5;
-
-
 
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -63,7 +57,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private static final String LNG = "lngData";
     private static final String CDT = "timeData";
     private LatLng currentLocation;
-    private GPSHelper gh;
+    private GPSHandler gh;
     private CloudDBHandler cdb;
     private LocalDBHandler ldb;
     private MessageHandler mh;
@@ -71,10 +65,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private int aflCheck, smsCheck;
     private Button trackMeButton, trackUserButton, smsBtn;
     private SessionManager sm;
-   // private ProgressDialog pd;
     private Context ctx;
-
-
 
     public HomeFragment() {
     }
@@ -111,9 +102,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         cdb = new CloudDBHandler(ctx);
         mh = new MessageHandler(ctx);
 
-//        if(sm.getFD()){
-//            startFallDetection();
-//        }
         trackMeButton = (Button) v.findViewById(R.id.trackme_button);
         trackMeButton.setOnClickListener(this);
 
@@ -122,22 +110,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
 
         checkPermissions();
-
-//        aflCheck = ContextCompat.checkSelfPermission(getActivity(),
-//                Manifest.permission.ACCESS_FINE_LOCATION);
-//
-//
-//        Log.i(TAG, "Permission already given to access location using device");
-//
-//        if (aflCheck != PackageManager.PERMISSION_GRANTED) {
-//            Log.i(TAG, "Requesting permission to access location");
-//
-//            ActivityCompat.requestPermissions(getActivity(),
-//                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-//                    fl);
-//        }
-//
-
 
         SupportMapFragment smf = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         smf.getMapAsync(this);
@@ -207,45 +179,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
         switch (requestCode) {
 
-//            case fl: {
-//
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    aflCheck = ContextCompat.checkSelfPermission(getActivity(),
-//                            Manifest.permission.ACCESS_FINE_LOCATION);
-//                    Log.i(TAG, "Checking if location permission given. Status: "+aflCheck);
-//
-//                    try{
-//                        getMap();
-//                    }catch(IOException e){
-//
-//                        e.printStackTrace();
-//                    }
-//                }
-//                else{
-//                    Log.i(TAG, "Location permission denied by user"+aflCheck);
-//                }
-//                }
-//            case sms: {
-//
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    smsCheck = ContextCompat.checkSelfPermission(getActivity(),
-//                            Manifest.permission.SEND_SMS);
-//                    Log.i(TAG, "Checking if SMS permission given. Status: "+smsCheck);
-//
-//                    Intent intent = new Intent(getActivity(), FallDetectionService.class);
-//                    getActivity().startService(intent);
-//
-//                    Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
-//                }
-//                else{
-//                    Log.i(TAG, "SMS permission denied by user"+smsCheck);
-//                }
-//
-//            }
             case REQUEST_ID_MULTIPLE_PERMISSIONS: {
 
                 Map<String, Integer> perms = new HashMap<>();
@@ -335,7 +268,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private void getMap() throws IOException{
 
         String address;
-        gh = new GPSHelper(ctx);
+        gh = new GPSHandler(ctx);
         if(!gh.checkInternetServiceAvailable()) {
 
             new AlertDialog.Builder(getActivity()).
@@ -347,7 +280,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
         currentLocation = gh.getCurrentStaticLocation();
         map.setPadding(10, 10, 10, 10);
-        address = gh.getAddressString(currentLocation);
+        address = gh.getShortAddressString(currentLocation);
 
         Log.d(TAG, "User Location is :" + address );
         map.addMarker(new MarkerOptions().position(currentLocation).title(address));
@@ -435,7 +368,3 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         }
     };
 }
-
-
-
-
