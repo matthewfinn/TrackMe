@@ -29,4 +29,8 @@
         android:positiveButtonText="@null"
         android:title="@string/pref_title_add_friends_to_messages" />
 
+    <!--Preference android:title="@string/pref_sos">
+        <intent android:action="android.intent.action.PICK"/>
+    </Preference-->
+
 </PreferenceScreen>

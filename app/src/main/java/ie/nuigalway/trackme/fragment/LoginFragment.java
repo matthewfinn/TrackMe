@@ -198,7 +198,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         String ty = user.getString("type");
                         String cr = user.getString("created_at");
 
-                        sm.startLoginSession(true, fn, sn, em, uname, ph, ty);
+                        sm.startLoginSession(true, fn, sn, em, uname, ph, ty, uid);
                         db.addUser(uid, fn, sn, em, uname, ph, ty, cr);
 
                         Intent intent = new Intent(getActivity(), MainActivity.class);

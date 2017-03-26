@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--These are strings that can be accessed by any class in the project-->
-    <string name="app_name">Track Me</string>
+    <string name="app_name">TrackMe</string>
     <string name="hint_firstname">First Name</string>
     <string name="hint_surname">Surname</string>
     <string name="hint_email">Email Address</string>
@@ -13,8 +13,6 @@
     <string name="hint_dob">DOB</string>
     <string name="hint_phno">Phone Number</string>
     <string name="hint_mins">Minutes</string>
-
-
 
     <string-array name="profile_types">
         <item>Default</item>
@@ -44,6 +42,8 @@
     <string name="pref_locup">Location Update Interval</string>
     <string name="PREF_LOCUP">locUP</string>
     <string name="gps_interval">Edit GPS Location Update Interval (Minutes)</string>
+
+    <string name="pref_sos">Choose Emergency Contact</string>
 
     <!-- Strings related to Settings -->
 

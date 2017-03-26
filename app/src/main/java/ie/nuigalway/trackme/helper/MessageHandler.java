@@ -16,17 +16,17 @@ public class MessageHandler {
     private SmsManager sms;
     Context ctx;
     private GPSHandler gh;
+    private SessionManager sm;
 
     public MessageHandler(Context c){
-
         ctx = c;
         sms = SmsManager.getDefault();
-
-
+        sm = new SessionManager(ctx);
     }
 
     public void sendMessage(String message){
 
+        String contact = sm.getSOSContact();
 
         SmsManager sms = SmsManager.getDefault();
         ArrayList<String> parts = sms.divideMessage(message);

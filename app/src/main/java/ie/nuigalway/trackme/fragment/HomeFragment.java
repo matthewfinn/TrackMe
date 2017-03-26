@@ -356,9 +356,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
             Double lat = intent.getDoubleExtra(LAT,0.0);
             Double lon = intent.getDoubleExtra(LNG,0.0);
             String cdt = intent.getExtras().get(CDT).toString();
-            Log.d(TAG, "onReceive Location Data: "+ldb.getUserLocation().toString());
-
             LatLng currPos = new LatLng(lat,lon);
+            Log.d(TAG, "onReceive Location Data: "+lat+" "+lon+" "+cdt);
+
+
             try {
                 map.addMarker(new MarkerOptions().position(currPos).title(gh.getShortAddressString(currPos)+" @ "+cdt
                         ));

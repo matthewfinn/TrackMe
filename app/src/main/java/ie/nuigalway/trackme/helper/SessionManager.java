@@ -19,6 +19,7 @@ public class SessionManager {
 
 
     public static final String FNAME = "firstname";
+    public static final String UID = "unique_id";
     public static final String SURNAME = "surname";
     public static final String EMAIL = "email";
     public static final String USERNAME = "username";
@@ -52,7 +53,7 @@ public class SessionManager {
     }
 
     //Start Login Session
-    public void startLoginSession(boolean isLoggedIn, String fn, String sn, String em, String un, String ph, String ty) {
+    public void startLoginSession(boolean isLoggedIn, String fn, String sn, String em, String un, String ph, String ty, String uid) {
         ed.putBoolean(KEY_L, isLoggedIn);
         ed.putString(FNAME, fn);
         ed.putString(SURNAME, sn);
@@ -60,6 +61,7 @@ public class SessionManager {
         ed.putString(USERNAME, un);
         ed.putString(PHONE, ph);
         ed.putString(TYPE,ty);
+        ed.putString(UID, uid);
         // commit changes
         ed.commit();
         Log.d(TAG, "User login session modified. Session started for user.");
@@ -156,6 +158,7 @@ public class SessionManager {
         details.put(USERNAME, sp.getString(USERNAME, null));
         details.put(PHONE, sp.getString(PHONE, null));
         details.put(TYPE, sp.getString(TYPE, null));
+        details.put(UID, sp.getString(UID, null));
 
 
         // return user details for session

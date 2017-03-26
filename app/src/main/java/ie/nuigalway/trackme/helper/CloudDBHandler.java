@@ -31,20 +31,24 @@ public class CloudDBHandler {
     private static final String LON = "longitude";
     private static final String TS = "timestamp";
     private LocalDBHandler ldb;
+    private SessionManager sm;
     private Context c;
     private HashMap<String, String> location;
 
 
     public CloudDBHandler(Context ctx){
         this.c = ctx;
-        ldb = new LocalDBHandler(c);
+        sm = new SessionManager(c);
+       // ldb = new LocalDBHandler(c);
     }
 
     public void addLatestLocation( final String lat, final String lon, final String ts){
 
-        HashMap<String,String> uDetails = ldb.getUserDetails();
+        HashMap<String,String> uDetails = sm.getUserDetails();
         final String uid = uDetails.get("unique_id");
         final String username = uDetails.get("username");
+
+        Log.d(TAG, uid+" "+username);
         String req = "req_loc";
 
         StringRequest r = new StringRequest(Request.Method.POST, AppConfig.LOCATION_URL, new Response.Listener<String>(){

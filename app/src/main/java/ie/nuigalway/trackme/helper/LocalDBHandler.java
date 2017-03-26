@@ -43,11 +43,12 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     private static final String TS = "timestamp";
     private static final String TSM = "timestampmilli";
 
+    private SessionManager sm;
+
 
     public LocalDBHandler(Context ctx){
-
         super(ctx, DB_NAME, null, VERSION);
-
+        sm = new SessionManager(ctx);
     }
     @Override
     public void onCreate(SQLiteDatabase db){
@@ -158,8 +159,8 @@ public class LocalDBHandler extends SQLiteOpenHelper{
 
     public void updateLocation(String lt, String ln, String t){
 
-        HashMap<String,String> uDetails = getUserDetails();
-        Log.e(TAG, "USER DETAILS: "+uDetails.toString());
+        HashMap<String,String> uDetails = sm.getUserDetails();
+        Log.d(TAG, "User Details: "+uDetails.toString());
         String id = uDetails.get(UID);
         String username = uDetails.get(USERNAME);
 
@@ -178,58 +179,33 @@ public class LocalDBHandler extends SQLiteOpenHelper{
         createTrigger();
 
     }
-
-    public HashMap<String, String> getUserDetails(){
-
-        HashMap<String, String> userDetails = new HashMap<String, String>();
-        String query = "SELECT  * FROM " + TABLE_USER_DETAILS;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-
-        Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            userDetails.put(UID, cursor.getString(1));
-            userDetails.put(FN, cursor.getString(2));
-            userDetails.put(SN, cursor.getString(3));
-            userDetails.put(PHNO, cursor.getString(4));
-            userDetails.put(EMAIL, cursor.getString(5));
-            userDetails.put(USERNAME, cursor.getString(5));
-            userDetails.put(CR, cursor.getString(6));
-        }
-        cursor.close();
-
-        db.close();
-        // return user
-        Log.d(TAG, "Fetching User from Sqlite: " + userDetails.toString());
-
-        return userDetails;
-    }
-
-    public HashMap<String, String> getUserLocation(){
-
-        HashMap<String, String> userLocation = new HashMap<String, String>();
-        String query = "SELECT  * FROM " + TABLE_USER_LOCATION;
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            userLocation.put(UID, cursor.getString(0));
-            userLocation.put(USERNAME, cursor.getString(1));
-            userLocation.put(LAT, cursor.getString(2));
-            userLocation.put(LNG, cursor.getString(3));
-            userLocation.put(TS, cursor.getString(4));
-        }
-        cursor.close();
-
-        db.close();
-        Log.d(TAG, "Fetching Location from Sqlite: " + userLocation.toString());
-
-        return userLocation;
-    }
-
+//
+//    public HashMap<String, String> getUserDetails(){
+//
+//        HashMap<String, String> userDetails = new HashMap<String, String>();
+//        String query = "SELECT  * FROM " + TABLE_USER_DETAILS;
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//
+//        Cursor cursor = db.rawQuery(query, null);
+//        cursor.moveToFirst();
+//        if (cursor.getCount() > 0) {
+//            userDetails.put(UID, cursor.getString(1));
+//            userDetails.put(FN, cursor.getString(2));
+//            userDetails.put(SN, cursor.getString(3));
+//            userDetails.put(PHNO, cursor.getString(4));
+//            userDetails.put(EMAIL, cursor.getString(5));
+//            userDetails.put(USERNAME, cursor.getString(5));
+//            userDetails.put(CR, cursor.getString(6));
+//        }
+//        cursor.close();
+//
+//        db.close();
+//        // return user
+//        Log.d(TAG, "Fetching User from Sqlite: " + userDetails.toString());
+//
+//        return userDetails;
+//    }
 }
 
 
