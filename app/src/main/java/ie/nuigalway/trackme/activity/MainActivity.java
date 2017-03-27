@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity
             inten.setAction("STOP");
             PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, inten, 0);
             Log.d(TAG, "onReceive Intent To Stop Service");
+
             if(notif==null){
 
                 nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity
                         setDefaults(Notification.DEFAULT_VIBRATE).
                         setVisibility(Notification.VISIBILITY_PUBLIC).
                         setPriority(Notification.PRIORITY_MAX).
-                        addAction(R.drawable.quantum_ic_stop_white_24, "Stop", pendingIntent);
+                        addAction(R.drawable.quantum_ic_stop_white_24, "Cancel", pendingIntent);
 
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
