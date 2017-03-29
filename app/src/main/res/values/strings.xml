@@ -13,6 +13,8 @@
     <string name="hint_dob">DOB</string>
     <string name="hint_phno">Phone Number</string>
     <string name="hint_mins">Minutes</string>
+    <string name="hint_kms">Kilometers</string>
+
 
     <string-array name="profile_types">
         <item>Default</item>
@@ -26,6 +28,9 @@
     <string name="menu_fd">Fall Detection Settings</string>
     <string name="menu_pref">Preferences</string>
     <string name="menu_profile">My Details</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_about">About</string>
+
     <string name="menu_logout">Logout</string>
 
     <string name="button_register">Register</string>
@@ -43,7 +48,13 @@
     <string name="PREF_LOCUP">locUP</string>
     <string name="gps_interval">Edit GPS Location Update Interval (Minutes)</string>
 
-    <string name="pref_sos">Choose Emergency Contact</string>
+    <string name="pref_boundary">Boundary Distance</string>
+    <string name="PREF_BOUND">boundary</string>
+    <string name="boundary_setting">Edit GPS Boundary Distance</string>
+
+
+    <string name="pref_sosctc">Emergency Contact</string>
+    <string name="PREF_SOSCTC">soscontact</string>
 
     <!-- Strings related to Settings -->
 

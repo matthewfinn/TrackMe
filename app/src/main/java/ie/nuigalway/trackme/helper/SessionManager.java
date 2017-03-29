@@ -25,17 +25,16 @@ public class SessionManager {
     public static final String USERNAME = "username";
     public static final String PHONE = "phone";
     public static final String TYPE = "type";
-    public static final String SOSCTC = "soscontact";
 
     public static final String TRACKME_SERVICE = "trackme_service";
     private static final String PREF = "TrackMePreferences";
     private static final String KEY_L = "LoggedIn";
     private static final String KEY_F = "FDRunning";
 
-    private static final String PREF_FD = "runFD";
-    private static final String PREF_LOCUP = "locUP";
-
-    private static final String PREF_BOUND = "boundary";
+    private static final String PREF_FD = "runFD"; // Preference to run fall detection
+    private static final String PREF_LOCUP = "locUP";  // Location update interval preference
+    private static final String PREF_BOUND = "boundary"; // Boundary Distance Preference
+    private static final String PREF_SOSCTC = "soscontact"; // SOS Contact Preference
 
 
     int MODE = 0; //private preferences mode used to set preference permissions
@@ -106,11 +105,11 @@ public class SessionManager {
 
     //SOS Contact Number Getter/Setter
     public String getSOSContact(){
-        return sp.getString(SOSCTC, null);
+        return sp.getString(PREF_SOSCTC, null);
     }
     public void setSOSContact(String con){
 
-        ed.putString(SOSCTC, con);
+        ed.putString(PREF_SOSCTC, con);
         ed.commit();
     }
 

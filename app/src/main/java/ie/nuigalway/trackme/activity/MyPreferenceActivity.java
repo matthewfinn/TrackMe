@@ -12,6 +12,7 @@ import android.widget.Toast;
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.helper.SessionManager;
 import ie.nuigalway.trackme.services.FallDetectionService;
+import ie.nuigalway.trackme.services.GPSService;
 
 public class MyPreferenceActivity extends PreferenceActivity
 {
@@ -38,7 +39,13 @@ public class MyPreferenceActivity extends PreferenceActivity
         private static final String TAG = MyPreferenceFragment.class.getSimpleName();
         private static final String PREF = "TrackMePreferences";
         private static final String PREF_FD = "runFD";
+        private static final String PREF_BOUND = "boundary"; // Boundary Distance Preference
+        private static final String TYPE_DEF = "default";
+        private static final String TYPE_TEEN = "teenager";
+        private static final String TYPE_ADULT = "adult";
+        private static final String TYPE_ELDERLY = "elderly";
         private SessionManager sm;
+        String type;
 
 
 
@@ -46,6 +53,7 @@ public class MyPreferenceActivity extends PreferenceActivity
         public void onCreate(final Bundle savedInstanceState)
         {
             sm = new SessionManager(getActivity());
+            type = sm.getProfileType();
             super.onCreate(savedInstanceState);
             getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
@@ -53,11 +61,43 @@ public class MyPreferenceActivity extends PreferenceActivity
             PreferenceManager pref = getPreferenceManager();
             pref.setSharedPreferencesName(PREF);
 
-            //Do checking for profile type
-            addPreferencesFromResource(R.xml.preference_default);
+            //Do checking for profile type and load preferences base on profile type
+            if (type.equals(TYPE_DEF)){
 
-            //Check for FD change....Start Service
-            //i.e check if sp contradicts running status
+                addPreferencesFromResource(R.xml.preference_default);
+                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+
+            }else if(type.equals(TYPE_TEEN)){
+
+               // addPreferencesFromResource(R.xml.preference_young);
+                addPreferencesFromResource(R.xml.preference_default);
+
+                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+
+            }else if(type.equals(TYPE_ADULT)){
+
+                //addPreferencesFromResource(R.xml.preference_adult);
+
+                addPreferencesFromResource(R.xml.preference_default);
+
+                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+
+            }else if(type.equals(TYPE_ELDERLY)) {
+
+               // addPreferencesFromResource(R.xml.preference_elderly);
+
+                addPreferencesFromResource(R.xml.preference_default);
+
+                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+
+            }else if (type.equals(null)){
+
+                addPreferencesFromResource(R.xml.preference_default);
+
+                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+
+        }
+
 
         }
 
@@ -85,6 +125,10 @@ public class MyPreferenceActivity extends PreferenceActivity
                     stopFallDetection();
                 }
             }
+
+            if(key.equals(PREF_BOUND)){
+                restartGPSTracking();
+            }
         }
         private void startFallDetection() {
             Intent intent = new Intent(getActivity(), FallDetectionService.class);
@@ -101,6 +145,18 @@ public class MyPreferenceActivity extends PreferenceActivity
             Log.d(TAG, "Stopping Service: " + FallDetectionService.class.getSimpleName());
             Toast.makeText(getActivity(), "Stopping Fall Detection", Toast.LENGTH_SHORT)
                     .show();
+        }
+        private void restartGPSTracking(){
+
+            if(sm.isGPSServiceRunning()){
+
+                Intent intent = new Intent(getActivity(), GPSService.class);
+                getActivity().stopService(intent);
+                getActivity().startService(intent);
+                Log.d(TAG, "Restarting Service: " + GPSService.class.getSimpleName());
+                Toast.makeText(getActivity(), "Restarting GPS Tracking With New Boundary", Toast.LENGTH_SHORT)
+                        .show();
+            }
 
         }
     }

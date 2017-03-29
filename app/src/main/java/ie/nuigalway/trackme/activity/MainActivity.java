@@ -28,7 +28,8 @@ import android.view.WindowManager;
 import java.util.List;
 
 import ie.nuigalway.trackme.R;
-import ie.nuigalway.trackme.fragment.ContactsFragment;
+import ie.nuigalway.trackme.fragment.AboutFragment;
+import ie.nuigalway.trackme.fragment.HelpFragment;
 import ie.nuigalway.trackme.fragment.HomeFragment;
 import ie.nuigalway.trackme.fragment.ProfileFragment;
 import ie.nuigalway.trackme.helper.SessionManager;
@@ -38,7 +39,9 @@ import ie.nuigalway.trackme.services.GPSService;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener, ContactsFragment.OnFragmentInteractionListener
+        ProfileFragment.OnFragmentInteractionListener,
+        AboutFragment.OnFragmentInteractionListener,
+        HelpFragment.OnFragmentInteractionListener
          {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -163,6 +166,10 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = HomeFragment.class;
         } else if (id == R.id.nav_profile) {
             fragmentClass = ProfileFragment.class;
+        } else if (id == R.id.nav_about) {
+            fragmentClass = AboutFragment.class;
+        }else if (id == R.id.nav_help) {
+            fragmentClass = HelpFragment.class;
         } else if (id == R.id.nav_prefs) {
             Intent i = new Intent(this, MyPreferenceActivity.class);
             finish();

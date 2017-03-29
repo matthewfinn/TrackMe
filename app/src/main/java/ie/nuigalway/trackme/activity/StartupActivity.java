@@ -15,12 +15,17 @@ import android.view.MenuItem;
 
 import ie.nuigalway.trackme.R;
 import ie.nuigalway.trackme.fragment.AboutFragment;
+import ie.nuigalway.trackme.fragment.HelpFragment;
 import ie.nuigalway.trackme.fragment.LoginFragment;
 import ie.nuigalway.trackme.fragment.RegisterFragment;
 import ie.nuigalway.trackme.helper.LocalDBHandler;
 
 public class StartupActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,LoginFragment.OnFragmentInteractionListener,RegisterFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        LoginFragment.OnFragmentInteractionListener,
+        RegisterFragment.OnFragmentInteractionListener,
+        AboutFragment.OnFragmentInteractionListener,
+        HelpFragment.OnFragmentInteractionListener {
 
     LocalDBHandler db;
 
@@ -95,12 +100,15 @@ public class StartupActivity extends AppCompatActivity
         Class fragmentClass = null;
 
         if (id == R.id.nav_help) {
-            fragmentClass = AboutFragment.class;
+            fragmentClass = HelpFragment.class;
         }else if (id == R.id.nav_login) {
             fragmentClass = LoginFragment.class;
         }
         else if (id == R.id.nav_register) {
             fragmentClass = RegisterFragment.class;
+        }
+        else if (id == R.id.nav_about){
+            fragmentClass = AboutFragment.class;
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();

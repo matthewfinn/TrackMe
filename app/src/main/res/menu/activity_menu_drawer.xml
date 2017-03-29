@@ -8,22 +8,24 @@
             android:title="@string/menu_trackMe" />
         <item
             android:id="@+id/nav_profile"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@mipmap/ic_account_circle_black_24dp"
             android:title="@string/menu_profile" />
-
+        <item
+            android:id="@+id/nav_prefs"
+            android:icon="@mipmap/ic_settings_black_24dp"
+            android:title="@string/menu_pref" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@mipmap/ic_info_outline_black_24dp"
+            android:title="@string/menu_about" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@mipmap/ic_help_outline_black_24dp"
+            android:title="@string/menu_help" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@mipmap/ic_exit_to_app_black_24dp"
+            android:title="@string/menu_logout" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_prefs"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_pref" />
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_logout" />
-        </menu>
-    </item>
 
 </menu>
