@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
     private LocalDBHandler ldb;
     private MessageHandler mh;
     private GoogleMap map;
-    private int aflCheck, smsCheck;
+    private int aflCheck, smsCheck, rctsCheck;
     private Button trackMeButton, trackUserButton, smsBtn;
     private SessionManager sm;
     private Context ctx;
@@ -183,6 +183,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
 
                 Map<String, Integer> perms = new HashMap<>();
                 // Initialize the map with both permissions
+                perms.put(Manifest.permission.READ_CONTACTS, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.SEND_SMS, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
                 // Fill with actual results from user
@@ -191,7 +192,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                         perms.put(permissions[i], grantResults[i]);
 
                     if (perms.get(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED
-                            && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            && perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                            perms.get(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
                         Log.d(TAG, "sms & location services permission granted");
 
                         try{
@@ -240,12 +242,20 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
         smsCheck = ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.SEND_SMS);
 
+        rctsCheck = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_CONTACTS);
+
+
+
         List<String> listPermissionsNeeded = new ArrayList<>();
         if (aflCheck != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
         if (smsCheck != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (rctsCheck != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_CONTACTS);
         }
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(getActivity(), listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);

@@ -1,11 +1,16 @@
 package ie.nuigalway.trackme.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,6 +22,8 @@ import ie.nuigalway.trackme.services.GPSService;
 public class MyPreferenceActivity extends PreferenceActivity
 {
     private static final String TAG = MyPreferenceActivity.class.getSimpleName();
+    final static int CTC = 1;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState)
@@ -40,6 +47,8 @@ public class MyPreferenceActivity extends PreferenceActivity
         private static final String PREF = "TrackMePreferences";
         private static final String PREF_FD = "runFD";
         private static final String PREF_BOUND = "boundary"; // Boundary Distance Preference
+        private static final String PREF_CT = "soscontact"; // Boundary Distance Preference
+
         private static final String TYPE_DEF = "default";
         private static final String TYPE_TEEN = "teenager";
         private static final String TYPE_ADULT = "adult";
@@ -60,47 +69,80 @@ public class MyPreferenceActivity extends PreferenceActivity
             Log.d(TAG,"onCreate");
             PreferenceManager pref = getPreferenceManager();
             pref.setSharedPreferencesName(PREF);
-
             //Do checking for profile type and load preferences base on profile type
             if (type.equals(TYPE_DEF)){
-
                 addPreferencesFromResource(R.xml.preference_default);
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
-
             }else if(type.equals(TYPE_TEEN)){
-
                // addPreferencesFromResource(R.xml.preference_young);
                 addPreferencesFromResource(R.xml.preference_default);
-
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
-
             }else if(type.equals(TYPE_ADULT)){
-
                 //addPreferencesFromResource(R.xml.preference_adult);
-
                 addPreferencesFromResource(R.xml.preference_default);
-
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
-
             }else if(type.equals(TYPE_ELDERLY)) {
-
                // addPreferencesFromResource(R.xml.preference_elderly);
-
                 addPreferencesFromResource(R.xml.preference_default);
-
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
-
             }else if (type.equals(null)){
 
                 addPreferencesFromResource(R.xml.preference_default);
 
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
 
+             }
+
+            Preference ctc = findPreference(PREF_CT);
+            ctc.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent i = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(i, CTC);
+                    return true;
+                }
+            });
         }
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            switch (requestCode) {
+                case CTC:
+                    Cursor c = null;
+                    String phno = "";
+                    String ctname = "";
+                    if (resultCode == Activity.RESULT_OK) {
+                        Uri contactData = data.getData();
+                        Log.i(TAG, "Contact Result Received: " + contactData.toString());
+
+                        // get the contact's ID
+                        String id = contactData.getLastPathSegment();
+
+                        c = getActivity().getContentResolver().query
+                                (ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID +
+                                                "=?", new String[] { id }, null);
+
+                        int phnoIndx = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA);
+                        int nameIndx = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
 
 
+                        if (c.moveToFirst()) {
+                            phno = c.getString(phnoIndx).replace(" ","");
+                            ctname = c.getString(nameIndx);
+                            Log.d(TAG, "Got Name: "+ctname+", Got Phone Number: " + phno);
+                            sm.setSOSContact(phno);
+
+                            Preference ctcpref = findPreference(PREF_CT);
+                            ctcpref.setSummary(ctname+" : "+phno);
+                        } else {
+                            Log.w(TAG, "No Results Obtained");
+
+                        }
+                    }
+            return;
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
-
         @Override
         public void onResume() {
             super.onResume();

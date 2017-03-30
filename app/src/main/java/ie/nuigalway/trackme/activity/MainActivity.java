@@ -139,10 +139,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    /**
-     * THIS IS THE MENU THING ON TOP RIGHT...... SHOULD BE DELETED FROM XMLS
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;

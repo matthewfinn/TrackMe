@@ -55,6 +55,8 @@
 
     <string name="pref_sosctc">Emergency Contact</string>
     <string name="PREF_SOSCTC">soscontact</string>
+    <string name="sos_contact">Choose SOS Emergency Contact</string>
+
 
     <!-- Strings related to Settings -->
 

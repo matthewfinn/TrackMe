@@ -32,17 +32,9 @@
         android:title="@string/pref_boundary" />
 
 
-    <ListPreference
-        android:defaultValue="-1"
-        android:entries="@array/pref_example_list_titles"
-        android:entryValues="@array/pref_example_list_values"
-        android:key="example_list"
-        android:negativeButtonText="@null"
-        android:positiveButtonText="@null"
-        android:title="@string/pref_title_add_friends_to_messages" />
-
-    <!--Preference android:title="@string/pref_sos">
-        <intent android:action="android.intent.action.PICK"/>
-    </Preference-->
+    <Preference
+        android:title="@string/pref_sosctc"
+        android:key="@string/PREF_SOSCTC"
+        />
 
 </PreferenceScreen>

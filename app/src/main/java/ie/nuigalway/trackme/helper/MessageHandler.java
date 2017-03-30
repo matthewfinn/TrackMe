@@ -30,7 +30,7 @@ public class MessageHandler {
 
         SmsManager sms = SmsManager.getDefault();
         ArrayList<String> parts = sms.divideMessage(message);
-        sms.sendMultipartTextMessage("0867354231", null, parts, null, null);
+        sms.sendMultipartTextMessage(sm.getSOSContact(), null, parts, null, null);
 
         Log.d(TAG, "Emergency Message Being Sent");
     }
