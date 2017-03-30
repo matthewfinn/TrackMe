@@ -94,6 +94,13 @@ public class MyPreferenceActivity extends PreferenceActivity
              }
 
             Preference ctc = findPreference(PREF_CT);
+            if(sm.getSOSContact()==null){
+                ctc.setSummary("Emergency Contact Not Configured");
+            }else{
+                ctc.setSummary("Emergency Contact Configured\n" +
+                        "Phone Number: "+sm.getSOSContact());
+            }
+
             ctc.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -123,17 +130,16 @@ public class MyPreferenceActivity extends PreferenceActivity
                                                 "=?", new String[] { id }, null);
 
                         int phnoIndx = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DATA);
-                        int nameIndx = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-
 
                         if (c.moveToFirst()) {
                             phno = c.getString(phnoIndx).replace(" ","");
-                            ctname = c.getString(nameIndx);
-                            Log.d(TAG, "Got Name: "+ctname+", Got Phone Number: " + phno);
+
+                            Log.d(TAG, "Got Phone Number: " + phno);
                             sm.setSOSContact(phno);
 
                             Preference ctcpref = findPreference(PREF_CT);
-                            ctcpref.setSummary(ctname+" : "+phno);
+                            ctcpref.setSummary("Emergency Contact Configured\n" +
+                                    "Phone Number: "+phno);
                         } else {
                             Log.w(TAG, "No Results Obtained");
 

@@ -32,6 +32,7 @@ public class FallDetectionService extends Service implements SensorEventListener
     private GPSHandler gh;
     private MessageHandler mh;
     private SessionManager sh;
+    private int timer;
 
     @Override
     public void onCreate()
@@ -71,7 +72,7 @@ public class FallDetectionService extends Service implements SensorEventListener
     }
 
     private void initialise(){
-
+        
     }
 
     @Nullable
