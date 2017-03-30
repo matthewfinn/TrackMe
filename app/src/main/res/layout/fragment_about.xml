@@ -4,9 +4,41 @@
     android:layout_height="match_parent"
     tools:context="ie.nuigalway.trackme.fragment.AboutFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
+
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:orientation="vertical">
+
+            <TextView android:id="@+id/title_about"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:layout_marginBottom="20dip"
+                android:text="@string/trackme_about_title"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="20dip"
+                android:textColor="#000000"/>
+
+            <TextView android:id="@+id/content_about"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:layout_marginBottom="20dip"
+                android:text="@string/trackme_about"
+                android:gravity="center"
+                android:textSize="16dip"
+                android:textColor="#000000"/>
+
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

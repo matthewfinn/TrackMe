@@ -14,7 +14,49 @@
     <string name="hint_phno">Phone Number</string>
     <string name="hint_mins">Minutes</string>
     <string name="hint_kms">Kilometers</string>
+    <string name="hint_seconds">Seconds</string>
 
+    <string name ="trackme_about_title">About TrackMe</string>
+    <string name ="trackme_about">TrackMe is a personal security application.\n\nIt offers
+    a range of features such as location tracking, fall detection and remote user location monitoring.\n\n
+        If TrackMe detects a scenario where a user may be in some danger it will send a message to the users emergency contact.
+        \n\nThe primary aim of TrackMe is to keep users safe.
+
+    </string>
+
+    <string name ="trackme_help_title">TrackMe Help</string>
+    <string name ="trackme_help_fd_title">Fall Detection</string>
+    <string name ="trackme_help_fd_content">
+        Enabling fall detection allows the\n
+        application to detect falls using \nthe devices accelerometer.\n\n
+        If a fall is detected a text is sent\n
+        to the emergency contact configured.\n\n
+    </string>
+    <string name ="trackme_help_loc_title">Location Updates</string>
+    <string name ="trackme_help_loc_content">
+        This specifies how often you would\n
+        like the application to update\n
+        your location details on the backend server.\n\n
+    </string>
+    <string name ="trackme_help_bd_title">Boundary Setting</string>
+    <string name ="trackme_help_bd_content">
+        This specifies the boundary \n
+        from the tracking startpoint\n
+    If the device travels outside \n
+        this boundary a text is sent to the\n
+        users emergency contact.\n\n
+    </string>
+    <string name ="trackme_help_not_title">Notification Timer</string>
+    <string name ="trackme_help_not_content">
+        This allows you to specify how long\n
+        the notification timer alerts a user\n
+        before sending an emergency sms.\n\n</string>
+    <string name ="trackme_help_em_title">Emergency Contact</string>
+    <string name ="trackme_help_em_content">
+        This specifies contact information\n
+        for the emergency contact that the\n
+        user would like to be texted\n
+        upon detection of an unsafe scenario.</string>
 
     <string-array name="profile_types">
         <item>Default</item>
@@ -56,6 +98,10 @@
     <string name="pref_sosctc">Emergency Contact</string>
     <string name="PREF_SOSCTC">soscontact</string>
     <string name="sos_contact">Choose SOS Emergency Contact</string>
+
+    <string name="pref_timer">Notification Timer</string>
+    <string name="PREF_TIME">notiftimer</string>
+    <string name="notif_timer">Set Notification Timer Length</string>
 
 
     <!-- Strings related to Settings -->

@@ -31,6 +31,17 @@
         android:singleLine="true"
         android:title="@string/pref_boundary" />
 
+    <EditTextPreference
+        android:defaultValue="30"
+        android:inputType="number"
+        android:key="@string/PREF_TIME"
+        android:maxLines="1"
+        android:hint="@string/hint_seconds"
+        android:summary="@string/notif_timer"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_timer" />
+
 
     <Preference
         android:title="@string/pref_sosctc"

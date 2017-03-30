@@ -7,11 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import ie.nuigalway.trackme.R;
-import ie.nuigalway.trackme.helper.LocalDBHandler;
 import ie.nuigalway.trackme.helper.SessionManager;
 
 /**
@@ -24,10 +28,12 @@ import ie.nuigalway.trackme.helper.SessionManager;
  */
 public class ProfileFragment extends Fragment {
 
-    LocalDBHandler db;
+
+    private static final String TAG = ProfileFragment.class.getSimpleName();
+
     HashMap<String, String> userDetails;
     private SessionManager sm;
-
+    private ListView list;
 
     private OnFragmentInteractionListener mListener;
 
@@ -55,8 +61,6 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         sm = new SessionManager(getActivity());
-        userDetails = sm.getUserDetails();
-
 
     }
 
@@ -64,7 +68,15 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+
+        userDetails = sm.getUserDetails();
+        MyAdapter adapter = new MyAdapter(userDetails);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        list  = (ListView) view.findViewById(R.id.profile_list);
+        list.setAdapter(adapter);
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -103,5 +115,50 @@ public class ProfileFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class MyAdapter extends BaseAdapter {
+
+        private final ArrayList mData;
+
+        public MyAdapter(Map<String, String> map) {
+            mData = new ArrayList();
+            mData.addAll(map.entrySet());
+        }
+
+        @Override
+        public Map.Entry<String, String> getItem(int position) {
+            return (Map.Entry) mData.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO implement you own logic with ID
+            return 0;
+        }
+
+        @Override
+        public int getCount() {
+            return mData.size();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final View result;
+
+            if (convertView == null) {
+                result = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_profile, parent, false);
+            } else {
+                result = convertView;
+            }
+
+            Map.Entry<String, String> item = getItem(position);
+
+
+            ((TextView) result.findViewById(R.id.txt1)).setText(item.getKey()+": "+item.getValue());
+
+            return result;
+        }
+
     }
 }
