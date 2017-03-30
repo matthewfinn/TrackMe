@@ -72,7 +72,7 @@ public class FallDetectionService extends Service implements SensorEventListener
     }
 
     private void initialise(){
-        
+
     }
 
     @Nullable
