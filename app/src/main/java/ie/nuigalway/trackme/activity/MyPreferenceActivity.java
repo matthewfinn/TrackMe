@@ -94,11 +94,13 @@ public class MyPreferenceActivity extends PreferenceActivity
              }
 
             Preference ctc = findPreference(PREF_CT);
-            if(sm.getSOSContact()==null){
-                ctc.setSummary("Emergency Contact Not Configured");
-            }else{
-                ctc.setSummary("Emergency Contact Configured\n" +
-                        "Phone Number: "+sm.getSOSContact());
+            if(ctc!=null) {
+                if (sm.getSOSContact() == null) {
+                    ctc.setSummary("Emergency Contact Not Configured");
+                } else {
+                    ctc.setSummary("Emergency Contact Configured\n" +
+                            "Phone Number: " + sm.getSOSContact());
+                }
             }
 
             ctc.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

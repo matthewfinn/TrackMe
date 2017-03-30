@@ -1,9 +1,11 @@
 package ie.nuigalway.trackme.fragment;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +74,15 @@ public class ProfileFragment extends Fragment {
         userDetails = sm.getUserDetails();
         MyAdapter adapter = new MyAdapter(userDetails);
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        TextView header = new TextView(getActivity());
+        header.setText("My Profile");
+        header.setGravity(Gravity.CENTER);
+        header.setTextSize(26);
+        header.setTypeface(null, Typeface.BOLD);
+        header.setPadding(10,10,10,10);
         list  = (ListView) view.findViewById(R.id.profile_list);
+        list.addHeaderView(header);
+        list.setPadding(10,20,10,10);
         list.setAdapter(adapter);
 
 
@@ -145,6 +155,7 @@ public class ProfileFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             final View result;
+
 
             if (convertView == null) {
                 result = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_profile, parent, false);
