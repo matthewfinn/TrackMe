@@ -74,21 +74,20 @@ public class MyPreferenceActivity extends PreferenceActivity
                 addPreferencesFromResource(R.xml.preference_default);
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
             }else if(type.equals(TYPE_TEEN)){
-               // addPreferencesFromResource(R.xml.preference_young);
-                addPreferencesFromResource(R.xml.preference_default);
+                addPreferencesFromResource(R.xml.preference_young);
+               // addPreferencesFromResource(R.xml.preference_default);
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
             }else if(type.equals(TYPE_ADULT)){
-                //addPreferencesFromResource(R.xml.preference_adult);
-                addPreferencesFromResource(R.xml.preference_default);
+                addPreferencesFromResource(R.xml.preference_adult);
+                //addPreferencesFromResource(R.xml.preference_default);
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
             }else if(type.equals(TYPE_ELDERLY)) {
-               // addPreferencesFromResource(R.xml.preference_elderly);
-                addPreferencesFromResource(R.xml.preference_default);
+                addPreferencesFromResource(R.xml.preference_elderly);
+               // addPreferencesFromResource(R.xml.preference_default);
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
             }else if (type.equals(null)){
 
                 addPreferencesFromResource(R.xml.preference_default);
-
                 Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
 
              }

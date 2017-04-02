@@ -125,7 +125,7 @@ public class FallDetectionService extends Service implements SensorEventListener
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        sb.append("If you could check in on me that'd be great \n");
+                        sb.append("If you could check in on me that'd be great!\n");
                         sb.append("Thanks, "+ sh.getUsername());
                         Log.d(TAG, sb.toString());
                         mh.sendMessage(sb.toString());

@@ -10,7 +10,7 @@
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
-        android:defaultValue="1"
+        android:defaultValue="30"
         android:inputType="number"
         android:key="@string/PREF_LOCUP"
         android:maxLines="1"
@@ -21,7 +21,7 @@
         android:title="@string/pref_locup" />
 
     <EditTextPreference
-        android:defaultValue="1"
+        android:defaultValue="5"
         android:inputType="number"
         android:key="@string/PREF_BOUND"
         android:maxLines="1"

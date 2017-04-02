@@ -1,4 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/PREF_FD"
+        android:title="@string/pref_fd" />
+
+    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
+    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+    <EditTextPreference
+        android:defaultValue="1"
+        android:inputType="number"
+        android:key="@string/PREF_LOCUP"
+        android:maxLines="1"
+        android:hint="@string/hint_mins"
+        android:summary="@string/gps_interval"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_locup" />
+
+    <EditTextPreference
+        android:defaultValue="1"
+        android:inputType="number"
+        android:key="@string/PREF_BOUND"
+        android:maxLines="1"
+        android:hint="@string/hint_kms"
+        android:summary="@string/boundary_setting"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_boundary" />
+
+    <EditTextPreference
+        android:defaultValue="30"
+        android:inputType="number"
+        android:key="@string/PREF_TIME"
+        android:maxLines="1"
+        android:hint="@string/hint_seconds"
+        android:summary="@string/notif_timer"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/pref_timer" />
+
+
+    <Preference
+        android:title="@string/pref_sosctc"
+        android:key="@string/PREF_SOSCTC"
+        />
+
 </PreferenceScreen>
