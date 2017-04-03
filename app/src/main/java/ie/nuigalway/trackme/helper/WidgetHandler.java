@@ -45,7 +45,7 @@ public class WidgetHandler extends AppWidgetProvider {
 
                     context.startService(in);
                     Log.d(TAG, "Starting Service: " + GPSTAG);
-                    Toast.makeText(context, "Starting GPS Tracking Service", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Starting GPS Tracking Service", Toast.LENGTH_SHORT).show();
                     rv.setTextViewText(R.id.actionButton, "||");
                     AppWidgetManager.getInstance(context).updateAppWidget(
                             new ComponentName(context, WidgetHandler.class), rv);
@@ -54,7 +54,7 @@ public class WidgetHandler extends AppWidgetProvider {
 
                     context.stopService(in);
                     Log.d(TAG, "Stopping Service: " + GPSTAG);
-                    Toast.makeText(context, "Stopping GPS Tracking Service", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Stopping GPS Tracking Service", Toast.LENGTH_SHORT).show();
                     rv.setTextViewText(R.id.actionButton, "►");
                     AppWidgetManager.getInstance(context).updateAppWidget(
                             new ComponentName(context, WidgetHandler.class),rv);
