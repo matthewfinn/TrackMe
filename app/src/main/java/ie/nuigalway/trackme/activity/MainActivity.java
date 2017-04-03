@@ -104,11 +104,8 @@ public class MainActivity extends AppCompatActivity
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         fragment = null;
-        fragmentClass = null;
+        fragmentClass = HomeFragment.class;
 
-            if (savedInstanceState == null) {
-                fragmentClass = HomeFragment.class;
-            }
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
             } catch (Exception e) {
