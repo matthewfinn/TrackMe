@@ -55,18 +55,19 @@ public class FallDetectionService extends Service implements SensorEventListener
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if(intent.getAction()!=null&&intent.getAction().equals("STOP")) {
+
+        if(intent.getAction()!=null&&intent.getAction().equals("STOP")&&cdt!=null) {
             stopSelf();
             bi.putExtra("close",true);
             Log.d(TAG,"Stopping Service");
             cdt.cancel();
             return START_NOT_STICKY;
 
-        }else{
+        }else {
             Log.d(TAG, "onStartCommand");
             super.onStartCommand(intent, flags, startId);
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                    SensorManager.SENSOR_DELAY_NORMAL);
+                    SensorManager.SENSOR_DELAY_UI);
             return START_NOT_STICKY;
         }
     }
@@ -93,15 +94,17 @@ public class FallDetectionService extends Service implements SensorEventListener
 
             if ((value > 25) || (value < 1))  {
 
-                Log.d(TAG,"Possible Fall Detected. Timer Started");
+                Log.d(TAG,"Possible Fall Detected With Reading of "+value+"m/s. Timer Started!");
 
 
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_USER_ACTION);
                 startActivity(i);
-                Log.d(TAG, "Attempting to start Intent: "+i.toString());
+                Log.d(TAG, "Attempting to start notification intent.");
 
-                cdt = new CountDownTimer(5000, 1000) {
+                int start = Integer.valueOf(sh.getCDT())*1000;
+                Log.d(TAG, "Starting "+start/1000+" second timer.");
+                cdt = new CountDownTimer(start, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
 
@@ -144,6 +147,7 @@ public class FallDetectionService extends Service implements SensorEventListener
         return sqrt((x*x)+(y*y)+(z*z));
     }
 
+    @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }

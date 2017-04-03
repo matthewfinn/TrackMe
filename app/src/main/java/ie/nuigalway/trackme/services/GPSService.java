@@ -36,8 +36,9 @@ public class GPSService extends Service {
     private static final String LNG = "lngData";
     private static final String CDT = "timeData";
     private static final String PREF = "TrackMePreferences";
+    private static final String PREF_LOCUP = "locUP";  // Location update interval preference
     int MODE = 0; //private preferences mode used to set preference permissions
-    private static final int L_INT = 60000;
+    private static int L_INT;
     private static final float L_DIST = 0; //Cast to float, compiler understands to treat as fp num
     private LocationManager lm = null;
     private GPSHandler gh;
@@ -156,7 +157,8 @@ public class GPSService extends Service {
         float distanceInMeters = loc1.distanceTo(loc2);
 
 
-        if(distanceInMeters>sm.getBoundary()){
+        float boundary = sm.getBoundary();
+        if(distanceInMeters>boundary){
             StringBuilder sb = new StringBuilder();
             sb.append("Hi, "+sm.getUsername()+" here!\n");
             sb.append("TrackMe has just detected that I have travelled outside my boundary.");
@@ -198,10 +200,20 @@ public class GPSService extends Service {
 
         sm = new SessionManager(getApplicationContext());
         sm.setGPSServiceRunning(true);
+        if(sm.getLocup()!=null){
+
+            L_INT = Integer.valueOf(sm.getLocup())*60000;
+            Log.d(TAG, "Location Update Interval Set To "+sm.getLocup()+" minutes.");
+        }else{
+            L_INT = 60000;
+            Log.d(TAG, "Location Update Interval Set To Default. 1 min");
+
+        }
 
         ldb = new LocalDBHandler(getApplicationContext());
         cdb = new CloudDBHandler(getApplicationContext());
         mh = new MessageHandler(getApplicationContext());
+
 
         //Initialise LocationManager
         initializeLocationManager();
@@ -212,6 +224,8 @@ public class GPSService extends Service {
         //Initialise Shared Preferences
         ctx = getApplicationContext();
         sp = ctx.getSharedPreferences(PREF,MODE);
+
+        //sp.getString()
 
         try {
             //Request location updates from LocationManager

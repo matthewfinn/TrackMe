@@ -35,6 +35,7 @@ public class SessionManager {
     private static final String PREF_LOCUP = "locUP";  // Location update interval preference
     private static final String PREF_BOUND = "boundary"; // Boundary Distance Preference
     private static final String PREF_SOSCTC = "soscontact"; // SOS Contact Preference
+    private static final String PREF_CDT = "notiftimer"; // SOS Contact Preference
 
 
     int MODE = 0; //private preferences mode used to set preference permissions
@@ -125,6 +126,8 @@ public class SessionManager {
     public boolean getFD(){
         return sp.getBoolean(PREF_FD, false);
     }
+
+
     public void setFD(boolean fd){
         ed.putBoolean(TYPE, fd);
         ed.commit();
@@ -133,18 +136,25 @@ public class SessionManager {
     public String getUsername(){
         return sp.getString(USERNAME, null);
     }
+
+
     public void setUsername(String type){
         ed.putString(USERNAME, type);
         ed.commit();
     }
 
     public float getBoundary(){
-        return sp.getFloat(PREF_BOUND, 1);
+
+        String b = sp.getString(PREF_BOUND, null);
+        return Float.valueOf(b);
     }
 
-    public void setBoundary(float b){
-        ed.putFloat(PREF_BOUND, b);
-        ed.commit();
+    public String getCDT(){
+        return sp.getString(PREF_CDT, null);
+    }
+
+    public String getLocup (){
+        return sp.getString(PREF_LOCUP, null);
     }
 
     public HashMap<String,String> getUserDetails(){

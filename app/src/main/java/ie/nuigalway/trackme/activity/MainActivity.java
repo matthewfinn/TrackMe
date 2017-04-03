@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         HelpFragment.OnFragmentInteractionListener
          {
 
+
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment fragment;
     private Class fragmentClass;
@@ -53,8 +55,10 @@ public class MainActivity extends AppCompatActivity
     private NotificationCompat.Builder notif;
     int nid = 001;
     private  NotificationManager nm;
-    //private PowerManager pm;
-
+             private static final String TYPE_DEF = "default";
+             private static final String TYPE_TEEN = "teenager";
+             private static final String TYPE_ADULT = "adult";
+             private static final String TYPE_ELDERLY = "elderly";
 
     @Override
     public void onResume() {
@@ -83,6 +87,22 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(br, new IntentFilter(FallDetectionService.CDT));
         Log.d(TAG, "onCreate Receiver Registered");
         sm = new SessionManager(getApplicationContext());
+        String type = sm.getProfileType();
+
+        //Set default profile preferences upon first instance of opening application
+        if (type.equals(TYPE_DEF)){
+            PreferenceManager.setDefaultValues(this,R.xml.preference_default,false);
+        }else if(type.equals(TYPE_TEEN)){
+            PreferenceManager.setDefaultValues(this,R.xml.preference_young,false);
+        }else if(type.equals(TYPE_ADULT)){
+            PreferenceManager.setDefaultValues(this,R.xml.preference_adult,false);
+        }else if(type.equals(TYPE_ELDERLY)) {
+            PreferenceManager.setDefaultValues(this,R.xml.preference_elderly,false);
+        }else if (type.equals(null)){
+            PreferenceManager.setDefaultValues(this,R.xml.preference_default,false);
+        }
+
+
         if(sm.getFD()){
             startFallDetection();
         }
@@ -226,6 +246,7 @@ public class MainActivity extends AppCompatActivity
             PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 0, inten, 0);
             Log.d(TAG, "onReceive Intent To Stop Service");
 
+
             if(notif==null){
 
                 nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -246,7 +267,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "onReceive Notification built");
                 updateGUI(intent);
             }else {
-                Log.d(TAG, "onReceive Notification should be built already & showing");
+                Log.d(TAG, "onReceive Notification already showing");
                 updateGUI(intent);
             }
         }
@@ -259,9 +280,9 @@ public class MainActivity extends AppCompatActivity
 
         if(intent.getBooleanExtra("close",false)){
             nm.cancel(nid);
-
         }
         if (intent.getExtras() != null) {
+
             long millisUntilFinished = intent.getLongExtra("countdown", 0);
             Log.d(TAG, "Receiving Time: "+ millisUntilFinished);
             notif.setContentText("Timer: "+String.valueOf(millisUntilFinished)+" - Before SMS is Sent");
@@ -273,10 +294,15 @@ public class MainActivity extends AppCompatActivity
         }
     }
              private void startFallDetection() {
+
                  Intent intent = new Intent(this, FallDetectionService.class);
                  startService(intent);
-
                  Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
+             }
+             private void stopFallDetection(){
+                 Intent intent = new Intent(this, FallDetectionService.class);
+                 stopService(intent);
+                 Log.d(TAG, "Stopping Service: " + FallDetectionService.class.getSimpleName());
              }
 
          }

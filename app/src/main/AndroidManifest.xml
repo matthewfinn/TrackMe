@@ -20,7 +20,7 @@
 
     <application
         android:name=".application.App"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:icon="@mipmap/track_me_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -54,7 +54,8 @@
 
         <service
             android:name=".services.FallDetectionService"
-            android:exported="false" />
+            android:exported="false"
+            />
         <service
             android:name=".services.GPSService"
             android:enabled="true"
@@ -94,7 +95,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activity.PreferenceActivity"></activity>
     </application>
 
 </manifest>
