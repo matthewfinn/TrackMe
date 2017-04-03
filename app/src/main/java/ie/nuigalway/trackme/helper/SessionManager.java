@@ -149,12 +149,14 @@ public class SessionManager {
         return Float.valueOf(b);
     }
 
-    public String getCDT(){
-        return sp.getString(PREF_CDT, null);
+    public int getCDT(){
+        String cdt = sp.getString(PREF_CDT, null);
+        return Integer.valueOf(cdt);
     }
 
-    public String getLocup (){
-        return sp.getString(PREF_LOCUP, null);
+    public int getLocup (){
+        String loc = sp.getString(PREF_LOCUP, null);
+        return Integer.valueOf(loc);
     }
 
     public HashMap<String,String> getUserDetails(){

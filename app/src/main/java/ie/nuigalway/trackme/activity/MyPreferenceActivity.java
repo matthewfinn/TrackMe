@@ -181,7 +181,9 @@ public class MyPreferenceActivity extends PreferenceActivity
             }
 
             if(key.equals(PREF_BOUND)){
-                restartGPSTracking();
+                if(sm.isGPSServiceRunning()) {
+                    restartGPSTracking();
+                }
             }
         }
         private void startFallDetection() {

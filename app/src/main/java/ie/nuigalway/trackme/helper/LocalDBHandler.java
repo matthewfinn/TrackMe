@@ -160,7 +160,6 @@ public class LocalDBHandler extends SQLiteOpenHelper{
     public void updateLocation(String lt, String ln, String t){
 
         HashMap<String,String> uDetails = sm.getUserDetails();
-        Log.d(TAG, "User Details: "+uDetails.toString());
         String id = uDetails.get(UID);
         String username = uDetails.get(USERNAME);
 

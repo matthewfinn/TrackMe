@@ -27,7 +27,7 @@ public class FallDetectionService extends Service implements SensorEventListener
     Intent bi = new Intent(CDT);
     private SensorManager sensorManager;
     private Sensor sensor;
-    private double  rx, ry, rz;
+    private double rx, ry, rz;
     private CountDownTimer cdt;
     private GPSHandler gh;
     private MessageHandler mh;
@@ -35,8 +35,7 @@ public class FallDetectionService extends Service implements SensorEventListener
     private int timer;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mh = new MessageHandler(getApplicationContext());
@@ -46,7 +45,8 @@ public class FallDetectionService extends Service implements SensorEventListener
         initialise();
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         Log.d("Running onDestroy", "Stop Sensors & Current Background Service");
         sensorManager.unregisterListener(this);
         super.onDestroy();
@@ -56,14 +56,14 @@ public class FallDetectionService extends Service implements SensorEventListener
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        if(intent.getAction()!=null&&intent.getAction().equals("STOP")&&cdt!=null) {
+        if (intent.getAction() != null && intent.getAction().equals("STOP") && cdt != null) {
             stopSelf();
-            bi.putExtra("close",true);
-            Log.d(TAG,"Stopping Service");
+            bi.putExtra("close", true);
+            Log.d(TAG, "Stopping Service");
             cdt.cancel();
             return START_NOT_STICKY;
 
-        }else {
+        } else {
             Log.d(TAG, "onStartCommand");
             super.onStartCommand(intent, flags, startId);
             sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
@@ -72,7 +72,7 @@ public class FallDetectionService extends Service implements SensorEventListener
         }
     }
 
-    private void initialise(){
+    private void initialise() {
 
     }
 
@@ -86,15 +86,17 @@ public class FallDetectionService extends Service implements SensorEventListener
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if(event.sensor.getType()==Sensor.TYPE_ACCELEROMETER){
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
-            rx = event.values[0]; ry = event.values[1]; rz = event.values[2];
-            double value = computeReadings(rx,ry,rz);
+            rx = event.values[0];
+            ry = event.values[1];
+            rz = event.values[2];
+            double value = computeReadings(rx, ry, rz);
             Log.d("Sensor Value: ", String.valueOf(value));
 
-            if ((value > 25) || (value < 1))  {
+            if ((value > 25) || (value < 1)) {
 
-                Log.d(TAG,"Possible Fall Detected With Reading of "+value+"m/s. Timer Started!");
+                Log.d(TAG, "Possible Fall Detected With Reading of " + value + "m/s. Timer Started!");
 
 
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
@@ -102,13 +104,13 @@ public class FallDetectionService extends Service implements SensorEventListener
                 startActivity(i);
                 Log.d(TAG, "Attempting to start notification intent.");
 
-                int start = Integer.valueOf(sh.getCDT())*1000;
-                Log.d(TAG, "Starting "+start/1000+" second timer.");
+                int start = sh.getCDT() * 1000;
+                Log.d(TAG, "Starting " + start / 1000 + " second timer.");
                 cdt = new CountDownTimer(start, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
 
-                        long mil = millisUntilFinished/1000;
+                        long mil = millisUntilFinished / 1000;
                         bi.putExtra("countdown", mil);
                         sendBroadcast(bi);
                     }
@@ -119,17 +121,17 @@ public class FallDetectionService extends Service implements SensorEventListener
                         Log.i(TAG, "Timer finished");
 
                         StringBuilder sb = new StringBuilder();
-                        sb.append("Hi, "+sh.getUsername()+" here!\n");
+                        sb.append("Hi, " + sh.getUsername() + " here!\n");
                         sb.append("TrackMe has just detected a possible fall.");
                         sb.append("I may be in trouble.\n");
                         sb.append("My current location is approximately: \n");
                         try {
-                            sb.append(gh.getAddressString(gh.getCurrentStaticLocation())+"\n");
+                            sb.append(gh.getAddressString(gh.getCurrentStaticLocation()) + "\n");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         sb.append("If you could check in on me that'd be great!\n");
-                        sb.append("Thanks, "+ sh.getUsername());
+                        sb.append("Thanks, " + sh.getUsername());
                         Log.d(TAG, sb.toString());
                         mh.sendMessage(sb.toString());
                     }
@@ -142,9 +144,9 @@ public class FallDetectionService extends Service implements SensorEventListener
         }
     }
 
-    private double computeReadings(double x, double y, double z){
+    private double computeReadings(double x, double y, double z) {
 
-        return sqrt((x*x)+(y*y)+(z*z));
+        return sqrt((x * x) + (y * y) + (z * z));
     }
 
     @Override

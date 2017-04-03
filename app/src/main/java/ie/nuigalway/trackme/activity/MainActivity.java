@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity
         HomeFragment.OnFragmentInteractionListener,
         ProfileFragment.OnFragmentInteractionListener,
         AboutFragment.OnFragmentInteractionListener,
-        HelpFragment.OnFragmentInteractionListener
-         {
+        HelpFragment.OnFragmentInteractionListener {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -54,11 +53,14 @@ public class MainActivity extends AppCompatActivity
     private static Context ctx;
     private NotificationCompat.Builder notif;
     int nid = 001;
-    private  NotificationManager nm;
-             private static final String TYPE_DEF = "default";
-             private static final String TYPE_TEEN = "teenager";
-             private static final String TYPE_ADULT = "adult";
-             private static final String TYPE_ELDERLY = "elderly";
+    private NotificationManager nm;
+    private static final String TYPE_DEF = "default";
+    private static final String TYPE_TEEN = "teenager";
+    private static final String TYPE_ADULT = "adult";
+    private static final String TYPE_ELDERLY = "elderly";
+
+    private static final String PREF = "TrackMePreferences";
+    int MODE = 0; //private preferences mode used to set preference permissions
 
     @Override
     public void onResume() {
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
 
         super.onDestroy();
         unregisterReceiver(br);
@@ -89,21 +91,24 @@ public class MainActivity extends AppCompatActivity
         sm = new SessionManager(getApplicationContext());
         String type = sm.getProfileType();
 
+
         //Set default profile preferences upon first instance of opening application
-        if (type.equals(TYPE_DEF)){
-            PreferenceManager.setDefaultValues(this,R.xml.preference_default,false);
-        }else if(type.equals(TYPE_TEEN)){
-            PreferenceManager.setDefaultValues(this,R.xml.preference_young,false);
-        }else if(type.equals(TYPE_ADULT)){
-            PreferenceManager.setDefaultValues(this,R.xml.preference_adult,false);
-        }else if(type.equals(TYPE_ELDERLY)) {
-            PreferenceManager.setDefaultValues(this,R.xml.preference_elderly,false);
-        }else if (type.equals(null)){
-            PreferenceManager.setDefaultValues(this,R.xml.preference_default,false);
+        if (type.equals(TYPE_DEF)) {
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_default, false);
+        } else if (type.equals(TYPE_TEEN)) {
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_young, false);
+        } else if (type.equals(TYPE_ADULT)) {
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_adult, false);
+        } else if (type.equals(TYPE_ELDERLY)) {
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_elderly, false);
+        } else if (type.equals(null)) {
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_default, false);
         }
 
+        Log.d(TAG,"PREFS:"+PreferenceManager.getDefaultSharedPreferences(this).getAll());
 
-        if(sm.getFD()){
+
+        if (sm.getFD()) {
             startFallDetection();
         }
 
@@ -126,11 +131,11 @@ public class MainActivity extends AppCompatActivity
         fragment = null;
         fragmentClass = HomeFragment.class;
 
-            try {
-                fragment = (Fragment) fragmentClass.newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -181,18 +186,18 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = ProfileFragment.class;
         } else if (id == R.id.nav_about) {
             fragmentClass = AboutFragment.class;
-        }else if (id == R.id.nav_help) {
+        } else if (id == R.id.nav_help) {
             fragmentClass = HelpFragment.class;
         } else if (id == R.id.nav_prefs) {
             Intent i = new Intent(this, MyPreferenceActivity.class);
             finish();
             this.startActivity(i);
-            b=false;
+            b = false;
 
         } else if (id == R.id.nav_logout) {
             b = false;
 
-            if(sm.isGPSServiceRunning()){
+            if (sm.isGPSServiceRunning()) {
                 Intent intent = new Intent(this, GPSService.class);
                 stopService(intent);
             }
@@ -247,7 +252,7 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, "onReceive Intent To Stop Service");
 
 
-            if(notif==null){
+            if (notif == null) {
 
                 nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -266,45 +271,38 @@ public class MainActivity extends AppCompatActivity
                 nm.notify(nid, notif.build());
                 Log.d(TAG, "onReceive Notification built");
                 updateGUI(intent);
-            }else {
+            } else {
                 Log.d(TAG, "onReceive Notification already showing");
                 updateGUI(intent);
             }
         }
     };
 
-
     private void updateGUI(Intent intent) {
         Log.d(TAG, "onReceive updateGUI Registered");
 
-
-        if(intent.getBooleanExtra("close",false)){
+        if (intent.getBooleanExtra("close", false)) {
             nm.cancel(nid);
         }
         if (intent.getExtras() != null) {
 
             long millisUntilFinished = intent.getLongExtra("countdown", 0);
-            Log.d(TAG, "Receiving Time: "+ millisUntilFinished);
-            notif.setContentText("Timer: "+String.valueOf(millisUntilFinished)+" - Before SMS is Sent");
+            Log.d(TAG, "Receiving Time: " + millisUntilFinished);
+            notif.setContentText("Timer: " + String.valueOf(millisUntilFinished) + " - Before SMS is Sent");
             nm.notify(nid, notif.build());
 
-            if(millisUntilFinished == 1){
+            if (millisUntilFinished == 1) {
                 nm.cancel(nid);
             }
         }
     }
-             private void startFallDetection() {
 
-                 Intent intent = new Intent(this, FallDetectionService.class);
-                 startService(intent);
-                 Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
-             }
-             private void stopFallDetection(){
-                 Intent intent = new Intent(this, FallDetectionService.class);
-                 stopService(intent);
-                 Log.d(TAG, "Stopping Service: " + FallDetectionService.class.getSimpleName());
-             }
+    private void startFallDetection() {
 
-         }
+        Intent intent = new Intent(this, FallDetectionService.class);
+        startService(intent);
+        Log.d(TAG, "Starting Service: " + FallDetectionService.class.getSimpleName());
+    }
+}
 
 

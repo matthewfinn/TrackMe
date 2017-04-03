@@ -314,7 +314,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, View.O
                     Intent intent = new Intent(getActivity(), GPSService.class);
                     getActivity().stopService(intent);
                     Toast.makeText(ctx, "Stopping GPS Tracking Service ", Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "Starting Service: " + GPSService.class.getSimpleName());
+                    Log.d(TAG, "Stopping Service: " + GPSService.class.getSimpleName());
                 }
                 break;
 
