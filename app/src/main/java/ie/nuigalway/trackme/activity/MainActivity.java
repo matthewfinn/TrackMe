@@ -94,18 +94,16 @@ public class MainActivity extends AppCompatActivity
 
         //Set default profile preferences upon first instance of opening application
         if (type.equals(TYPE_DEF)) {
-            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_default, false);
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_default, true);
         } else if (type.equals(TYPE_TEEN)) {
-            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_young, false);
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_young, true);
         } else if (type.equals(TYPE_ADULT)) {
-            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_adult, false);
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_adult, true);
         } else if (type.equals(TYPE_ELDERLY)) {
-            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_elderly, false);
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_elderly, true);
         } else if (type.equals(null)) {
-            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_default, false);
+            PreferenceManager.setDefaultValues(this, PREF, MODE, R.xml.preference_default, true);
         }
-
-        Log.d(TAG,"PREFS:"+PreferenceManager.getDefaultSharedPreferences(this).getAll());
 
 
         if (sm.getFD()) {
@@ -200,7 +198,14 @@ public class MainActivity extends AppCompatActivity
             if (sm.isGPSServiceRunning()) {
                 Intent intent = new Intent(this, GPSService.class);
                 stopService(intent);
+                Log.d(TAG, "Stopping GPS Tracking On Logout");
             }
+            if (sm.getFD()) {
+                Intent intent = new Intent(this, FallDetectionService.class);
+                stopService(intent);
+                Log.d(TAG, "Stopping Fall Detection On Logout");
+            }
+
             sm.logOutUser();
             Intent i = new Intent(this, StartupActivity.class);
             finish();

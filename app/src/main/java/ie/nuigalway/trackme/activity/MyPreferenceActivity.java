@@ -73,28 +73,27 @@ public class MyPreferenceActivity extends PreferenceActivity
             if (type.equals(TYPE_DEF)){
 
                 addPreferencesFromResource(R.xml.preference_default);
-                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+                Log.d(TAG, "Default preferences loaded from resource");
 
             }else if(type.equals(TYPE_TEEN)){
 
                 addPreferencesFromResource(R.xml.preference_young);
-                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+                Log.d(TAG, "Teenager default preferences loaded from resource");
 
             }else if(type.equals(TYPE_ADULT)){
 
                 addPreferencesFromResource(R.xml.preference_adult);
-                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+                Log.d(TAG, "Adult default preferences loaded from resource");
 
             }else if(type.equals(TYPE_ELDERLY)) {
 
                 addPreferencesFromResource(R.xml.preference_elderly);
-                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
+                Log.d(TAG, "Elderly default preferences loaded from resource");
 
             }else if (type.equals(null)){
 
                 addPreferencesFromResource(R.xml.preference_default);
-                Log.d(TAG, getPreferenceManager().getSharedPreferences().getAll().toString());
-
+                Log.d(TAG, "Default preferences loaded from resource");
              }
 
             Preference ctc = findPreference(PREF_CT);

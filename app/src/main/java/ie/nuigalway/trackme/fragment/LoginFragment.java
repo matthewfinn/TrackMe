@@ -88,8 +88,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
             new AlertDialog.Builder(getContext()).
                     setTitle("No Connection").
-                    setMessage("Internet Connection Needed To Log In.\n" +
-                            "Please Enable Internet Connection To Continue").
+                    setMessage("Internet Connection Needed To Log In").
                     setNeutralButton("Close", null).show();
         }
         return view;

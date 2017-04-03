@@ -61,6 +61,7 @@ public class FallDetectionService extends Service implements SensorEventListener
             bi.putExtra("close", true);
             Log.d(TAG, "Stopping Service");
             cdt.cancel();
+            startServiceAgain();
             return START_NOT_STICKY;
 
         } else {
@@ -70,6 +71,11 @@ public class FallDetectionService extends Service implements SensorEventListener
                     SensorManager.SENSOR_DELAY_UI);
             return START_NOT_STICKY;
         }
+    }
+
+    private void startServiceAgain() {
+        Intent i = new Intent(getApplicationContext(), FallDetectionService.class);
+        startService(i);
     }
 
     private void initialise() {

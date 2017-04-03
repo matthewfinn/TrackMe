@@ -47,8 +47,6 @@ public class CloudDBHandler {
         HashMap<String,String> uDetails = sm.getUserDetails();
         final String uid = uDetails.get("unique_id");
         final String username = uDetails.get("username");
-
-        Log.d(TAG, uid+" "+username);
         String req = "req_loc";
 
         StringRequest r = new StringRequest(Request.Method.POST, AppConfig.LOCATION_URL, new Response.Listener<String>(){
@@ -78,7 +76,7 @@ public class CloudDBHandler {
             public void onErrorResponse(VolleyError e){
 
                 Log.e(TAG,"Cloud Push Error : "+ e.toString());
-                Toast.makeText(c,"Cloud Server Error Response: "+ e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(c,"Cloud Server Push Error: "+ e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
         }){
