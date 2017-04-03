@@ -61,8 +61,6 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
     private HashMap<String, String> loc;
     private GoogleMap map;
     private ProgressDialog dialog;
-  //  private int aflCheck;
-    //private Button trackMeButton, trackUserButton;
     private SessionManager sm;
     private Context ctx;
 
@@ -173,7 +171,7 @@ public class TrackUserFragment extends Fragment implements OnMapReadyCallback{
         @Override
         protected Void doInBackground(Void... params) {
             Bundle bundle = getArguments();
-            cdb.requestUserLocation(bundle.getString("email"));
+            cdb.requestUserLocation(bundle.getString("email").trim());
             try{
 
                 Thread.sleep(4000);
